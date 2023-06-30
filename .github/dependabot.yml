@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "14:00"
+      timezone: "Asia/Tokyo"
+
+  - package-ecosystem: "github-actions"
+    directory: "/actions/publish"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "14:00"
+      timezone: "Asia/Tokyo"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "14:00"
+      timezone: "Asia/Tokyo"
