@@ -4,8 +4,6 @@ By contributing your code to this repository, you are deemed to agree to license
 
 ## What
 
-Closes <!-- Issue URL -->
-
 ## How
 
 ## Why
