@@ -36,7 +36,7 @@ Qiita CLI を使うには `Node.js 18.0.0` 以上が必要です。Node.js を�
 Qiita のコンテンツを管理したいディレクトリで、以下のコマンドを実行します。
 
 ```console
-npm install @qiita/qiita-cli
+npm install @qiita/qiita-cli --save-dev
 ```
 
 以下のコマンドでバージョンが表示されればインストール完了です。
