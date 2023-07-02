@@ -167,6 +167,7 @@ Qiita CLI、Qiita Preview から記事の削除はできません。
 
 - .gitignore
 - GitHub Actions のワークフローファイル
+- public フォルダ
 
 が生成されます。
 
