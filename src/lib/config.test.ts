@@ -57,13 +57,13 @@ jest.mock("node:fs/promises", () => {
 });
 
 describe("config", () => {
-  describe("#getConfigDir", () => {
+  describe("#getCredentialDir", () => {
     beforeEach(() => {
       config.load({});
     });
 
     it("returns default path", () => {
-      expect(config.getConfigDir()).toEqual(
+      expect(config.getCredentialDir()).toEqual(
         "/home/test-user/.config/qiita-cli"
       );
     });
@@ -71,13 +71,13 @@ describe("config", () => {
     describe("with options", () => {
       beforeEach(() => {
         config.load({
-          configDir: "my-config",
+          credentialDir: "my-credential",
         });
       });
 
       it("returns customized path", () => {
-        expect(config.getConfigDir()).toEqual(
-          "/home/test-user/qiita-articles/my-config"
+        expect(config.getCredentialDir()).toEqual(
+          "/home/test-user/qiita-articles/my-credential"
         );
       });
     });

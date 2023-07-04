@@ -5,40 +5,40 @@ import process from "node:process";
 import { configDebugger } from "./debugger";
 
 interface Options {
-  configDir?: string;
+  credentialDir?: string;
   profile?: string;
   itemsRootDir?: string;
 }
 
 class Config {
-  private configDir?: string;
+  private credentialDir?: string;
   private itemsRootDir?: string;
   private credential?: Credential;
 
   constructor() {}
 
   load(options: Options) {
-    this.configDir = this.resolveConfigDir(options.configDir);
+    this.credentialDir = this.resolveConfigDir(options.credentialDir);
     this.itemsRootDir = this.resolveItemsRootDir(options.itemsRootDir);
     this.credential = new Credential({
-      credentialDir: this.configDir,
+      credentialDir: this.credentialDir,
       profile: options.profile,
     });
 
     configDebugger(
       "load",
       JSON.stringify({
-        configDir: this.configDir,
+        credentialDir: this.credentialDir,
         itemsRootDir: this.itemsRootDir,
       })
     );
   }
 
-  getConfigDir() {
-    if (!this.configDir) {
-      throw new Error("configDir is undefined");
+  getCredentialDir() {
+    if (!this.credentialDir) {
+      throw new Error("credentialDir is undefined");
     }
-    return this.configDir;
+    return this.credentialDir;
   }
 
   // TODO: filesystemrepo 側にあるべきか確認
@@ -63,19 +63,19 @@ class Config {
     return this.credential.setCredential(credential);
   }
 
-  private resolveConfigDir(configDirPath?: string) {
+  private resolveConfigDir(credentialDirPath?: string) {
     const packageName = "qiita-cli";
 
     if (process.env.XDG_CONFIG_HOME) {
-      const configDir = process.env.XDG_CONFIG_HOME;
-      return path.join(configDir, packageName);
+      const credentialDir = process.env.XDG_CONFIG_HOME;
+      return path.join(credentialDir, packageName);
     }
-    if (!configDirPath) {
+    if (!credentialDirPath) {
       const homeDir = os.homedir();
       return path.join(homeDir, ".config", packageName);
     }
 
-    return this.resolveFullPath(configDirPath);
+    return this.resolveFullPath(credentialDirPath);
   }
 
   private resolveItemsRootDir(dirPath?: string) {
