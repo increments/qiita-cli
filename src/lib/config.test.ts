@@ -55,15 +55,23 @@ jest.mock("node:fs/promises", () => {
     mkdir: jest.fn(() => {}),
   };
 });
+jest.mock("node:fs", () => {
+  return {
+    existsSync: jest.fn((filePath: string): boolean => {
+      const text = getFile(filePath);
+      return !!text;
+    }),
+  };
+});
 
 describe("config", () => {
-  describe("#getConfigDir", () => {
+  describe("#getCredentialDir", () => {
     beforeEach(() => {
       config.load({});
     });
 
     it("returns default path", () => {
-      expect(config.getConfigDir()).toEqual(
+      expect(config.getCredentialDir()).toEqual(
         "/home/test-user/.config/qiita-cli"
       );
     });
@@ -71,13 +79,13 @@ describe("config", () => {
     describe("with options", () => {
       beforeEach(() => {
         config.load({
-          configDir: "my-config",
+          credentialDir: "my-credential",
         });
       });
 
       it("returns customized path", () => {
-        expect(config.getConfigDir()).toEqual(
-          "/home/test-user/qiita-articles/my-config"
+        expect(config.getCredentialDir()).toEqual(
+          "/home/test-user/qiita-articles/my-credential"
         );
       });
     });
@@ -106,6 +114,101 @@ describe("config", () => {
           expect(config.getItemsRootDir()).toEqual(
             "/home/test-user/qiita-articles/my-root"
           );
+        });
+      });
+    });
+  });
+
+  describe("#getUserConfigDir", () => {
+    describe("paths", () => {
+      beforeEach(() => {
+        config.load({});
+      });
+
+      it("returns default path", () => {
+        expect(config.getUserConfigDir()).toEqual(
+          "/home/test-user/qiita-articles"
+        );
+      });
+
+      describe("with options", () => {
+        beforeEach(() => {
+          config.load({
+            userConfigDir: "my-root",
+          });
+        });
+
+        it("returns customized path", () => {
+          expect(config.getUserConfigDir()).toEqual(
+            "/home/test-user/qiita-articles/my-root"
+          );
+        });
+      });
+    });
+  });
+
+  describe("#getUserConfigFilePath", () => {
+    describe("paths", () => {
+      beforeEach(() => {
+        config.load({});
+      });
+
+      it("returns default path", () => {
+        expect(config.getUserConfigFilePath()).toEqual(
+          "/home/test-user/qiita-articles/qiita.config.json"
+        );
+      });
+
+      describe("with options", () => {
+        beforeEach(() => {
+          config.load({
+            userConfigDir: "my-root",
+          });
+        });
+
+        it("returns customized path", () => {
+          expect(config.getUserConfigFilePath()).toEqual(
+            "/home/test-user/qiita-articles/my-root/qiita.config.json"
+          );
+        });
+      });
+    });
+  });
+
+  describe("#getUserConfig", () => {
+    const userConfigFilePath =
+      "/home/test-user/qiita-articles/qiita.config.json";
+
+    beforeEach(() => {
+      config.load({});
+    });
+
+    describe("when user config file already exists", () => {
+      beforeEach(() => {
+        const userConfigData = {
+          includePrivate: true,
+        };
+        resetFiles();
+        setFile(userConfigFilePath, JSON.stringify(userConfigData, null, 2));
+      });
+
+      it("returns user config", async () => {
+        const userConfig = await config.getUserConfig();
+        expect(userConfig).toStrictEqual({
+          includePrivate: true,
+        });
+      });
+    });
+
+    describe("when user config file does not exist", () => {
+      beforeEach(() => {
+        resetFiles();
+      });
+
+      it("returns default user config", async () => {
+        const userConfig = await config.getUserConfig();
+        expect(userConfig).toStrictEqual({
+          includePrivate: false,
         });
       });
     });

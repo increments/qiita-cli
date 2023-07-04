@@ -1,44 +1,57 @@
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { configDebugger } from "./debugger";
 
 interface Options {
-  configDir?: string;
+  credentialDir?: string;
   profile?: string;
   itemsRootDir?: string;
+  userConfigDir?: string;
 }
 
+type UserConfig = {
+  includePrivate: boolean;
+};
+
 class Config {
-  private configDir?: string;
+  private credentialDir?: string;
   private itemsRootDir?: string;
+  private userConfigFilePath?: string;
+  private userConfigDir?: string;
   private credential?: Credential;
 
   constructor() {}
 
   load(options: Options) {
-    this.configDir = this.resolveConfigDir(options.configDir);
+    this.credentialDir = this.resolveConfigDir(options.credentialDir);
     this.itemsRootDir = this.resolveItemsRootDir(options.itemsRootDir);
+    this.userConfigDir = this.resolveUserConfigDirPath(options.userConfigDir);
+    this.userConfigFilePath = this.resolveUserConfigFilePath(
+      options.userConfigDir
+    );
     this.credential = new Credential({
-      credentialDir: this.configDir,
+      credentialDir: this.credentialDir,
       profile: options.profile,
     });
 
     configDebugger(
       "load",
       JSON.stringify({
-        configDir: this.configDir,
+        credentialDir: this.credentialDir,
         itemsRootDir: this.itemsRootDir,
+        userConfigFilePath: this.userConfigFilePath,
       })
     );
   }
 
-  getConfigDir() {
-    if (!this.configDir) {
-      throw new Error("configDir is undefined");
+  getCredentialDir() {
+    if (!this.credentialDir) {
+      throw new Error("credentialDir is undefined");
     }
-    return this.configDir;
+    return this.credentialDir;
   }
 
   // TODO: filesystemrepo 側にあるべきか確認
@@ -47,6 +60,20 @@ class Config {
       throw new Error("itemsRootDir is undefined");
     }
     return this.itemsRootDir;
+  }
+
+  getUserConfigDir() {
+    if (!this.userConfigDir) {
+      throw new Error("userConfigDir is undefined");
+    }
+    return this.userConfigDir;
+  }
+
+  getUserConfigFilePath() {
+    if (!this.userConfigFilePath) {
+      throw new Error("userConfigFilePath is undefined");
+    }
+    return this.userConfigFilePath;
   }
 
   getCredential() {
@@ -63,19 +90,37 @@ class Config {
     return this.credential.setCredential(credential);
   }
 
-  private resolveConfigDir(configDirPath?: string) {
+  async getUserConfig() {
+    const defaultConfig = {
+      includePrivate: false,
+    } as UserConfig;
+
+    if (fsSync.existsSync(this.getUserConfigFilePath())) {
+      const userConfigFileData = await fs.readFile(
+        this.userConfigFilePath as string
+      );
+      const userConfig = JSON.parse(
+        userConfigFileData.toString()
+      ) as UserConfig;
+      return { ...defaultConfig, ...userConfig };
+    }
+
+    return defaultConfig;
+  }
+
+  private resolveConfigDir(credentialDirPath?: string) {
     const packageName = "qiita-cli";
 
     if (process.env.XDG_CONFIG_HOME) {
-      const configDir = process.env.XDG_CONFIG_HOME;
-      return path.join(configDir, packageName);
+      const credentialDir = process.env.XDG_CONFIG_HOME;
+      return path.join(credentialDir, packageName);
     }
-    if (!configDirPath) {
+    if (!credentialDirPath) {
       const homeDir = os.homedir();
       return path.join(homeDir, ".config", packageName);
     }
 
-    return this.resolveFullPath(configDirPath);
+    return this.resolveFullPath(credentialDirPath);
   }
 
   private resolveItemsRootDir(dirPath?: string) {
@@ -87,6 +132,22 @@ class Config {
     }
 
     return this.resolveFullPath(dirPath);
+  }
+
+  private resolveUserConfigDirPath(dirPath?: string) {
+    if (process.env.QIITA_CLI_USER_CONFIG_DIR) {
+      return process.env.QIITA_CLI_USER_CONFIG_DIR;
+    }
+    if (!dirPath) {
+      return process.cwd();
+    }
+
+    return this.resolveFullPath(dirPath);
+  }
+
+  private resolveUserConfigFilePath(dirPath?: string) {
+    const filename = "qiita.config.json";
+    return path.join(this.resolveUserConfigDirPath(dirPath), filename);
   }
 
   private resolveFullPath(filePath: string) {

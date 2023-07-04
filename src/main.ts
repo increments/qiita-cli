@@ -11,8 +11,9 @@ dotenv.config();
 
 const args = arg(
   {
-    "--config": String,
+    "--credential": String,
     "--profile": String,
+    "--config": String,
     "--root": String,
     "--verbose": Boolean,
   },
@@ -29,9 +30,10 @@ if (args["--verbose"]) {
 }
 
 config.load({
-  configDir: args["--config"],
+  credentialDir: args["--credential"],
   profile: args["--profile"],
   itemsRootDir: args["--root"],
+  userConfigDir: args["--config"],
 });
 
 exec(commandName, commandArgs);

@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { config } from "../lib/config";
 
 export const init = async () => {
   const rootDir = process.cwd();
@@ -48,6 +49,18 @@ jobs:
 node_modules
 `;
   writeFile(gitignoreFilePath, gitignoreFileContent);
+
+  const userConfigFilePath = config.getUserConfigFilePath();
+  const userConfigDir = config.getUserConfigDir();
+  if (!fs.existsSync(userConfigFilePath)) {
+    fs.mkdirSync(userConfigDir, { recursive: true });
+  }
+  const userConfigFileContent = JSON.stringify(
+    await config.getUserConfig(),
+    null,
+    2
+  );
+  writeFile(userConfigFilePath, userConfigFileContent);
 };
 
 const writeFile = (path: string, content: string) => {

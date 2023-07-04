@@ -55,6 +55,22 @@ npm install @qiita/qiita-cli@latest
 
 ## Qiita CLI のセットアップ方法について
 
+### init コマンドを実行する
+
+以下のコマンドを実行することで、
+
+- .gitignore
+- GitHub Actions のワークフローファイル
+  - 「GitHub で記事を管理する」の項目を参照
+- ユーザー設定ファイル（qiita.config.json）
+  - 「ユーザー設定ファイルについて」の項目を参照
+
+が生成されます。
+
+```console
+npx qiita init
+```
+
 ### Qiita のトークンを発行する
 
 以下の流れでトークンを発行してください。
@@ -161,17 +177,6 @@ Qiita CLI、Qiita Preview から記事の削除はできません。
 
 ## GitHub で記事を管理する
 
-以下のコマンドを実行することで、
-
-- .gitignore
-- GitHub Actions のワークフローファイル
-
-が生成されます。
-
-```console
-npx qiita init
-```
-
 ### GitHub の設定について
 
 以下の流れで設定を行うことで、GitHub の特定のブランチにコミットしたタイミングで記事の投稿や更新を行うことが可能になります。
@@ -204,19 +209,37 @@ npx qiita pull
 
 ### version
 
-qiita-cli のバージョンを確認できます。
+Qiita CLI のバージョンを確認できます。
 
 ```console
 npx qiita version
 ```
 
+## ユーザー設定ファイルについて
+
+`npx qiita init`コマンドで生成される`qiita.config.json`について説明します。
+このファイルを用いて、Qiita CLI の設定を行うことができます。
+設定できるオプションは以下の通りです。
+
+- includePrivate: 限定共有記事を含めるかどうかを選べます。デフォルトは`false`です。
+
 ## オプション
+
+### --credential \<credential_dir>
+
+Qiita CLI の認証情報（`credentials.json`）を配置する・しているディレクトリを指定できます。
+デフォルトでは`$XDG_CONFIG_HOME/qiita-cli`もしくは`$HOME/.config/qiita-cli`になっています。
+
+```console
+npx qiita login ---credential ./my_conf/
+npx qiita preview --credential ./my_conf/
+```
 
 ### --config \<config_dir>
 
-qiita-cli の設定情報（`credentials.json`）を配置する・しているディレクトリを指定できます。
+Qiita CLI の設定情報（`qiita.config.json`）を配置する・しているディレクトリを指定できます。
 
-デフォルトでは`$XDG_CONFIG_HOME/qiita-cli`もしくは`$HOME/.config/qiita-cli`になっています。
+デフォルトでは、カレントディレクトリになります。
 
 例）
 
