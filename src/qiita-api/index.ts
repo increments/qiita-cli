@@ -17,9 +17,18 @@ export interface Item {
 
 export class QiitaApi {
   private readonly token: string;
+  private readonly userAgent: string;
 
-  constructor({ token }: { token: string }) {
+  static agentName = "QiitaApi";
+  static version = "0.0.1";
+
+  constructor({ token, userAgent }: { token: string; userAgent?: string }) {
     this.token = token;
+    this.userAgent = userAgent ? userAgent : QiitaApi.defaultUserAgent();
+  }
+
+  static defaultUserAgent() {
+    return `${QiitaApi.agentName}/${QiitaApi.version}`;
   }
 
   private getUrlScheme() {
@@ -49,6 +58,7 @@ export class QiitaApi {
         headers: {
           Authorization: `Bearer ${this.token}`,
           "Content-Type": "application/json",
+          "User-Agent": this.userAgent,
         },
         ...options,
       });

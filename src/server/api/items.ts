@@ -2,6 +2,7 @@ import type Express from "express";
 import { Router } from "express";
 import { config } from "../../lib/config";
 import { getFileSystemRepo } from "../../lib/get-file-system-repo";
+import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
 import { itemsShowPath } from "../../lib/qiita-cli-url";
 import { validateItem } from "../../lib/validators/item-validator";
 import type {
@@ -79,8 +80,7 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
   // const { data, itemPath, modified, published } = ;
   const { itemPath, modified, published } = item;
 
-  const { accessToken } = await config.getCredential();
-  const qiitaApi = new QiitaApi({ token: accessToken });
+  const qiitaApi = await getQiitaApiInstance();
   const renderedBody = await qiitaApi.preview(item.rawBody);
 
   const currentUser = await getCurrentUser();
@@ -139,8 +139,7 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
     return;
   }
 
-  const { accessToken } = await config.getCredential();
-  const qiitaApi = new QiitaApi({ token: accessToken });
+  const qiitaApi = await getQiitaApiInstance();
   let output: { [key: string]: string | boolean } = {
     success: true,
     uuid: result.id || "",
