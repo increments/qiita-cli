@@ -13,6 +13,7 @@ const args = arg(
   {
     "--credential": String,
     "--profile": String,
+    "--config": String,
     "--root": String,
     "--verbose": Boolean,
   },
@@ -32,6 +33,7 @@ config.load({
   credentialDir: args["--credential"],
   profile: args["--profile"],
   itemsRootDir: args["--root"],
+  userConfigDir: args["--config"],
 });
 
 exec(commandName, commandArgs);

@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -8,11 +9,18 @@ interface Options {
   credentialDir?: string;
   profile?: string;
   itemsRootDir?: string;
+  userConfigDir?: string;
 }
+
+type UserConfig = {
+  includePrivate: boolean;
+};
 
 class Config {
   private credentialDir?: string;
   private itemsRootDir?: string;
+  private userConfigFilePath?: string;
+  private userConfigDir?: string;
   private credential?: Credential;
 
   constructor() {}
@@ -20,6 +28,10 @@ class Config {
   load(options: Options) {
     this.credentialDir = this.resolveConfigDir(options.credentialDir);
     this.itemsRootDir = this.resolveItemsRootDir(options.itemsRootDir);
+    this.userConfigDir = this.resolveUserConfigDirPath(options.userConfigDir);
+    this.userConfigFilePath = this.resolveUserConfigFilePath(
+      options.userConfigDir
+    );
     this.credential = new Credential({
       credentialDir: this.credentialDir,
       profile: options.profile,
@@ -30,6 +42,7 @@ class Config {
       JSON.stringify({
         credentialDir: this.credentialDir,
         itemsRootDir: this.itemsRootDir,
+        userConfigFilePath: this.userConfigFilePath,
       })
     );
   }
@@ -49,6 +62,20 @@ class Config {
     return this.itemsRootDir;
   }
 
+  getUserConfigDir() {
+    if (!this.userConfigDir) {
+      throw new Error("userConfigDir is undefined");
+    }
+    return this.userConfigDir;
+  }
+
+  getUserConfigFilePath() {
+    if (!this.userConfigFilePath) {
+      throw new Error("userConfigFilePath is undefined");
+    }
+    return this.userConfigFilePath;
+  }
+
   getCredential() {
     if (!this.credential) {
       throw new Error("credential is undefined");
@@ -61,6 +88,24 @@ class Config {
       throw new Error("credential is undefined");
     }
     return this.credential.setCredential(credential);
+  }
+
+  async getUserConfig() {
+    const defaultConfig = {
+      includePrivate: false,
+    } as UserConfig;
+
+    if (fsSync.existsSync(this.getUserConfigFilePath())) {
+      const userConfigFileData = await fs.readFile(
+        this.userConfigFilePath as string
+      );
+      const userConfig = JSON.parse(
+        userConfigFileData.toString()
+      ) as UserConfig;
+      return { ...defaultConfig, ...userConfig };
+    }
+
+    return defaultConfig;
   }
 
   private resolveConfigDir(credentialDirPath?: string) {
@@ -87,6 +132,22 @@ class Config {
     }
 
     return this.resolveFullPath(dirPath);
+  }
+
+  private resolveUserConfigDirPath(dirPath?: string) {
+    if (process.env.QIITA_CLI_USER_CONFIG_DIR) {
+      return process.env.QIITA_CLI_USER_CONFIG_DIR;
+    }
+    if (!dirPath) {
+      return process.cwd();
+    }
+
+    return this.resolveFullPath(dirPath);
+  }
+
+  private resolveUserConfigFilePath(dirPath?: string) {
+    const filename = "qiita.config.json";
+    return path.join(this.resolveUserConfigDirPath(dirPath), filename);
   }
 
   private resolveFullPath(filePath: string) {
