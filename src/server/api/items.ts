@@ -9,7 +9,7 @@ import type {
   ItemsIndexViewModel,
 } from "../../lib/view-models/items";
 import { Item, QiitaApi } from "../../qiita-api";
-import { checkFrontmatterType } from "../lib/check-frontmatter-type";
+import { checkFrontmatterType } from "../../lib/check-frontmatter-type";
 import { getCurrentUser } from "../lib/get-current-user";
 import { itemUrl } from "../lib/qiita-url";
 
