@@ -45,7 +45,7 @@ npm install @qiita/qiita-cli --save-dev
 npx qiita version
 ```
 
-### ３. Qiita CLI をアップデートする
+### 3. Qiita CLI をアップデートする
 
 Qiita CLI をアップデートする場合は以下のコマンドを実行します。
 
