@@ -1,5 +1,6 @@
 import arg from "arg";
 import process from "node:process";
+import { checkFrontmatterType } from "../lib/check-frontmatter-type";
 import { config } from "../lib/config";
 import { QiitaItem } from "../lib/entities/qiita-item";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
@@ -44,16 +45,22 @@ export const publish = async (argv: string[]) => {
 
   // Validate
   const invalidItemMessages = targetItems.reduce((acc, item) => {
-    const errors = validateItem(item);
-    if (errors.length > 0) return [...acc, { name: item.name, errors }];
-    else return acc;
+    const frontmatterErrors = checkFrontmatterType(item);
+    if (frontmatterErrors.length > 0)
+      return [...acc, { name: item.name, errors: frontmatterErrors }];
+
+    const validationErrors = validateItem(item);
+    if (validationErrors.length > 0)
+      return [...acc, { name: item.name, errors: validationErrors }];
+
+    return acc;
   }, [] as { name: string; errors: string[] }[]);
   if (invalidItemMessages.length > 0) {
     console.error("Validation error:");
     invalidItemMessages.forEach((msg) => {
       console.error(msg.name, msg.errors);
-      targetItems = targetItems.filter((item) => item.name !== msg.name);
     });
+    process.exit(1);
   }
 
   if (targetItems.length === 0) {
