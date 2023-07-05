@@ -59,8 +59,8 @@ export const publish = async (argv: string[]) => {
     console.error("Validation error:");
     invalidItemMessages.forEach((msg) => {
       console.error(msg.name, msg.errors);
-      targetItems = targetItems.filter((item) => item.name !== msg.name);
     });
+    process.exit(1);
   }
 
   if (targetItems.length === 0) {
