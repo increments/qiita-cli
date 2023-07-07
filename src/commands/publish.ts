@@ -4,6 +4,7 @@ import { checkFrontmatterType } from "../lib/check-frontmatter-type";
 import { config } from "../lib/config";
 import { QiitaItem } from "../lib/entities/qiita-item";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
+import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { validateItem } from "../lib/validators/item-validator";
 import { Item, QiitaApi } from "../qiita-api";
@@ -16,11 +17,7 @@ export const publish = async (argv: string[]) => {
     { argv }
   );
 
-  const { accessToken } = await config.getCredential();
-
-  const qiitaApi = new QiitaApi({
-    token: accessToken,
-  });
+  const qiitaApi = await getQiitaApiInstance();
   const fileSystemRepo = await getFileSystemRepo();
 
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi });

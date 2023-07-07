@@ -3,6 +3,7 @@ import { Router } from "express";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { config } from "../../lib/config";
+import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
 import { QiitaApi } from "../../qiita-api";
 
 const readmeIndex = async (req: Express.Request, res: Express.Response) => {
@@ -11,8 +12,7 @@ const readmeIndex = async (req: Express.Request, res: Express.Response) => {
       path.join(path.resolve(__dirname), "../../../", "README.md"),
       { encoding: "utf8" }
     );
-    const { accessToken } = await config.getCredential();
-    const qiitaApi = new QiitaApi({ token: accessToken });
+    const qiitaApi = await getQiitaApiInstance();
     const renderedBody = await qiitaApi.preview(fileContent);
 
     res.json({

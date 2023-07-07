@@ -2,6 +2,7 @@ import arg from "arg";
 import process from "node:process";
 import readline from "node:readline/promises";
 import { config } from "../lib/config";
+import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { QiitaApi } from "../qiita-api";
 
 export const login = async (argv: string[]) => {
@@ -15,9 +16,7 @@ export const login = async (argv: string[]) => {
   const token = await rl.question("Enter your token: ");
   rl.close();
 
-  const qiitaApi = new QiitaApi({
-    token,
-  });
+  const qiitaApi = await getQiitaApiInstance({ token });
   const currentUser = await qiitaApi.authenticatedUser();
 
   await config.setCredential({
