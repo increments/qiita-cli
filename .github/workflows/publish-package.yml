@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 concurrency:
@@ -21,10 +21,23 @@ jobs:
         with:
           node-version: "18.16.0"
           registry-url: "https://registry.npmjs.org"
+      - name: Set version number to environment variable
+        run: |
+          node -p -e '`RELEASED_PACKAGE_VERSION=v${require("./package.json").version}`' >> $GITHUB_ENV
+          node -p -e '`RELEASED_MAJOR_VERSION=v${require("./package.json").version}`' | awk -F. '{print $1}' >> $GITHUB_ENV
       - run: yarn install
       - run: yarn run build
         env:
           NODE_ENV: "production"
-      - run: yarn publish --access public
+      - name: Publish package
+        run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create version tag
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a ${{ env.RELEASED_PACKAGE_VERSION }} -m 'Release ${{ env.RELEASED_PACKAGE_VERSION }}'
+          git tag -f ${{ env.RELEASED_MAJOR_VERSION }} ${{ env.RELEASED_PACKAGE_VERSION }}
+          git push origin ${{ env.RELEASED_PACKAGE_VERSION }}
+          git push -f origin ${{ env.RELEASED_MAJOR_VERSION }}
