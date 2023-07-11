@@ -140,7 +140,7 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
   }
 
   const qiitaApi = await getQiitaApiInstance();
-  let output: { [key: string]: string | boolean } = {
+  const output: { [key: string]: string | boolean } = {
     success: true,
     uuid: result.id || "",
   };
