@@ -170,7 +170,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
           css={articleFooterTitleStyle}
           href="https://qiita.com"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
         >
           <QiitaLogo css={{ height: 16 }} />
         </a>
@@ -188,7 +188,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articlesListItemStyle}
               href="https://help.qiita.com/ja/articles/qiita-article-guideline"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <MaterialSymbol css={{ color: Colors.disabled }}>
                 lightbulb
@@ -201,7 +201,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articlesListItemStyle}
               href="https://qiita.com/Qiita/items/c686397e4a0f4f11683d"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <MaterialSymbol css={{ color: Colors.disabled }}>
                 help
@@ -216,7 +216,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articleFooterListItemStyle}
               href="https://help.qiita.com/ja/articles/qiita-community-guideline"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               コミュニティガイドライン
             </a>
@@ -226,7 +226,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articleFooterListItemStyle}
               href="https://qiita.com/terms"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               利用規約
             </a>
@@ -236,7 +236,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articleFooterListItemStyle}
               href="https://qiita.com/privacy"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               プライバシーポリシー
             </a>
@@ -346,7 +346,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
           css={articleFooterTitleStyle}
           href="https://qiita.com"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
         >
           <QiitaLogo css={{ height: 16 }} />
         </a>
@@ -364,7 +364,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articlesListItemStyle}
               href="https://help.qiita.com/ja/articles/qiita-article-guideline"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <MaterialSymbol css={{ color: Colors.disabled }}>
                 lightbulb
@@ -377,7 +377,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articlesListItemStyle}
               href="https://qiita.com/Qiita/items/c686397e4a0f4f11683d"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <MaterialSymbol css={{ color: Colors.disabled }}>
                 help
@@ -392,7 +392,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articleFooterListItemStyle}
               href="https://help.qiita.com/ja/articles/qiita-community-guideline"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               コミュニティガイドライン
             </a>
@@ -402,7 +402,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articleFooterListItemStyle}
               href="https://qiita.com/terms"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               利用規約
             </a>
@@ -412,7 +412,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={articleFooterListItemStyle}
               href="https://qiita.com/privacy"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               プライバシーポリシー
             </a>
@@ -503,7 +503,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={closeSidebarFooterLinkStyle}
               href="https://help.qiita.com/ja/articles/qiita-article-guideline"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <MaterialSymbol>lightbulb</MaterialSymbol>
             </a>
@@ -521,7 +521,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               css={closeSidebarFooterLinkStyle}
               href="https://qiita.com/Qiita/items/c686397e4a0f4f11683d"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <MaterialSymbol>help</MaterialSymbol>
             </a>
