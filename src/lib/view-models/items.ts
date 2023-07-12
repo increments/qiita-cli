@@ -12,3 +12,16 @@ export type ItemsIndexViewModel = {
   draft: ItemViewModel[];
   public: ItemViewModel[];
 };
+
+export type ItemsShowViewModel = {
+  error_messages: string[];
+  item_path: string;
+  modified: boolean;
+  organization_url_name: string | null;
+  published: boolean;
+  qiita_item_url: string | null;
+  rendered_body: string;
+  secret: boolean;
+  tags: string[];
+  title: string;
+};

@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { apiItemsShowPath } from "../../../lib/qiita-cli-url";
+import type { ItemsShowViewModel } from "../../../lib/view-models/items";
 import { Article } from "../../components/Article";
 import { ArticleInfo } from "../../components/ArticleInfo";
 import { Header } from "../../components/Header";
@@ -25,20 +26,7 @@ export const ItemsShow = () => {
   const [searchParams] = useSearchParams();
   const basename = searchParams.get("basename");
 
-  const [item, setItem] = useState<{
-    body: string;
-    renderedBody: string;
-    private: boolean;
-    tags: string[];
-    title: string;
-    itemPath: string;
-    qiitaItemUrl: string | null;
-    itemsShowPath: string;
-    modified: boolean;
-    published: boolean;
-    organizationUrlName: string | null;
-    errorMessages: string[];
-  } | null>(null);
+  const [item, setItem] = useState<ItemsShowViewModel | null>(null);
 
   const [error, setError] = useState<null | string>(null);
   const [errorFrontmatterMessages, setErrorFrontmatterMessages] = useState<
@@ -94,25 +82,25 @@ export const ItemsShow = () => {
             <Header
               handleMobileOpen={handleMobileOpen}
               isItemPublishable={
-                item.modified && item.errorMessages.length === 0
+                item.modified && item.error_messages.length === 0
               }
-              itemPath={item.itemPath}
+              itemPath={item.item_path}
               id={id}
               basename={basename}
             />
             <div css={contentsWrapperStyle}>
               <div css={contentsContainerStyle}>
                 <ArticleInfo
-                  secret={item.private}
+                  secret={item.secret}
                   modified={item.modified}
-                  organizationUrlName={item.organizationUrlName}
+                  organizationUrlName={item.organization_url_name}
                   published={item.published}
-                  errorMessages={item.errorMessages}
-                  qiitaItemUrl={item.qiitaItemUrl}
+                  errorMessages={item.error_messages}
+                  qiitaItemUrl={item.qiita_item_url}
                 />
                 <div css={articleWrapStyle}>
                   <Article
-                    renderedBody={item.renderedBody}
+                    renderedBody={item.rendered_body}
                     tags={item.tags}
                     title={item.title}
                   />
