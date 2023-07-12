@@ -1,16 +1,15 @@
 import type Express from "express";
 import { Router } from "express";
-import { config } from "../../lib/config";
+import { checkFrontmatterType } from "../../lib/check-frontmatter-type";
 import { getFileSystemRepo } from "../../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
-import { itemsShowPath } from "../../lib/qiita-cli-url";
 import { validateItem } from "../../lib/validators/item-validator";
 import type {
   ItemViewModel,
   ItemsIndexViewModel,
+  ItemsShowViewModel,
 } from "../../lib/view-models/items";
-import { Item, QiitaApi } from "../../qiita-api";
-import { checkFrontmatterType } from "../../lib/check-frontmatter-type";
+import { Item } from "../../qiita-api";
 import { getCurrentUser } from "../lib/get-current-user";
 import { itemUrl } from "../lib/qiita-url";
 
@@ -95,23 +94,19 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
   // validate
   const errorMessages = validateItem(item);
 
-  res.json({
-    title: item.title,
-    tags: item.tags,
-    private: item.secret,
-    body: item.rawBody,
-    organizationUrlName: item.organizationUrlName,
-    renderedBody,
-    itemPath,
-    qiitaItemUrl,
-    itemsShowPath: itemsShowPath(
-      itemId,
-      basename ? { basename: basename } : undefined
-    ),
+  const result: ItemsShowViewModel = {
+    error_messages: errorMessages,
+    item_path: itemPath,
     modified,
+    organization_url_name: item.organizationUrlName,
+    secret: item.secret,
     published,
-    errorMessages,
-  });
+    qiita_item_url: qiitaItemUrl,
+    rendered_body: renderedBody,
+    tags: item.tags,
+    title: item.title,
+  };
+  res.json(result);
 };
 
 const itemsCreate = async (req: Express.Request, res: Express.Response) => {
