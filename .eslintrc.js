@@ -39,7 +39,6 @@ module.exports = {
         "src/commands/pull.ts",
         "src/lib/file-system-repo.test.ts",
         "src/lib/file-system-repo.ts",
-        "src/server/api/items.ts",
         "src/server/api/readme.ts",
         "src/server/app.ts",
         "src/server/lib/get-current-user.ts",

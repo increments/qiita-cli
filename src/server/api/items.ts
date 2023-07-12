@@ -1,17 +1,15 @@
 import type Express from "express";
 import { Router } from "express";
-import { config } from "../../lib/config";
+import { checkFrontmatterType } from "../../lib/check-frontmatter-type";
 import { getFileSystemRepo } from "../../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
-import { itemsShowPath } from "../../lib/qiita-cli-url";
 import { validateItem } from "../../lib/validators/item-validator";
 import type {
   ItemViewModel,
   ItemsIndexViewModel,
   ItemsShowViewModel,
 } from "../../lib/view-models/items";
-import { Item, QiitaApi } from "../../qiita-api";
-import { checkFrontmatterType } from "../../lib/check-frontmatter-type";
+import { Item } from "../../qiita-api";
 import { getCurrentUser } from "../lib/get-current-user";
 import { itemUrl } from "../lib/qiita-url";
 
