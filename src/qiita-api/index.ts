@@ -13,6 +13,7 @@ export interface Item {
   coediting: boolean;
   created_at: string;
   updated_at: string;
+  slide: boolean;
 }
 
 export class QiitaApi {
@@ -188,12 +189,14 @@ export class QiitaApi {
     title,
     isPrivate,
     organizationUrlName,
+    slide,
   }: {
     rawBody: string;
     tags: string[];
     title: string;
     isPrivate: boolean;
     organizationUrlName: string | null;
+    slide: boolean;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -206,6 +209,7 @@ export class QiitaApi {
       }),
       private: isPrivate,
       organization_url_name: organizationUrlName,
+      slide,
     });
 
     const path = `/api/v2/items`;
@@ -222,6 +226,7 @@ export class QiitaApi {
     tags,
     isPrivate,
     organizationUrlName,
+    slide,
   }: {
     uuid: string;
     rawBody: string;
@@ -229,6 +234,7 @@ export class QiitaApi {
     tags: string[];
     isPrivate: boolean;
     organizationUrlName: string | null;
+    slide: boolean;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -241,6 +247,7 @@ export class QiitaApi {
       }),
       private: isPrivate,
       organization_url_name: organizationUrlName,
+      slide,
     });
 
     const path = `/api/v2/items/${uuid}`;

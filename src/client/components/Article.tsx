@@ -1,38 +1,25 @@
 import { css } from "@emotion/react";
+import { useRef } from "react";
 import {
   Colors,
-  getSpace,
   LineHeight,
   Typography,
   Weight,
+  getSpace,
 } from "../lib/variables";
 import { MaterialSymbol } from "./MaterialSymbol";
-import { useState, useEffect, useRef } from "react";
-import {
-  applyMathJax,
-  executeScriptTagsInElement,
-} from "../lib/embed-init-scripts";
+import { QiitaMarkdownHtmlBody } from "./QiitaMarkdownHtmlBody";
+import { Slide } from "./Slide";
 
 interface Props {
   renderedBody: string;
   tags: string[];
   title: string;
+  slide: boolean;
 }
 
-export const Article = ({ renderedBody, tags, title }: Props) => {
-  const bodyElement = useRef<HTMLDivElement>(null);
-  const [isRendered, setIsRendered] = useState(false);
-
-  useEffect(() => {
-    if (isRendered) {
-      bodyElement.current && executeScriptTagsInElement(bodyElement.current);
-      bodyElement.current && applyMathJax(bodyElement.current);
-    }
-  }, [isRendered, bodyElement, renderedBody]);
-
-  useEffect(() => {
-    setIsRendered(true);
-  }, []);
+export const Article = ({ renderedBody, tags, title, slide }: Props) => {
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   return (
     <article css={containerStyle}>
@@ -50,8 +37,9 @@ export const Article = ({ renderedBody, tags, title }: Props) => {
           ))}
         </ul>
       </div>
-      <div css={bodyStyle} className="it-MdContent" ref={bodyElement}>
-        <div dangerouslySetInnerHTML={{ __html: renderedBody }} />
+      <div css={bodyStyle} className="it-MdContent">
+        {slide && <Slide renderedBody={renderedBody} title={title} />}
+        <QiitaMarkdownHtmlBody renderedBody={renderedBody} bodyRef={bodyRef} />
       </div>
     </article>
   );

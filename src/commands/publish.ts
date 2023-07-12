@@ -75,6 +75,7 @@ export const publish = async (argv: string[]) => {
         uuid: item.id,
         isPrivate: item.secret,
         organizationUrlName: item.organizationUrlName,
+        slide: item.slide,
       });
 
       console.log(`Updated: ${item.name} -> ${item.id}`);
@@ -85,6 +86,7 @@ export const publish = async (argv: string[]) => {
         title: item.title,
         isPrivate: item.secret,
         organizationUrlName: item.organizationUrlName,
+        slide: item.slide,
       });
       fileSystemRepo.updateItemUuid(item.name, responseItem.id);
 

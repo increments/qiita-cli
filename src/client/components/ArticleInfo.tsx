@@ -17,6 +17,7 @@ interface Props {
   published: boolean;
   errorMessages: string[];
   qiitaItemUrl: string | null;
+  slide: boolean;
 }
 
 export const ArticleInfo = ({
@@ -26,6 +27,7 @@ export const ArticleInfo = ({
   published,
   errorMessages,
   qiitaItemUrl,
+  slide,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(
     localStorage.getItem("openInfoState") === "true" ? true : false
@@ -84,6 +86,7 @@ export const ArticleInfo = ({
         <InfoItem title="Organization">
           {organizationUrlName || "紐付けなし"}
         </InfoItem>
+        <InfoItem title="スライドモード">{slide ? "ON" : "OFF"}</InfoItem>
       </details>
       {errorMessages.length > 0 && (
         <div css={errorContentsStyle}>

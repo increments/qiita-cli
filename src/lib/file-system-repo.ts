@@ -13,6 +13,7 @@ class FileContent {
   public readonly id: string | null;
   public readonly organizationUrlName: string | null;
   public readonly rawBody: string;
+  public readonly slide: boolean;
 
   constructor({
     title,
@@ -22,6 +23,7 @@ class FileContent {
     id,
     organizationUrlName,
     rawBody,
+    slide,
   }: {
     title: string;
     tags: string[];
@@ -30,6 +32,7 @@ class FileContent {
     id: string | null;
     organizationUrlName: string | null;
     rawBody: string;
+    slide: boolean;
   }) {
     this.title = title;
     this.tags = tags;
@@ -38,6 +41,7 @@ class FileContent {
     this.id = id;
     this.organizationUrlName = organizationUrlName;
     this.rawBody = rawBody;
+    this.slide = slide;
   }
 
   static read(fileContent: string): FileContent {
@@ -50,6 +54,7 @@ class FileContent {
       updatedAt: data.updated_at,
       id: data.id,
       organizationUrlName: data.organization_url_name,
+      slide: data.slide,
     });
   }
 
@@ -68,6 +73,7 @@ class FileContent {
       updatedAt: "",
       id,
       organizationUrlName: null,
+      slide: false,
     });
   }
 
@@ -80,6 +86,7 @@ class FileContent {
       updatedAt: item.updated_at,
       id: item.id,
       organizationUrlName: item.organization_url_name,
+      slide: item.slide,
     });
   }
 
@@ -92,6 +99,7 @@ class FileContent {
       updatedAt: item.updatedAt,
       id: item.id,
       organizationUrlName: item.organizationUrlName,
+      slide: item.slide,
     });
   }
 
@@ -103,6 +111,7 @@ class FileContent {
       updated_at: this.updatedAt,
       id: this.id,
       organization_url_name: this.organizationUrlName,
+      slide: this.slide,
     });
   }
 
@@ -121,7 +130,8 @@ class FileContent {
       this.title === aFileContent.title &&
       this.tags.sort().join() === aFileContent.tags.sort().join() &&
       this.secret === aFileContent.secret &&
-      this.rawBody === aFileContent.rawBody
+      this.rawBody === aFileContent.rawBody &&
+      this.slide === aFileContent.slide
     );
   }
 
@@ -134,6 +144,7 @@ class FileContent {
       id,
       organizationUrlName: this.organizationUrlName,
       rawBody: this.rawBody,
+      slide: this.slide,
     });
   }
 }
@@ -339,6 +350,7 @@ export class FileSystemRepo {
       updatedAt: localFileContent.updatedAt,
       organizationUrlName: localFileContent.organizationUrlName,
       rawBody: localFileContent.rawBody,
+      slide: localFileContent.slide,
       name: basename,
       modified: !localFileContent.equals(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
@@ -373,6 +385,7 @@ export class FileSystemRepo {
       updatedAt: localFileContent.updatedAt,
       organizationUrlName: localFileContent.organizationUrlName,
       rawBody: localFileContent.rawBody,
+      slide: localFileContent.slide,
       name: basename,
       modified: !localFileContent.equals(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),

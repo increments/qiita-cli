@@ -8,6 +8,7 @@ describe("checkFrontmatterType", () => {
     updatedAt: "",
     id: null,
     organizationUrlName: null,
+    slide: false,
   };
 
   it("returns no errors", () => {
@@ -120,6 +121,41 @@ describe("checkFrontmatterType", () => {
       const errorMessages = checkFrontmatterType({
         ...frontMatter,
         organizationUrlName: "qiita-inc",
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+  });
+
+  describe("checkFrontmatterTypeSlide", () => {
+    describe("when slide is String", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        slide: "true" as unknown as boolean,
+      });
+
+      it("returns errors", () => {
+        expect(errorMessages.length).toEqual(1);
+      });
+    });
+
+    describe("when slide is true", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        slide: true,
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when slide is false", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        slide: false,
       });
 
       it("returns no errors", () => {

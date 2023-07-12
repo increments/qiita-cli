@@ -18,12 +18,6 @@ Qiita の Markdown 記法については[Markdown 記法 チートシート](htt
 
 Qiita CLI、Qiita Preview は現在ベータ版です。
 機能についても開発中のものがあります。
-未実装の機能は以下の通りです。
-
-- スライドモードのプレビュー
-
-これらの機能に関しましては、正式版リリースまでに開発を行っていきます。
-正式リリースまでは破壊的なアップデートなどが頻繁にされる可能性がございますのでご了承ください。
 
 ## Qiita CLI の導入方法について
 
@@ -147,6 +141,7 @@ private: false # true: 限定共有記事 / false: 公開記事
 updated_at: "" # 記事を投稿した際に自動的に記事の更新日時に変わります
 id: null # 記事を投稿した際に自動的に記事のUUIDに変わります
 organization_url_name: null # 関連付けるOrganizationのURL名
+slide: false # true: スライドモードON / false: スライドモードOFF
 ---
 # new article body
 ```
