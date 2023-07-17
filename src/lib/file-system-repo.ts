@@ -276,9 +276,9 @@ export class FileSystemRepo {
     }
   }
 
-  async saveItems(items: Item[]) {
+  async saveItems(items: Item[], isLocalUpdate: boolean = false) {
     const promises = items.map(async (item) => {
-      await this.syncItem(item);
+      await this.syncItem(item, false, isLocalUpdate);
     });
 
     await Promise.all(promises);
