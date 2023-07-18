@@ -207,6 +207,14 @@ Qiita 上で更新を行い、手元で変更を行っていない記事ファ�
 npx qiita pull
 ```
 
+`--force`オプションを用いることで、記事ファイルをを全て強制的に Qiita と同期します。
+
+```console
+npx qiita pull --force
+# -f は --force のエイリアスとして使用できます。
+npx qiita pull -f
+```
+
 ### version
 
 Qiita CLI のバージョンを確認できます。

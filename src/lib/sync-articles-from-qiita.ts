@@ -5,9 +5,11 @@ import { config } from "./config";
 export const syncArticlesFromQiita = async ({
   fileSystemRepo,
   qiitaApi,
+  isLocalUpdate = false,
 }: {
   fileSystemRepo: FileSystemRepo;
   qiitaApi: QiitaApi;
+  isLocalUpdate?: boolean;
 }) => {
   const per = 100;
   const userConfig = await config.getUserConfig();
@@ -20,6 +22,6 @@ export const syncArticlesFromQiita = async ({
     const result = userConfig.includePrivate
       ? items
       : items.filter((item) => !item.private);
-    await fileSystemRepo.saveItems(result);
+    await fileSystemRepo.saveItems(result, isLocalUpdate);
   }
 };
