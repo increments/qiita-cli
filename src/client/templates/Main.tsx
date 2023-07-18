@@ -18,9 +18,8 @@ const mainStyle = css({
   "sidebar contents"
   `,
   gridTemplateColumns: "auto minmax(450px, 1fr)",
-  height: "100vh",
 
   ...viewport.S({
-    gridTemplateColumns: "auto 1fr",
+    gridTemplateColumns: "auto minmax(0, 1fr)", // Setting min width to prevent widening
   }),
 });

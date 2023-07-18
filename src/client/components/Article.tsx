@@ -21,20 +21,7 @@ interface Props {
 
 export const Article = ({ renderedBody, tags, title }: Props) => {
   const bodyElement = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(
-    localStorage.getItem("openArticleState") === "true" ? true : false
-  );
-
   const [isRendered, setIsRendered] = useState(false);
-
-  const toggleAccordion = (event: React.MouseEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setIsOpen((prev) => !prev);
-  };
-
-  useEffect(() => {
-    localStorage.setItem("openArticleState", JSON.stringify(isOpen));
-  }, [isOpen]);
 
   useEffect(() => {
     if (isRendered) {

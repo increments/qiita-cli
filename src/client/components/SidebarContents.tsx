@@ -694,6 +694,8 @@ const closedSidebarStyle = css({
   justifyContent: "space-between",
   maxWidth: 48,
   padding: `${getSpace(1)}px ${getSpace(1 / 2)}px ${getSpace(2)}px`,
+  position: "sticky",
+  top: 0,
 
   ...viewport.S({
     display: "none",
