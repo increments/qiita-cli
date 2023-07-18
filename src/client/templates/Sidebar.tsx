@@ -14,4 +14,6 @@ export const Sidebar = ({ children }: Props) => {
 const sidebarStyle = css({
   backgroundColor: Colors.gray0,
   gridArea: "sidebar",
+  position: "sticky",
+  zIndex: 1,
 });

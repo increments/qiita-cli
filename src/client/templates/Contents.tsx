@@ -11,7 +11,5 @@ export const Contents = ({ children }: Props) => {
 
 const contentsStyle = css({
   gridArea: "contents",
-  height: "100vh",
-  overflowX: "auto",
   width: "100%",
 });
