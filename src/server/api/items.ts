@@ -76,7 +76,6 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
     return;
   }
 
-  // const { data, itemPath, modified, published } = ;
   const { itemPath, modified, published } = item;
 
   const qiitaApi = await getQiitaApiInstance();

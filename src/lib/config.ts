@@ -22,8 +22,12 @@ class Config {
   private userConfigFilePath?: string;
   private userConfigDir?: string;
   private credential?: Credential;
+  private cacheDataDir?: string;
+  private readonly packageName: string;
 
-  constructor() {}
+  constructor() {
+    this.packageName = "qiita-cli";
+  }
 
   load(options: Options) {
     this.credentialDir = this.resolveConfigDir(options.credentialDir);
@@ -32,6 +36,7 @@ class Config {
     this.userConfigFilePath = this.resolveUserConfigFilePath(
       options.userConfigDir
     );
+    this.cacheDataDir = this.resolveCacheDataDir();
     this.credential = new Credential({
       credentialDir: this.credentialDir,
       profile: options.profile,
@@ -43,6 +48,7 @@ class Config {
         credentialDir: this.credentialDir,
         itemsRootDir: this.itemsRootDir,
         userConfigFilePath: this.userConfigFilePath,
+        cacheDataDir: this.cacheDataDir,
       })
     );
   }
@@ -74,6 +80,13 @@ class Config {
       throw new Error("userConfigFilePath is undefined");
     }
     return this.userConfigFilePath;
+  }
+
+  getCacheDataDir() {
+    if (!this.cacheDataDir) {
+      throw new Error("cacheDataDir is undefined");
+    }
+    return this.cacheDataDir;
   }
 
   getCredential() {
@@ -109,15 +122,13 @@ class Config {
   }
 
   private resolveConfigDir(credentialDirPath?: string) {
-    const packageName = "qiita-cli";
-
     if (process.env.XDG_CONFIG_HOME) {
       const credentialDir = process.env.XDG_CONFIG_HOME;
-      return path.join(credentialDir, packageName);
+      return path.join(credentialDir, this.packageName);
     }
     if (!credentialDirPath) {
       const homeDir = os.homedir();
-      return path.join(homeDir, ".config", packageName);
+      return path.join(homeDir, ".config", this.packageName);
     }
 
     return this.resolveFullPath(credentialDirPath);
@@ -148,6 +159,12 @@ class Config {
   private resolveUserConfigFilePath(dirPath?: string) {
     const filename = "qiita.config.json";
     return path.join(this.resolveUserConfigDirPath(dirPath), filename);
+  }
+
+  private resolveCacheDataDir() {
+    const cacheHome =
+      process.env.XDG_CACHE_HOME || path.join(os.homedir(), ".cache");
+    return path.join(cacheHome, this.packageName);
   }
 
   private resolveFullPath(filePath: string) {

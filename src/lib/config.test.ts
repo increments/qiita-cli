@@ -1,4 +1,7 @@
+import process from "node:process";
 import { config } from "./config";
+
+jest.mock("node:process");
 
 const initMockFs = () => {
   let files: { [path: string]: string } = {};
@@ -171,6 +174,40 @@ describe("config", () => {
             "/home/test-user/qiita-articles/my-root/qiita.config.json"
           );
         });
+      });
+    });
+  });
+
+  describe("#getCacheDataDir", () => {
+    beforeEach(() => {
+      config.load({});
+    });
+
+    it("returns default path", () => {
+      expect(config.getCacheDataDir()).toEqual(
+        "/home/test-user/.cache/qiita-cli"
+      );
+    });
+
+    describe("with XDG_CACHE_HOME environment", () => {
+      const xdgCacheHome = "/tmp/.cache";
+
+      const mockProcess = process as jest.Mocked<typeof process>;
+      const env = mockProcess.env;
+      beforeEach(() => {
+        mockProcess.env = {
+          ...env,
+          XDG_CACHE_HOME: xdgCacheHome,
+        };
+
+        config.load({});
+      });
+      afterEach(() => {
+        mockProcess.env = env;
+      });
+
+      it("returns customized path", () => {
+        expect(config.getCacheDataDir()).toEqual(`${xdgCacheHome}/qiita-cli`);
       });
     });
   });
