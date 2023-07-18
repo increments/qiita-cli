@@ -22,28 +22,11 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-  setup:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    strategy:
-      matrix:
-        node:
-          - "18.0.0"
-          - "18.16.0"
-    needs:
-      - check_test_execution_conditions
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-      - run: yarn install
-
   lint:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs:
-      - setup
+      - check_test_execution_conditions
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -61,7 +44,7 @@ jobs:
           - "18.0.0"
           - "18.16.0"
     needs:
-      - setup
+      - check_test_execution_conditions
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -74,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs:
-      - setup
+      - check_test_execution_conditions
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
