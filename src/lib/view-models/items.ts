@@ -22,6 +22,7 @@ export type ItemsShowViewModel = {
   qiita_item_url: string | null;
   rendered_body: string;
   secret: boolean;
+  slide: boolean;
   tags: string[];
   title: string;
 };

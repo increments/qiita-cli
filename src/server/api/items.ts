@@ -102,6 +102,7 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
     published,
     qiita_item_url: qiitaItemUrl,
     rendered_body: renderedBody,
+    slide: item.slide,
     tags: item.tags,
     title: item.title,
   };
@@ -149,6 +150,7 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
         title: result.title,
         isPrivate: result.secret,
         organizationUrlName: result.organizationUrlName,
+        slide: result.slide,
       });
       if (item) {
         fileSystemRepo.updateItemUuid(basename, item.id);
@@ -162,6 +164,7 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
         uuid: result.id,
         isPrivate: result.secret,
         organizationUrlName: result.organizationUrlName,
+        slide: result.slide,
       });
     } else {
       throw new Error("Unknown Error");

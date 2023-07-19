@@ -97,12 +97,14 @@ export const ItemsShow = () => {
                   published={item.published}
                   errorMessages={item.error_messages}
                   qiitaItemUrl={item.qiita_item_url}
+                  slide={item.slide}
                 />
                 <div css={articleWrapStyle}>
                   <Article
                     renderedBody={item.rendered_body}
                     tags={item.tags}
                     title={item.title}
+                    slide={item.slide}
                   />
                 </div>
               </div>
@@ -120,7 +122,7 @@ export const ItemsShow = () => {
                 <MaterialSymbol fill={true} css={exclamationIconStyle}>
                   error
                 </MaterialSymbol>
-                {errorMessage}
+                <div css={errorMessageBodyStyle}>{errorMessage}</div>
               </p>
             ))}
           </div>
@@ -179,4 +181,8 @@ const errorStyle = css({
   alignItems: "center",
   display: "flex",
   marginTop: getSpace(3 / 2),
+});
+
+const errorMessageBodyStyle = css({
+  whiteSpace: "pre",
 });
