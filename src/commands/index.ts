@@ -1,13 +1,14 @@
+import { packageUpdateNotice } from "../lib/package-update-notice";
 import { help, helpText } from "./help";
 import { init } from "./init";
 import { login } from "./login";
 import { newArticles } from "./newArticles";
 import { preview } from "./preview";
 import { publish } from "./publish";
-import { version } from "./version";
 import { pull } from "./pull";
+import { version } from "./version";
 
-export const exec = (commandName: string, commandArgs: string[]) => {
+export const exec = async (commandName: string, commandArgs: string[]) => {
   const commands = {
     init,
     login,
@@ -30,6 +31,11 @@ export const exec = (commandName: string, commandArgs: string[]) => {
     console.error();
     console.error(helpText);
     process.exit(1);
+  }
+
+  const updateMessage = await packageUpdateNotice();
+  if (updateMessage) {
+    console.log(updateMessage);
   }
 
   commands[commandName](commandArgs);
