@@ -69,8 +69,7 @@ npx qiita init
 
 以下の流れでトークンを発行してください。
 
-- https://qiita.com/settings/applications へログインした状態でアクセスします。
-- `設定 > アプリーケーション > 個人用アクセストークン` からトークンを発行します。
+- [https://qiita.com/settings/tokens/new](https://qiita.com/settings/tokens/new?read_qiita=1&write_qiita=1&description=qiita-cli) へログインした状態でアクセスします。
   - トークンの権限には「read_qiita」と「write_qiita」を設定します。
 
 発行したトークンは`Qiita CLIのログイン`、`GitHubで記事を管理する`で利用します。
@@ -84,7 +83,7 @@ npx qiita login
 ```
 
 ```console
-Enter your token: トークンを入力しEnterキーを押す
+発行したトークンを入力: トークンを入力しEnterキーを押す
 Hi ユーザー名!
 ```
 
