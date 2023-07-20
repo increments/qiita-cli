@@ -15,6 +15,13 @@ export const preview = async (argv: string[]) => {
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi });
 
   const server = await startServer();
+
+  const address = server.address();
+  if (address && typeof address !== "string") {
+    const open = (await import("open")).default;
+    await open(`http://localhost:${address.port}`);
+  }
+
   startLocalChangeWatcher({
     server,
     watchPath: config.getItemsRootDir(),
