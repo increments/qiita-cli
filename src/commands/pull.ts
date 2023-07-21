@@ -14,9 +14,9 @@ export const pull = async (argv: string[]) => {
 
   const qiitaApi = await getQiitaApiInstance();
   const fileSystemRepo = await getFileSystemRepo();
-  const isLocalUpdate = args["--force"];
+  const forceUpdate = args["--force"];
 
-  await syncArticlesFromQiita({ fileSystemRepo, qiitaApi, isLocalUpdate });
+  await syncArticlesFromQiita({ fileSystemRepo, qiitaApi, forceUpdate });
   console.log("Sync local articles from Qiita");
   console.log("Successful!");
 };

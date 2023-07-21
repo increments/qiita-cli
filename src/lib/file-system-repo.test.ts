@@ -315,9 +315,9 @@ updated
 `;
     const subject = (
       beforeSync: boolean = false,
-      isLocalUpdate: boolean = false
+      forceUpdate: boolean = false
     ) => {
-      return instance.saveItem(item, beforeSync, isLocalUpdate);
+      return instance.saveItem(item, beforeSync, forceUpdate);
     };
 
     describe("when local article does not exist", () => {
@@ -378,7 +378,7 @@ updated
         });
       });
 
-      describe("when isLocalUpdate is true", () => {
+      describe("when forceUpdate is true", () => {
         it("saves item local and remote", () => {
           const mockFs = fs as jest.Mocked<typeof fs>;
           mockFs.readdir.mockResolvedValueOnce([localFilename] as any[]);
