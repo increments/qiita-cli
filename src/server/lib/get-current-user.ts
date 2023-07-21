@@ -1,6 +1,4 @@
-import { config } from "../../lib/config";
 import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
-import { QiitaApi } from "../../qiita-api";
 
 let currentUser: { id: string } | undefined;
 

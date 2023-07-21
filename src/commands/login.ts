@@ -1,13 +1,9 @@
-import arg from "arg";
 import process from "node:process";
 import readline from "node:readline/promises";
 import { config } from "../lib/config";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
-import { QiitaApi } from "../qiita-api";
 
-export const login = async (argv: string[]) => {
-  const args = arg({}, { argv });
-
+export const login = async () => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,

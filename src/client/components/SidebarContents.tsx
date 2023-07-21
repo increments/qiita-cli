@@ -558,12 +558,6 @@ const mobileSidebarStyle = (isStateOpen: boolean) =>
     zIndex: 10,
   });
 
-const articlesMobileListStyle = css({
-  overflow: "hidden",
-  padding: `0 ${getSpace(5 / 2)}px 0 ${getSpace(2)}px`,
-  boxSizing: "border-box",
-});
-
 const headerStyle = css({
   alignItems: "center",
   fontSize: Typography.subhead1,

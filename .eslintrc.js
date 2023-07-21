@@ -27,25 +27,6 @@ module.exports = {
   overrides: [
     {
       rules: {
-        "@typescript-eslint/no-unused-vars": "off",
-      },
-      files: [
-        "src/client/components/Article.tsx",
-        "src/client/components/SidebarContents.tsx",
-        "src/client/templates/Sidebar.tsx",
-        "src/commands/login.ts",
-        "src/commands/preview.ts",
-        "src/commands/publish.ts",
-        "src/commands/pull.ts",
-        "src/lib/file-system-repo.test.ts",
-        "src/lib/file-system-repo.ts",
-        "src/server/api/readme.ts",
-        "src/server/app.ts",
-        "src/server/lib/get-current-user.ts",
-      ],
-    },
-    {
-      rules: {
         "react-hooks/exhaustive-deps": "off",
       },
       files: [
