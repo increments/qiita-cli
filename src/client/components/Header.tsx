@@ -13,6 +13,7 @@ import { Snackbar, Message as SnackbarMessage } from "./Snackbar";
 interface Props {
   id?: string;
   isItemPublishable: boolean;
+  isOlderThanRemote: boolean;
   itemPath: string;
   basename: string | null;
   handleMobileOpen: () => void;
@@ -21,6 +22,7 @@ interface Props {
 export const Header = ({
   id,
   isItemPublishable,
+  isOlderThanRemote,
   itemPath,
   basename,
   handleMobileOpen,
@@ -32,6 +34,16 @@ export const Header = ({
   const mobileSize = currentWidth <= breakpoint.S;
 
   const handlePublish = () => {
+    if (isOlderThanRemote) {
+      if (
+        !window.confirm(
+          "この記事はQiita上の記事より古い可能性があります。上書きしますか？"
+        )
+      ) {
+        return;
+      }
+    }
+
     const params = {
       method: "POST",
       headers: {

@@ -135,6 +135,14 @@ class FileContent {
     );
   }
 
+  isOlderThan(otherFileContent: FileContent | null): boolean {
+    if (!otherFileContent) return false;
+    const updatedAt = new Date(this.updatedAt);
+    const otherUpdatedAt = new Date(otherFileContent.updatedAt);
+
+    return updatedAt < otherUpdatedAt;
+  }
+
   clone({ id }: { id: string }): FileContent {
     return new FileContent({
       title: this.title,
@@ -353,6 +361,7 @@ export class FileSystemRepo {
       slide: localFileContent.slide,
       name: basename,
       modified: !localFileContent.equals(remoteFileContent),
+      isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
       itemPath,
@@ -388,6 +397,7 @@ export class FileSystemRepo {
       slide: localFileContent.slide,
       name: basename,
       modified: !localFileContent.equals(remoteFileContent),
+      isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
       itemPath,

@@ -18,6 +18,7 @@ interface Props {
   errorMessages: string[];
   qiitaItemUrl: string | null;
   slide: boolean;
+  isOlderThanRemote: boolean;
 }
 
 export const ArticleInfo = ({
@@ -28,6 +29,7 @@ export const ArticleInfo = ({
   errorMessages,
   qiitaItemUrl,
   slide,
+  isOlderThanRemote,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(
     localStorage.getItem("openInfoState") === "true" ? true : false
@@ -88,6 +90,18 @@ export const ArticleInfo = ({
         </InfoItem>
         <InfoItem title="スライドモード">{slide ? "ON" : "OFF"}</InfoItem>
       </details>
+      {isOlderThanRemote && (
+        <div css={errorContentsStyle}>
+          <p css={errorStyle}>
+            <MaterialSymbol fill={true} css={exclamationIconStyle}>
+              error
+            </MaterialSymbol>
+            {
+              "この記事ファイルの内容は、Qiita上の記事より古い可能性があります。"
+            }
+          </p>
+        </div>
+      )}
       {errorMessages.length > 0 && (
         <div css={errorContentsStyle}>
           {errorMessages.map((errorMessage, index) => (

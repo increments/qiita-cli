@@ -95,6 +95,7 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
 
   const result: ItemsShowViewModel = {
     error_messages: errorMessages,
+    is_older_than_remote: item.isOlderThanRemote,
     item_path: itemPath,
     modified,
     organization_url_name: item.organizationUrlName,

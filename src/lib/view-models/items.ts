@@ -15,6 +15,7 @@ export type ItemsIndexViewModel = {
 
 export type ItemsShowViewModel = {
   error_messages: string[];
+  is_older_than_remote: boolean;
   item_path: string;
   modified: boolean;
   organization_url_name: string | null;

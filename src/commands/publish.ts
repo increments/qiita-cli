@@ -12,6 +12,8 @@ export const publish = async (argv: string[]) => {
   const args = arg(
     {
       "--all": Boolean,
+      "--force": Boolean,
+      "-f": "--force",
     },
     { argv }
   );
@@ -40,6 +42,7 @@ export const publish = async (argv: string[]) => {
   }
 
   // Validate
+  const enableForcePublish = args["--force"];
   const invalidItemMessages = targetItems.reduce((acc, item) => {
     const frontmatterErrors = checkFrontmatterType(item);
     if (frontmatterErrors.length > 0)
@@ -48,6 +51,16 @@ export const publish = async (argv: string[]) => {
     const validationErrors = validateItem(item);
     if (validationErrors.length > 0)
       return [...acc, { name: item.name, errors: validationErrors }];
+
+    if (!enableForcePublish && item.isOlderThanRemote) {
+      return [
+        ...acc,
+        {
+          name: item.name,
+          errors: ["内容がQiita上の記事より古い可能性があります"],
+        },
+      ];
+    }
 
     return acc;
   }, [] as { name: string; errors: string[] }[]);
