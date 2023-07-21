@@ -1,5 +1,4 @@
 import matter from "gray-matter";
-import { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import { Item } from "../qiita-api";
 import { FileSystemRepo } from "./file-system-repo";

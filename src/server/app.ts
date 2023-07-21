@@ -35,7 +35,7 @@ export async function startServer() {
     : 8888;
   const host = "localhost";
 
-  return new Promise<Server>((resolve, reject) => {
+  return new Promise<Server>((resolve) => {
     server
       .listen(port, host)
       .once("listening", () => {

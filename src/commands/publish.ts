@@ -1,13 +1,12 @@
 import arg from "arg";
 import process from "node:process";
 import { checkFrontmatterType } from "../lib/check-frontmatter-type";
-import { config } from "../lib/config";
 import { QiitaItem } from "../lib/entities/qiita-item";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { validateItem } from "../lib/validators/item-validator";
-import { Item, QiitaApi } from "../qiita-api";
+import { Item } from "../qiita-api";
 
 export const publish = async (argv: string[]) => {
   const args = arg(

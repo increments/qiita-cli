@@ -2,9 +2,7 @@ import type Express from "express";
 import { Router } from "express";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { config } from "../../lib/config";
 import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
-import { QiitaApi } from "../../qiita-api";
 
 const readmeIndex = async (req: Express.Request, res: Express.Response) => {
   try {

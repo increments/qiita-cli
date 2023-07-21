@@ -201,7 +201,7 @@ export class FileSystemRepo {
     );
   }
 
-  private defaultBasename(fileContent: FileContent, _remote: boolean) {
+  private defaultBasename(fileContent: FileContent) {
     // TODO: Add article title to basename
     return fileContent.id as string;
   }
@@ -239,7 +239,7 @@ export class FileSystemRepo {
       return;
     }
     const filepath = this.getFilePath(
-      basename || this.defaultBasename(fileContent, remote),
+      basename || this.defaultBasename(fileContent),
       remote
     );
     const data = fileContent.toSaveFormat();
