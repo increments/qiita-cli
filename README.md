@@ -224,6 +224,7 @@ npx qiita version
 設定できるオプションは以下の通りです。
 
 - includePrivate: 限定共有記事を含めるかどうかを選べます。デフォルトは`false`です。
+- port: `qiita preview`コマンドで利用するポートを指定できます。デフォルトは`8888`です。
 
 ## オプション
 

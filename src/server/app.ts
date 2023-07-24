@@ -9,6 +9,7 @@ import { AssetsRouter } from "./api/assets";
 import { EmojiRouter } from "./api/emoji";
 import { ItemsRouter } from "./api/items";
 import { ReadmeRouter } from "./api/readme";
+import { config } from "../lib/config";
 
 export async function startServer() {
   const app = express();
@@ -30,9 +31,8 @@ export async function startServer() {
   app.use("*", express.static(path.join(__dirname, "../public/index.html")));
 
   const server = createServer(app);
-  const port = process.env.QIITA_CLI_PORT
-    ? parseInt(process.env.QIITA_CLI_PORT, 10)
-    : 8888;
+  const userConfig = await config.getUserConfig();
+  const port = userConfig.port;
   const host = "localhost";
 
   return new Promise<Server>((resolve) => {

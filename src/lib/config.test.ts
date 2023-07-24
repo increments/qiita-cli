@@ -224,6 +224,7 @@ describe("config", () => {
       beforeEach(() => {
         const userConfigData = {
           includePrivate: true,
+          port: 9999,
         };
         resetFiles();
         setFile(userConfigFilePath, JSON.stringify(userConfigData, null, 2));
@@ -233,6 +234,7 @@ describe("config", () => {
         const userConfig = await config.getUserConfig();
         expect(userConfig).toStrictEqual({
           includePrivate: true,
+          port: 9999,
         });
       });
     });
@@ -246,6 +248,7 @@ describe("config", () => {
         const userConfig = await config.getUserConfig();
         expect(userConfig).toStrictEqual({
           includePrivate: false,
+          port: 8888,
         });
       });
     });

@@ -14,6 +14,7 @@ interface Options {
 
 type UserConfig = {
   includePrivate: boolean;
+  port: number;
 };
 
 class Config {
@@ -106,6 +107,7 @@ class Config {
   async getUserConfig() {
     const defaultConfig = {
       includePrivate: false,
+      port: 8888,
     } as UserConfig;
 
     if (fsSync.existsSync(this.getUserConfigFilePath())) {
