@@ -1,5 +1,17 @@
 import { URL, URLSearchParams } from "node:url";
+import {
+  QiitaBadRequestError,
+  QiitaFetchError,
+  QiitaForbiddenError,
+  QiitaInternalServerError,
+  QiitaNotFoundError,
+  QiitaRateLimitError,
+  QiitaUnauthorizedError,
+  QiitaUnknownError,
+} from "./errors";
 import { qiitaApiDebugger } from "./lib/debugger";
+
+export * from "./errors";
 
 export interface Item {
   body: string;
@@ -65,7 +77,7 @@ export class QiitaApi {
       });
     } catch (err) {
       console.error(err);
-      throw new Error("NetworkError");
+      throw new QiitaFetchError((err as Error).message);
     }
 
     if (response.ok) {
@@ -78,8 +90,8 @@ export class QiitaApi {
       }
     }
 
+    const responseBody = await response.text();
     if (qiitaApiDebugger.enabled) {
-      const responseBody = await response.text();
       qiitaApiDebugger(
         "request failed",
         JSON.stringify({
@@ -89,21 +101,22 @@ export class QiitaApi {
       );
     }
 
+    const errorMessage = responseBody.slice(0, 100);
     switch (response.status) {
       case 400:
-        throw new Error("QiitaBadRequestError");
+        throw new QiitaBadRequestError(errorMessage);
       case 401:
-        throw new Error("QiitaUnauthorizedError");
+        throw new QiitaUnauthorizedError(errorMessage);
       case 403:
-        throw new Error("QiitaForbiddenError");
+        throw new QiitaForbiddenError(errorMessage);
       case 404:
-        throw new Error("QiitaNotFoundError");
+        throw new QiitaNotFoundError(errorMessage);
       case 429:
-        throw new Error("QiitaRateLimitError");
+        throw new QiitaRateLimitError(errorMessage);
       case 500:
-        throw new Error("QiitaInternalServerError");
+        throw new QiitaInternalServerError(errorMessage);
       default:
-        throw new Error("QiitaUnknownError");
+        throw new QiitaUnknownError(errorMessage);
     }
   }
 

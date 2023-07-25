@@ -1,3 +1,4 @@
+import { handleError } from "../lib/error-handler";
 import { packageUpdateNotice } from "../lib/package-update-notice";
 import { help, helpText } from "./help";
 import { init } from "./init";
@@ -38,5 +39,11 @@ export const exec = async (commandName: string, commandArgs: string[]) => {
     console.log(updateMessage);
   }
 
-  commands[commandName](commandArgs);
+  try {
+    await commands[commandName](commandArgs);
+  } catch (err) {
+    console.error(err);
+    await handleError(err as Error);
+    process.exit(1);
+  }
 };
