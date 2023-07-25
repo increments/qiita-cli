@@ -65,10 +65,15 @@ export const publish = async (argv: string[]) => {
     return acc;
   }, [] as { name: string; errors: string[] }[]);
   if (invalidItemMessages.length > 0) {
-    console.error("Validation error:");
+    const chalk = (await import("chalk")).default;
     invalidItemMessages.forEach((msg) => {
-      console.error(msg.name, msg.errors);
+      msg.errors.forEach((err) => {
+        const errorName = chalk.red.bold(msg.name + ":");
+        const errorDescription = chalk.red(err);
+        console.error(`${errorName} ${errorDescription}`);
+      });
     });
+
     process.exit(1);
   }
 

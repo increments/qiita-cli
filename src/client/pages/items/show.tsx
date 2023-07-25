@@ -124,7 +124,7 @@ export const ItemsShow = () => {
                 <MaterialSymbol fill={true} css={exclamationIconStyle}>
                   error
                 </MaterialSymbol>
-                <div css={errorMessageBodyStyle}>{errorMessage}</div>
+                <div>{errorMessage}</div>
               </p>
             ))}
           </div>
@@ -183,8 +183,4 @@ const errorStyle = css({
   alignItems: "center",
   display: "flex",
   marginTop: getSpace(3 / 2),
-});
-
-const errorMessageBodyStyle = css({
-  whiteSpace: "pre",
 });
