@@ -135,6 +135,14 @@ class FileContent {
     );
   }
 
+  isOlderThan(otherFileContent: FileContent | null): boolean {
+    if (!otherFileContent) return false;
+    const updatedAt = new Date(this.updatedAt);
+    const otherUpdatedAt = new Date(otherFileContent.updatedAt);
+
+    return updatedAt < otherUpdatedAt;
+  }
+
   clone({ id }: { id: string }): FileContent {
     return new FileContent({
       title: this.title,
@@ -264,7 +272,7 @@ export class FileSystemRepo {
   private async syncItem(
     item: Item,
     beforeSync: boolean = false,
-    isLocalUpdate: boolean = false
+    forceUpdate: boolean = false
   ) {
     const fileContent = FileContent.fromItem(item);
 
@@ -279,7 +287,7 @@ export class FileSystemRepo {
       true
     );
 
-    if (data === null || remoteFileContent?.equals(data) || isLocalUpdate) {
+    if (data === null || remoteFileContent?.equals(data) || forceUpdate) {
       await this.setItemData(fileContent, true);
       await this.setItemData(fileContent, false, basename);
     } else {
@@ -287,9 +295,9 @@ export class FileSystemRepo {
     }
   }
 
-  async saveItems(items: Item[], isLocalUpdate: boolean = false) {
+  async saveItems(items: Item[], forceUpdate: boolean = false) {
     const promises = items.map(async (item) => {
-      await this.syncItem(item, false, isLocalUpdate);
+      await this.syncItem(item, false, forceUpdate);
     });
 
     await Promise.all(promises);
@@ -298,9 +306,9 @@ export class FileSystemRepo {
   async saveItem(
     item: Item,
     beforeSync: boolean = false,
-    isLocalUpdate: boolean = false
+    forceUpdate: boolean = false
   ) {
-    await this.syncItem(item, beforeSync, isLocalUpdate);
+    await this.syncItem(item, beforeSync, forceUpdate);
   }
 
   async loadItems(): Promise<QiitaItem[]> {
@@ -353,6 +361,7 @@ export class FileSystemRepo {
       slide: localFileContent.slide,
       name: basename,
       modified: !localFileContent.equals(remoteFileContent),
+      isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
       itemPath,
@@ -388,6 +397,7 @@ export class FileSystemRepo {
       slide: localFileContent.slide,
       name: basename,
       modified: !localFileContent.equals(remoteFileContent),
+      isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
       itemPath,

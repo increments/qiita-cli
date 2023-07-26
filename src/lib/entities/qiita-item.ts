@@ -8,6 +8,7 @@ export class QiitaItem {
   public readonly rawBody: string;
   public readonly name: string;
   public readonly modified: boolean;
+  public readonly isOlderThanRemote: boolean;
   public readonly itemsShowPath: string;
   public readonly published: boolean;
   public readonly itemPath: string;
@@ -23,6 +24,7 @@ export class QiitaItem {
     rawBody,
     name,
     modified,
+    isOlderThanRemote,
     itemsShowPath,
     published,
     itemPath,
@@ -37,6 +39,7 @@ export class QiitaItem {
     rawBody: string;
     name: string;
     modified: boolean;
+    isOlderThanRemote: boolean;
     itemsShowPath: string;
     published: boolean;
     itemPath: string;
@@ -51,6 +54,7 @@ export class QiitaItem {
     this.rawBody = rawBody;
     this.name = name;
     this.modified = modified;
+    this.isOlderThanRemote = isOlderThanRemote;
     this.itemsShowPath = itemsShowPath;
     this.published = published;
     this.itemPath = itemPath;

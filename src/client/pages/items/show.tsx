@@ -84,6 +84,7 @@ export const ItemsShow = () => {
               isItemPublishable={
                 item.modified && item.error_messages.length === 0
               }
+              isOlderThanRemote={item.is_older_than_remote}
               itemPath={item.item_path}
               id={id}
               basename={basename}
@@ -98,6 +99,7 @@ export const ItemsShow = () => {
                   errorMessages={item.error_messages}
                   qiitaItemUrl={item.qiita_item_url}
                   slide={item.slide}
+                  isOlderThanRemote={item.is_older_than_remote}
                 />
                 <div css={articleWrapStyle}>
                   <Article
