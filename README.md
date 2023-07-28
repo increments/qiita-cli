@@ -162,6 +162,14 @@ npx qiita publish 記事のファイルのベース名
 npx qiita publish --all
 ```
 
+`--force`オプションを用いることで、強制的に記事ファイルの内容を Qiita に反映させます。
+
+```console
+npx qiita publish 記事ファイルのベース名 --force
+# -f は --force のエイリアスとして使用できます。
+npx qiita publish 記事ファイルのベース名 --force
+```
+
 ### 記事の削除
 
 Qiita CLI、Qiita Preview から記事の削除はできません。
@@ -201,7 +209,7 @@ Qiita 上で更新を行い、手元で変更を行っていない記事ファ�
 npx qiita pull
 ```
 
-`--force`オプションを用いることで、記事ファイルをを全て強制的に Qiita と同期します。
+`--force`オプションを用いることで、強制的に Qiita 上の内容を記事ファイルに反映させます。
 
 ```console
 npx qiita pull --force
