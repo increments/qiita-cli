@@ -65,7 +65,7 @@ const checkOrganizationUrlName: CheckType = {
 
 const checkSlide: CheckType = {
   getMessage: () =>
-    "slideの設定はtrue/falseで入力してください\n\n【破壊的な変更がありました】\n詳しくは以下のリリースをご確認ください\nhttps://github.com/increments/qiita-cli/releases/tag/v0.5.0",
+    "slideの設定はtrue/falseで入力してください（破壊的な変更がありました。詳しくはリリースをご確認ください https://github.com/increments/qiita-cli/releases/tag/v0.5.0）",
   isValid: ({ slide }) => {
     return typeof slide === "boolean";
   },

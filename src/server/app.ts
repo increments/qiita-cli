@@ -35,7 +35,7 @@ export async function startServer() {
   const port = userConfig.port;
   const host = "localhost";
 
-  return new Promise<Server>((resolve) => {
+  return new Promise<Server>((resolve, reject) => {
     server
       .listen(port, host)
       .once("listening", () => {
@@ -43,8 +43,8 @@ export async function startServer() {
 
         resolve(server);
       })
-      .once("error", () => {
-        throw new Error("Failed to start server");
+      .once("error", (err) => {
+        reject(err);
       });
   });
 }
