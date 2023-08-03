@@ -3,7 +3,7 @@
 Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。
 Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。
 
-> Qiita CLI、Qiita Preview は現在ベータ版です。<br>破壊的なアップデートなどが頻繁にされる可能性がございますのでご了承ください。<br>不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
+> 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
 
 ## ご利用の前に
 
@@ -15,9 +15,6 @@ Qiita CLI、Qiita Preview を利用されたら、[利用規約](https://qiita.c
 また、記事を書く上で意識すると望ましいもの、気をつけるべき点を[良い記事を書くためのガイドライン](https://help.qiita.com/ja/articles/qiita-article-guideline)にまとめています。
 
 Qiita の Markdown 記法については[Markdown 記法 チートシート](https://qiita.com/Qiita/items/c686397e4a0f4f11683d)をご覧ください。
-
-Qiita CLI、Qiita Preview は現在ベータ版です。
-機能についても開発中のものがあります。
 
 ## Qiita CLI の導入方法について
 
