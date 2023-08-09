@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: increments/qiita-cli/actions/publish@v0
+      - uses: increments/qiita-cli/actions/publish@v1
         with:
           qiita-token: \${{ secrets.QIITA_TOKEN }}
 `;
