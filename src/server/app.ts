@@ -32,8 +32,8 @@ export async function startServer() {
 
   const server = createServer(app);
   const userConfig = await config.getUserConfig();
+  const host = userConfig.host;
   const port = userConfig.port;
-  const host = "localhost";
 
   return new Promise<Server>((resolve, reject) => {
     server

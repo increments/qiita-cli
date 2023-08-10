@@ -15,7 +15,7 @@ export const preview = async () => {
   const address = server.address();
   if (address && typeof address !== "string") {
     const open = (await import("open")).default;
-    await open(`http://localhost:${address.port}`);
+    await open(`http://${address.address}:${address.port}`);
   }
 
   startLocalChangeWatcher({
