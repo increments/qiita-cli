@@ -164,7 +164,7 @@ npx qiita publish --all
 ```console
 npx qiita publish 記事ファイルのベース名 --force
 # -f は --force のエイリアスとして使用できます。
-npx qiita publish 記事ファイルのベース名 --force
+npx qiita publish 記事ファイルのベース名 -f
 ```
 
 ### 記事の削除
