@@ -7,7 +7,6 @@ import {
   Weight,
   getSpace,
 } from "../lib/variables";
-import { MaterialSymbol } from "./MaterialSymbol";
 import { QiitaMarkdownHtmlBody } from "./QiitaMarkdownHtmlBody";
 import { Slide } from "./Slide";
 
@@ -25,12 +24,9 @@ export const Article = ({ renderedBody, tags, title, slide }: Props) => {
     <article css={containerStyle}>
       <h1 css={titleStyle}>{title}</h1>
       <div css={tagListWrapStyle}>
-        <MaterialSymbol fill={true} css={{ color: Colors.mediumEmphasis }}>
-          sell
-        </MaterialSymbol>
         <ul css={tagListStyle}>
           {tags.map((tag, index) => (
-            <li key={tag}>
+            <li css={tagListItemStyle} key={tag}>
               <span>{tag}</span>
               {index !== tags.length - 1 && <span>,</span>}
             </li>
@@ -65,6 +61,14 @@ const tagListWrapStyle = css({
 const tagListStyle = css({
   display: "flex",
   gap: getSpace(1),
+});
+
+const tagListItemStyle = css({
+  backgroundColor: Colors.surfaceVariant,
+  borderRadius: 4,
+  color: Colors.mediumEmphasis,
+  fontSize: Typography.body2,
+  padding: `0 ${getSpace(3 / 4)}px`,
 });
 
 const bodyStyle = css({

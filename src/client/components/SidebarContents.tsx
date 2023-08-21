@@ -219,6 +219,9 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               rel="noopener noreferrer"
             >
               コミュニティガイドライン
+              <MaterialSymbol css={{ color: Colors.disabled }}>
+                open_in_new
+              </MaterialSymbol>
             </a>
           </li>
           <li>
@@ -229,6 +232,9 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               rel="noopener noreferrer"
             >
               利用規約
+              <MaterialSymbol css={{ color: Colors.disabled }}>
+                open_in_new
+              </MaterialSymbol>
             </a>
           </li>
           <li>
@@ -239,6 +245,9 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               rel="noopener noreferrer"
             >
               プライバシーポリシー
+              <MaterialSymbol css={{ color: Colors.disabled }}>
+                open_in_new
+              </MaterialSymbol>
             </a>
           </li>
         </ul>
@@ -395,6 +404,9 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               rel="noopener noreferrer"
             >
               コミュニティガイドライン
+              <MaterialSymbol css={{ color: Colors.disabled }}>
+                open_in_new
+              </MaterialSymbol>
             </a>
           </li>
           <li>
@@ -405,6 +417,9 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               rel="noopener noreferrer"
             >
               利用規約
+              <MaterialSymbol css={{ color: Colors.disabled }}>
+                open_in_new
+              </MaterialSymbol>
             </a>
           </li>
           <li>
@@ -415,6 +430,9 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               rel="noopener noreferrer"
             >
               プライバシーポリシー
+              <MaterialSymbol css={{ color: Colors.disabled }}>
+                open_in_new
+              </MaterialSymbol>
             </a>
           </li>
         </ul>
@@ -534,7 +552,7 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
 
 const sidebarStyle = css({
   height: "100vh",
-  maxWidth: 360,
+  width: 360,
   padding: `${getSpace(2)}px 0`,
   position: "sticky",
   top: 0,
@@ -632,6 +650,7 @@ const articlesListItemStyle = css({
   )}px ${getSpace(3 / 2)}px`,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
+  width: "100%",
 
   ...pointerFine({
     "&:hover": {
@@ -675,6 +694,9 @@ const articleFooterListStyle = css({
 });
 
 const articleFooterListItemStyle = css({
+  alignItems: "center",
+  display: "flex",
+  gap: getSpace(1),
   color: Colors.mediumEmphasis,
   fontSize: Typography.body3,
 });
