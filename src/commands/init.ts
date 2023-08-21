@@ -30,6 +30,7 @@ jobs:
       - uses: increments/qiita-cli/actions/publish@v1
         with:
           qiita-token: \${{ secrets.QIITA_TOKEN }}
+          root: "."
 `;
 
 const rootDir = process.cwd();
