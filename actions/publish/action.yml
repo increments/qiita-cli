@@ -3,6 +3,10 @@ description: "Publish articles to Qiita using qiita-cli"
 author: "Qiita Inc."
 
 inputs:
+  root:
+    required: false
+    default: "."
+    description: "Root directory path"
   qiita-token:
     required: true
     description: "Qiita API token"
@@ -17,13 +21,13 @@ runs:
       run: npm install -g @qiita/qiita-cli@v1.0.0
       shell: bash
     - name: Publish articles
-      run: qiita publish --all
+      run: qiita publish --all --root ${{ inputs.root }}
       env:
         QIITA_TOKEN: ${{ inputs.qiita-token }}
       shell: bash
     - name: Commit and push diff # Not executed recursively even if `push` is triggered. See https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
       run: |
-        git add public/*
+        git add ${{ inputs.root }}/public/*
         if ! git diff --staged --exit-code --quiet; then
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
