@@ -99,6 +99,7 @@ const articleSummaryStyle = css({
   alignItems: "center",
   backgroundColor: "transparent",
   color: Colors.mediumEmphasis,
+  cursor: "pointer",
   display: "flex",
   fontWeight: Weight.bold,
   fontSize: Typography.body2,
@@ -110,6 +111,7 @@ const articleSummaryStyle = css({
   ...pointerFine({
     "&:hover": {
       backgroundColor: Colors.gray5,
+      cursor: "pointer",
       textDecoration: "none",
     },
   }),
