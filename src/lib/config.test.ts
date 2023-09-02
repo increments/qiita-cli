@@ -55,7 +55,7 @@ jest.mock("node:fs/promises", () => {
     writeFile: jest.fn((filePath: string, text: string) => {
       setFile(filePath, text);
     }),
-    mkdir: jest.fn(() => {}),
+    mkdir: jest.fn(() => { }),
   };
 });
 jest.mock("node:fs", () => {
@@ -224,6 +224,8 @@ describe("config", () => {
       beforeEach(() => {
         const userConfigData = {
           includePrivate: true,
+          address: "localhost",
+          family: "IPv4",
           port: 9999,
         };
         resetFiles();
@@ -234,6 +236,8 @@ describe("config", () => {
         const userConfig = await config.getUserConfig();
         expect(userConfig).toStrictEqual({
           includePrivate: true,
+          address: "localhost",
+          family: "IPv4",
           port: 9999,
         });
       });
@@ -248,6 +252,8 @@ describe("config", () => {
         const userConfig = await config.getUserConfig();
         expect(userConfig).toStrictEqual({
           includePrivate: false,
+          address: "localhost",
+          family: "IPv4",
           port: 8888,
         });
       });
