@@ -22,7 +22,7 @@ Qiita の Markdown 記法については[Markdown 記法 チートシート](htt
 
 Qiita CLI を使うには `Node.js 18.0.0` 以上が必要です。Node.js をはじめて使う場合はインストールする必要があります。
 
->`Docker`で利用するには`Docker`がインストールされている必要があります。
+> `Docker`で利用するには`Docker`がインストールされている必要があります。
 
 ### 2. Qiita CLI をインストールする
 
@@ -32,11 +32,11 @@ Qiita のコンテンツを管理したいディレクトリで、以下のコ�
 npm install @qiita/qiita-cli --save-dev
 ```
 
->`Docker`で環境を構築する場合は次のコマンドで実行できます。
+> `Docker`で環境を構築する場合は次のコマンドで実行できます。
 >
->```console
->docker run --rm -v $(pwd):/opt -w /opt node:20-alpine3.17 sh -c "npm install @qiita/qiita-cli --save-dev && npx qiita init"
->```
+> ```console
+> docker run --rm -v $(pwd):/opt -w /opt node:20-alpine3.17 sh -c "npm install @qiita/qiita-cli --save-dev && npx qiita init"
+> ```
 
 以下のコマンドでバージョンが表示されればインストール完了です。
 
@@ -68,11 +68,11 @@ npm install @qiita/qiita-cli@latest
 
 が生成されます。
 
->`Docker`で環境を構築する場合はコンテナを起動してから実行してください。
+> `Docker`で環境を構築する場合はコンテナを起動してから実行してください。
 >
->```console
->docker-compose up -d && docker-compose exec qiita sh
->```
+> ```console
+> docker-compose up -d && docker-compose exec qiita sh
+> ```
 
 ```console
 npx qiita init

@@ -55,7 +55,7 @@ jest.mock("node:fs/promises", () => {
     writeFile: jest.fn((filePath: string, text: string) => {
       setFile(filePath, text);
     }),
-    mkdir: jest.fn(() => { }),
+    mkdir: jest.fn(() => {}),
   };
 });
 jest.mock("node:fs", () => {

@@ -1,7 +1,6 @@
 import { AddressInfo } from "net";
 import { getUrlAddress } from "./getUrlAddress";
 
-
 describe("getUrlAddress", () => {
   describe("when null is passed", () => {
     it("returns null", () => {
@@ -23,7 +22,7 @@ describe("getUrlAddress", () => {
         address: "0.0.0.0",
         family: "IPv4",
         port: 8888,
-      }
+      };
       const url = getUrlAddress(address);
       expect(url).toEqual(`http://${address.address}:${address.port}`);
     });
@@ -35,7 +34,7 @@ describe("getUrlAddress", () => {
         address: "::",
         family: "IPv6",
         port: 8888,
-      }
+      };
       const url = getUrlAddress(address);
       expect(url).toEqual(`http://[${address.address}]:${address.port}`);
     });

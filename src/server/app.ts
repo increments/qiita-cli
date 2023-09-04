@@ -43,7 +43,7 @@ export async function startServer() {
         const address = server.address();
         const url = getUrlAddress(address);
         if (url) {
-          console.log(`Preview: ${url}`)
+          console.log(`Preview: ${url}`);
         }
 
         resolve(server);
