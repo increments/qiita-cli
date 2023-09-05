@@ -14,8 +14,7 @@ interface Options {
 
 type UserConfig = {
   includePrivate: boolean;
-  address: string;
-  family: string;
+  host: string;
   port: number;
 };
 
@@ -109,8 +108,7 @@ class Config {
   async getUserConfig() {
     const defaultConfig = {
       includePrivate: false,
-      address: "localhost",
-      family: "IPv4",
+      host: "localhost",
       port: 8888,
     } as UserConfig;
 

@@ -224,8 +224,7 @@ describe("config", () => {
       beforeEach(() => {
         const userConfigData = {
           includePrivate: true,
-          address: "localhost",
-          family: "IPv4",
+          host: "localhost",
           port: 9999,
         };
         resetFiles();
@@ -236,8 +235,7 @@ describe("config", () => {
         const userConfig = await config.getUserConfig();
         expect(userConfig).toStrictEqual({
           includePrivate: true,
-          address: "localhost",
-          family: "IPv4",
+          host: "localhost",
           port: 9999,
         });
       });
@@ -252,8 +250,7 @@ describe("config", () => {
         const userConfig = await config.getUserConfig();
         expect(userConfig).toStrictEqual({
           includePrivate: false,
-          address: "localhost",
-          family: "IPv4",
+          host: "localhost",
           port: 8888,
         });
       });
