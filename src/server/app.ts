@@ -10,6 +10,7 @@ import { EmojiRouter } from "./api/emoji";
 import { ItemsRouter } from "./api/items";
 import { ReadmeRouter } from "./api/readme";
 import { config } from "../lib/config";
+import { getUrlAddress } from "../lib/getUrlAddress";
 
 export async function startServer() {
   const app = express();
@@ -33,13 +34,17 @@ export async function startServer() {
   const server = createServer(app);
   const userConfig = await config.getUserConfig();
   const port = userConfig.port;
-  const host = "localhost";
+  const host = userConfig.host;
 
   return new Promise<Server>((resolve, reject) => {
     server
       .listen(port, host)
       .once("listening", () => {
-        console.log(`Preview: http://${host}:${port}`);
+        const address = server.address();
+        const url = getUrlAddress(address);
+        if (url) {
+          console.log(`Preview: ${url}`);
+        }
 
         resolve(server);
       })

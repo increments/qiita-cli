@@ -1,6 +1,7 @@
 import { config } from "../lib/config";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
+import { getUrlAddress } from "../lib/getUrlAddress";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { startLocalChangeWatcher, startServer } from "../server/app";
 
@@ -13,9 +14,11 @@ export const preview = async () => {
   const server = await startServer();
 
   const address = server.address();
-  if (address && typeof address !== "string") {
+  const url = getUrlAddress(address);
+
+  if (url) {
     const open = (await import("open")).default;
-    await open(`http://localhost:${address.port}`);
+    await open(url);
   }
 
   startLocalChangeWatcher({
