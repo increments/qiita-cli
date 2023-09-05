@@ -45,31 +45,6 @@ const gitignoreFileContent = `.remote
 node_modules
 `;
 
-const dockerfilePath = path.join(rootDir, "Dockerfile");
-const dockerfileContent = `FROM node:20-alpine3.17
-
-WORKDIR /qiita
-
-EXPOSE 8888
-`;
-
-const dockerComposeFilePath = path.join(rootDir, "docker-compose.yml");
-const dockerComposeFileContent = `version: "3"
-services:
-  qiita:
-    container_name: qiita
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - 8888:8888
-    tty: true
-    volumes:
-      - ./:/qiita
-    environment:
-      TZ: Asia/Tokyo
-`;
-
 export const init = async () => {
   console.log("設定ファイルを生成します。\n");
 
@@ -78,10 +53,6 @@ export const init = async () => {
   }
   writeFile(publishWorkflowFilePath, publishWorkflowFileContent);
   writeFile(gitignoreFilePath, gitignoreFileContent);
-
-  //docker
-  writeFile(dockerfilePath, dockerfileContent);
-  writeFile(dockerComposeFilePath, dockerComposeFileContent);
 
   const userConfigFilePath = config.getUserConfigFilePath();
   const userConfigDir = config.getUserConfigDir();
