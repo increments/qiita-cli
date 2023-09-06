@@ -18,7 +18,7 @@ runs:
       with:
         node-version: "18.16.0"
     - name: Install qiita-cli
-      run: npm install -g @qiita/qiita-cli@v1.1.0
+      run: npm install -g @qiita/qiita-cli@v1.2.0
       shell: bash
     - name: Publish articles
       run: qiita publish --all --root ${{ inputs.root }}
