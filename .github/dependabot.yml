@@ -23,3 +23,4 @@ updates:
       day: "monday"
       time: "14:00"
       timezone: "Asia/Tokyo"
+    versioning-strategy: increase
