@@ -14,6 +14,7 @@ class FileContent {
   public readonly organizationUrlName: string | null;
   public readonly rawBody: string;
   public readonly slide: boolean;
+  public readonly draft: boolean;
 
   constructor({
     title,
@@ -24,6 +25,7 @@ class FileContent {
     organizationUrlName,
     rawBody,
     slide,
+    draft,
   }: {
     title: string;
     tags: string[];
@@ -33,6 +35,7 @@ class FileContent {
     organizationUrlName: string | null;
     rawBody: string;
     slide: boolean;
+    draft: boolean;
   }) {
     this.title = title;
     this.tags = tags;
@@ -42,6 +45,7 @@ class FileContent {
     this.organizationUrlName = organizationUrlName;
     this.rawBody = rawBody;
     this.slide = slide;
+    this.draft = draft;
   }
 
   static read(fileContent: string): FileContent {
@@ -55,6 +59,7 @@ class FileContent {
       id: data.id,
       organizationUrlName: data.organization_url_name,
       slide: data.slide,
+      draft: data.draft,
     });
   }
 
@@ -74,6 +79,7 @@ class FileContent {
       id,
       organizationUrlName: null,
       slide: false,
+      draft: false,
     });
   }
 
@@ -87,6 +93,7 @@ class FileContent {
       id: item.id,
       organizationUrlName: item.organization_url_name,
       slide: item.slide,
+      draft: item.draft,
     });
   }
 
@@ -100,6 +107,7 @@ class FileContent {
       id: item.id,
       organizationUrlName: item.organizationUrlName,
       slide: item.slide,
+      draft: item.draft,
     });
   }
 
@@ -112,6 +120,7 @@ class FileContent {
       id: this.id,
       organization_url_name: this.organizationUrlName,
       slide: this.slide,
+      draft: this.draft,
     });
   }
 
@@ -153,6 +162,7 @@ class FileContent {
       organizationUrlName: this.organizationUrlName,
       rawBody: this.rawBody,
       slide: this.slide,
+      draft: this.draft,
     });
   }
 }
@@ -364,6 +374,7 @@ export class FileSystemRepo {
       isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
+      draft: localFileContent.draft,
       itemPath,
     });
   }
@@ -400,6 +411,7 @@ export class FileSystemRepo {
       isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
+      draft: localFileContent.draft,
       itemPath,
     });
   }

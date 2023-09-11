@@ -13,6 +13,7 @@ export class QiitaItem {
   public readonly published: boolean;
   public readonly itemPath: string;
   public readonly slide: boolean;
+  public readonly draft: boolean;
 
   constructor({
     id,
@@ -29,6 +30,7 @@ export class QiitaItem {
     published,
     itemPath,
     slide,
+    draft,
   }: {
     id: string | null;
     title: string;
@@ -44,6 +46,7 @@ export class QiitaItem {
     published: boolean;
     itemPath: string;
     slide: boolean;
+    draft: boolean;
   }) {
     this.id = id;
     this.title = title;
@@ -59,5 +62,6 @@ export class QiitaItem {
     this.published = published;
     this.itemPath = itemPath;
     this.slide = slide;
+    this.draft = draft;
   }
 }
