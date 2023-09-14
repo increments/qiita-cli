@@ -25,7 +25,7 @@ class FileContent {
     organizationUrlName,
     rawBody,
     slide,
-    draft,
+    draft = false,
   }: {
     title: string;
     tags: string[];
@@ -59,7 +59,7 @@ class FileContent {
       id: data.id,
       organizationUrlName: data.organization_url_name,
       slide: data.slide,
-      draft: data.draft,
+      draft: data.draft ?? false,
     });
   }
 
@@ -93,7 +93,7 @@ class FileContent {
       id: item.id,
       organizationUrlName: item.organization_url_name,
       slide: item.slide,
-      draft: item.draft,
+      draft: false,
     });
   }
 
