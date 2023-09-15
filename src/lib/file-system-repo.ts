@@ -120,7 +120,7 @@ class FileContent {
       id: this.id,
       organization_url_name: this.organizationUrlName,
       slide: this.slide,
-      ignorePublisht: this.ignorePublish,
+      ignorePublish: this.ignorePublish,
     });
   }
 
