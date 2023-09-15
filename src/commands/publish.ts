@@ -105,7 +105,7 @@ export const publish = async (argv: string[]) => {
         organizationUrlName: item.organizationUrlName,
         slide: item.slide,
       });
-      fileSystemRepo.updateItemUuid(item.name, responseItem.id);
+      await fileSystemRepo.updateItemUuid(item.name, responseItem.id);
 
       console.log(`Posted: ${item.name} -> ${responseItem.id}`);
     }
