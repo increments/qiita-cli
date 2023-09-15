@@ -13,7 +13,7 @@ export const login = async () => {
   console.log(`
 以下のURLにアクセスしてトークンを発行してください。（「read_qiita」と「write_qiita」にチェックを入れてください）
   ${chalk.bold(
-    "https://qiita.com/settings/tokens/new?read_qiita=1&write_qiita=1&description=qiita-cli"
+    "https://qiita.com/settings/tokens/new?read_qiita=1&write_qiita=1&description=qiita-cli",
   )}
   `);
   const token = await rl.question("発行したトークンを入力: ");

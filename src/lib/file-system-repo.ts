@@ -216,7 +216,7 @@ export class FileSystemRepo {
   private async getItemFilenames(remote: boolean = false) {
     return await fs.readdir(
       this.getRootOrRemotePath(remote),
-      FileSystemRepo.fileSystemOptions()
+      FileSystemRepo.fileSystemOptions(),
     );
   }
 
@@ -234,7 +234,7 @@ export class FileSystemRepo {
       const basename = `${prefix}${suffix}`;
       const filenameCandidate = this.getFilename(basename);
       const found = itemFilenames.find(
-        (filename) => filename === filenameCandidate
+        (filename) => filename === filenameCandidate,
       );
       if (!found) {
         return basename;
@@ -252,14 +252,14 @@ export class FileSystemRepo {
   private async setItemData(
     fileContent: FileContent,
     remote: boolean = false,
-    basename: string | null = null
+    basename: string | null = null,
   ) {
     if (!fileContent.id) {
       return;
     }
     const filepath = this.getFilePath(
       basename || this.defaultBasename(fileContent),
-      remote
+      remote,
     );
     const data = fileContent.toSaveFormat();
     await fs.writeFile(filepath, data, FileSystemRepo.fileSystemOptions());
@@ -267,12 +267,12 @@ export class FileSystemRepo {
 
   private async getItemData(
     itemFilename: string,
-    remote: boolean = false
+    remote: boolean = false,
   ): Promise<FileContent | null> {
     try {
       const fileContent = await fs.readFile(
         path.join(this.getRootOrRemotePath(remote), itemFilename),
-        FileSystemRepo.fileSystemOptions()
+        FileSystemRepo.fileSystemOptions(),
       );
       return FileContent.read(fileContent);
     } catch (err: any) {
@@ -283,7 +283,7 @@ export class FileSystemRepo {
   private async syncItem(
     item: Item,
     beforeSync: boolean = false,
-    forceUpdate: boolean = false
+    forceUpdate: boolean = false,
   ) {
     const fileContent = FileContent.fromItem(item);
 
@@ -295,7 +295,7 @@ export class FileSystemRepo {
     const basename = localResult?.name || null;
     const remoteFileContent = await this.getItemData(
       this.getFilename(item.id),
-      true
+      true,
     );
 
     if (data === null || remoteFileContent?.equals(data) || forceUpdate) {
@@ -317,7 +317,7 @@ export class FileSystemRepo {
   async saveItem(
     item: Item,
     beforeSync: boolean = false,
-    forceUpdate: boolean = false
+    forceUpdate: boolean = false,
   ) {
     await this.syncItem(item, beforeSync, forceUpdate);
   }
@@ -447,7 +447,7 @@ export class FileSystemRepo {
     await fs.writeFile(
       newFilePath,
       newData,
-      FileSystemRepo.fileSystemOptions()
+      FileSystemRepo.fileSystemOptions(),
     );
   }
 

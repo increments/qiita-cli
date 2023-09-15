@@ -8,7 +8,7 @@ const readmeIndex = async (req: Express.Request, res: Express.Response) => {
   try {
     const fileContent = await fs.readFile(
       path.join(path.resolve(__dirname), "../../../", "README.md"),
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     );
     const qiitaApi = await getQiitaApiInstance();
     const renderedBody = await qiitaApi.preview(fileContent);

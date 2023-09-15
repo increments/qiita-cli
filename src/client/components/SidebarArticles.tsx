@@ -47,7 +47,7 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
   };
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(
-    localStorage.getItem(StorageName[articleState]) === "true"
+    localStorage.getItem(StorageName[articleState]) === "true",
   );
 
   const toggleAccordion = (event: React.MouseEvent<HTMLInputElement>) => {
@@ -138,7 +138,7 @@ const articlesListItemStyle = css({
   gap: getSpace(1),
   lineHeight: LineHeight.bodyDense,
   padding: `${getSpace(3 / 4)}px ${getSpace(5 / 2)}px ${getSpace(
-    3 / 4
+    3 / 4,
   )}px ${getSpace(3 / 2)}px`,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",

@@ -44,7 +44,7 @@ const itemsIndex = async (req: Express.Request, res: Express.Response) => {
       private: [] as ItemViewModel[],
       draft: [] as ItemViewModel[],
       public: [] as ItemViewModel[],
-    }
+    },
   );
 
   res.json(result);

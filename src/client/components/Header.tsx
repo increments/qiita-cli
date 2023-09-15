@@ -37,7 +37,7 @@ export const Header = ({
     if (isOlderThanRemote) {
       if (
         !window.confirm(
-          "この記事はQiita上の記事より古い可能性があります。上書きしますか？"
+          "この記事はQiita上の記事より古い可能性があります。上書きしますか？",
         )
       ) {
         return;

@@ -37,7 +37,7 @@ export const Tooltip = ({
         handleHide();
       }
     },
-    [isShow, handleHide]
+    [isShow, handleHide],
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const toolTipItemStyle = (
   isShow: boolean,
   horizontal: string,
   vertical: string,
-  offset: number
+  offset: number,
 ) =>
   css({
     visibility: isShow ? "visible" : "hidden",

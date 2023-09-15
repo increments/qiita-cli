@@ -6,7 +6,7 @@ export const slidePages = (article: {
   body: string;
 }): string[] => [
   `<h1>${escape(
-    article.title
+    article.title,
   )}</h1><div class="slideMode-Viewer_content--firstSlideAuthor">by ${
     article.author.urlName
   }</div>`,

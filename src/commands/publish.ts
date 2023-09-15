@@ -15,7 +15,7 @@ export const publish = async (argv: string[]) => {
       "--force": Boolean,
       "-f": "--force",
     },
-    { argv }
+    { argv },
   );
 
   const qiitaApi = await getQiitaApiInstance();
@@ -44,27 +44,30 @@ export const publish = async (argv: string[]) => {
 
   // Validate
   const enableForcePublish = args["--force"];
-  const invalidItemMessages = targetItems.reduce((acc, item) => {
-    const frontmatterErrors = checkFrontmatterType(item);
-    if (frontmatterErrors.length > 0)
-      return [...acc, { name: item.name, errors: frontmatterErrors }];
+  const invalidItemMessages = targetItems.reduce(
+    (acc, item) => {
+      const frontmatterErrors = checkFrontmatterType(item);
+      if (frontmatterErrors.length > 0)
+        return [...acc, { name: item.name, errors: frontmatterErrors }];
 
-    const validationErrors = validateItem(item);
-    if (validationErrors.length > 0)
-      return [...acc, { name: item.name, errors: validationErrors }];
+      const validationErrors = validateItem(item);
+      if (validationErrors.length > 0)
+        return [...acc, { name: item.name, errors: validationErrors }];
 
-    if (!enableForcePublish && item.isOlderThanRemote) {
-      return [
-        ...acc,
-        {
-          name: item.name,
-          errors: ["内容がQiita上の記事より古い可能性があります"],
-        },
-      ];
-    }
+      if (!enableForcePublish && item.isOlderThanRemote) {
+        return [
+          ...acc,
+          {
+            name: item.name,
+            errors: ["内容がQiita上の記事より古い可能性があります"],
+          },
+        ];
+      }
 
-    return acc;
-  }, [] as { name: string; errors: string[] }[]);
+      return acc;
+    },
+    [] as { name: string; errors: string[] }[],
+  );
   if (invalidItemMessages.length > 0) {
     const chalk = (await import("chalk")).default;
     invalidItemMessages.forEach((msg) => {

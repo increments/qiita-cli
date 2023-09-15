@@ -38,7 +38,7 @@ describe("FileSystemRepo", () => {
         expect(item).toBeNull();
         expect(mockFs.readdir.mock.calls).toHaveLength(1);
         expect(mockFs.readdir.mock.calls[0][0]).toBe(
-          `${dataRootDir}/${subDir}`
+          `${dataRootDir}/${subDir}`,
         );
       });
     });
@@ -67,14 +67,14 @@ tags: []
           expect(item?.id).toBe(itemId);
           expect(mockFs.readdir.mock.calls).toHaveLength(1);
           expect(mockFs.readdir.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}`
+            `${dataRootDir}/${subDir}`,
           );
           expect(mockFs.readFile.mock.calls).toHaveLength(2);
           expect(mockFs.readFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/${filename}`
+            `${dataRootDir}/${subDir}/${filename}`,
           );
           expect(mockFs.readFile.mock.calls[1][0]).toBe(
-            `${dataRootDir}/${subDir}/.remote/${itemId}.md`
+            `${dataRootDir}/${subDir}/.remote/${itemId}.md`,
           );
         });
       });
@@ -99,7 +99,7 @@ tags: []
         expect(item).toBeNull();
         expect(mockFs.readdir.mock.calls).toHaveLength(1);
         expect(mockFs.readdir.mock.calls[0][0]).toBe(
-          `${dataRootDir}/${subDir}`
+          `${dataRootDir}/${subDir}`,
         );
       });
     });
@@ -128,14 +128,14 @@ tags: []
           expect(item?.id).toBe(id);
           expect(mockFs.readdir.mock.calls).toHaveLength(1);
           expect(mockFs.readdir.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}`
+            `${dataRootDir}/${subDir}`,
           );
           expect(mockFs.readFile.mock.calls).toHaveLength(2);
           expect(mockFs.readFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/${basename}.md`
+            `${dataRootDir}/${subDir}/${basename}.md`,
           );
           expect(mockFs.readFile.mock.calls[1][0]).toBe(
-            `${dataRootDir}/${subDir}/.remote/${id}.md`
+            `${dataRootDir}/${subDir}/.remote/${id}.md`,
           );
         });
       });
@@ -245,7 +245,7 @@ slide: false
           expect(mockFs.writeFile.mock.calls).toHaveLength(1);
           expect(mockFs.writeFile.mock.calls[0]).toHaveLength(3);
           expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/newArticle001.md`
+            `${dataRootDir}/${subDir}/newArticle001.md`,
           );
           const { data } = matter(mockFs.writeFile.mock.calls[0][1] as string);
           expect(data.id).toBeNull();
@@ -271,7 +271,7 @@ slide: false
           expect(mockFs.writeFile.mock.calls).toHaveLength(1);
           expect(mockFs.writeFile.mock.calls[0]).toHaveLength(3);
           expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/test01.md`
+            `${dataRootDir}/${subDir}/test01.md`,
           );
           const { data } = matter(mockFs.writeFile.mock.calls[0][1] as string);
           expect(data.id).toBeNull();
@@ -315,7 +315,7 @@ updated
 `;
     const subject = (
       beforeSync: boolean = false,
-      forceUpdate: boolean = false
+      forceUpdate: boolean = false,
     ) => {
       return instance.saveItem(item, beforeSync, forceUpdate);
     };
@@ -331,10 +331,10 @@ updated
           expect(mockFs.readFile.mock.calls).toHaveLength(1);
           expect(mockFs.writeFile.mock.calls).toHaveLength(2);
           expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/.remote/${remoteFilename}`
+            `${dataRootDir}/${subDir}/.remote/${remoteFilename}`,
           );
           expect(mockFs.writeFile.mock.calls[1][0]).toBe(
-            `${dataRootDir}/${subDir}/${localFilename}`
+            `${dataRootDir}/${subDir}/${localFilename}`,
           );
         });
       });
@@ -352,7 +352,7 @@ updated
           expect(mockFs.readFile.mock.calls).toHaveLength(3);
           expect(mockFs.writeFile.mock.calls).toHaveLength(1);
           expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/.remote/${remoteFilename}`
+            `${dataRootDir}/${subDir}/.remote/${remoteFilename}`,
           );
         });
       });
@@ -369,10 +369,10 @@ updated
             expect(mockFs.readFile.mock.calls).toHaveLength(3);
             expect(mockFs.writeFile.mock.calls).toHaveLength(2);
             expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-              `${dataRootDir}/${subDir}/.remote/${remoteFilename}`
+              `${dataRootDir}/${subDir}/.remote/${remoteFilename}`,
             );
             expect(mockFs.writeFile.mock.calls[1][0]).toBe(
-              `${dataRootDir}/${subDir}/.remote/${remoteFilename}`
+              `${dataRootDir}/${subDir}/.remote/${remoteFilename}`,
             );
           });
         });
@@ -391,10 +391,10 @@ updated
             expect(mockFs.readFile.mock.calls).toHaveLength(3);
             expect(mockFs.writeFile.mock.calls).toHaveLength(2);
             expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-              `${dataRootDir}/${subDir}/.remote/${remoteFilename}`
+              `${dataRootDir}/${subDir}/.remote/${remoteFilename}`,
             );
             expect(mockFs.writeFile.mock.calls[1][0]).toBe(
-              `${dataRootDir}/${subDir}/${localFilename}`
+              `${dataRootDir}/${subDir}/${localFilename}`,
             );
           });
         });

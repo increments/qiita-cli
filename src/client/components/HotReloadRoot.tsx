@@ -35,7 +35,7 @@ export const HotReloadRoot = ({ children }: Props) => {
 
 export const useHotReloadEffect = (
   callback: () => unknown,
-  deps: unknown[]
+  deps: unknown[],
 ) => {
   const { reloadedAt } = useContext(HotReloadContext);
 

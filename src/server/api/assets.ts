@@ -3,7 +3,7 @@ import { Router } from "express";
 
 const redirectToArticleCss = async (
   req: Express.Request,
-  res: Express.Response
+  res: Express.Response,
 ) => {
   const url =
     process.env.QIITA_ASSETS_ARTICLE_CSS ||
@@ -13,7 +13,7 @@ const redirectToArticleCss = async (
 
 const redirectToEmbedInitJs = async (
   req: Express.Request,
-  res: Express.Response
+  res: Express.Response,
 ) => {
   const url =
     process.env.QIITA_ASSETS_EMBED_INIT_JS ||
@@ -23,7 +23,7 @@ const redirectToEmbedInitJs = async (
 
 const redirectToFavicon = async (
   req: Express.Request,
-  res: Express.Response
+  res: Express.Response,
 ) => {
   const url =
     process.env.QIITA_ASSETS_FAVICON ||

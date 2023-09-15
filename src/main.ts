@@ -19,7 +19,7 @@ const args = arg(
   },
   {
     permissive: true,
-  }
+  },
 );
 
 const commandName = args._[0] || "preview";
