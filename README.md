@@ -138,7 +138,7 @@ updated_at: "" # 記事を投稿した際に自動的に記事の更新日時に
 id: null # 記事を投稿した際に自動的に記事のUUIDに変わります
 organization_url_name: null # 関連付けるOrganizationのURL名
 slide: false # true: スライドモードON / false: スライドモードOFF
-ignorePublish: false # true: `publish`コマンドにおいて無視されます（Qiitaに保存されません） / false: `publish`コマンドで処理されます（Qiitaに保存されます）
+ignorePublish: false # true: `publish`コマンドにおいて無視されます（Qiitaに投稿されません） / false: `publish`コマンドで処理されます（Qiitaに投稿されます）
 ---
 # new article body
 ```
