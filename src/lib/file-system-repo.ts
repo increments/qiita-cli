@@ -14,6 +14,7 @@ class FileContent {
   public readonly organizationUrlName: string | null;
   public readonly rawBody: string;
   public readonly slide: boolean;
+  public readonly ignorePublish: boolean;
 
   constructor({
     title,
@@ -24,6 +25,7 @@ class FileContent {
     organizationUrlName,
     rawBody,
     slide,
+    ignorePublish = false,
   }: {
     title: string;
     tags: string[];
@@ -33,6 +35,7 @@ class FileContent {
     organizationUrlName: string | null;
     rawBody: string;
     slide: boolean;
+    ignorePublish: boolean;
   }) {
     this.title = title;
     this.tags = tags;
@@ -42,6 +45,7 @@ class FileContent {
     this.organizationUrlName = organizationUrlName;
     this.rawBody = rawBody;
     this.slide = slide;
+    this.ignorePublish = ignorePublish;
   }
 
   static read(fileContent: string): FileContent {
@@ -55,6 +59,7 @@ class FileContent {
       id: data.id,
       organizationUrlName: data.organization_url_name,
       slide: data.slide,
+      ignorePublish: data.ignorePublish ?? false,
     });
   }
 
@@ -74,6 +79,7 @@ class FileContent {
       id,
       organizationUrlName: null,
       slide: false,
+      ignorePublish: false,
     });
   }
 
@@ -87,6 +93,7 @@ class FileContent {
       id: item.id,
       organizationUrlName: item.organization_url_name,
       slide: item.slide,
+      ignorePublish: false,
     });
   }
 
@@ -100,6 +107,7 @@ class FileContent {
       id: item.id,
       organizationUrlName: item.organizationUrlName,
       slide: item.slide,
+      ignorePublish: item.ignorePublish,
     });
   }
 
@@ -112,6 +120,7 @@ class FileContent {
       id: this.id,
       organization_url_name: this.organizationUrlName,
       slide: this.slide,
+      ignorePublish: this.ignorePublish,
     });
   }
 
@@ -131,7 +140,8 @@ class FileContent {
       this.tags.sort().join() === aFileContent.tags.sort().join() &&
       this.secret === aFileContent.secret &&
       this.rawBody === aFileContent.rawBody &&
-      this.slide === aFileContent.slide
+      this.slide === aFileContent.slide &&
+      this.ignorePublish === aFileContent.ignorePublish
     );
   }
 
@@ -153,6 +163,7 @@ class FileContent {
       organizationUrlName: this.organizationUrlName,
       rawBody: this.rawBody,
       slide: this.slide,
+      ignorePublish: this.ignorePublish,
     });
   }
 }
@@ -364,6 +375,7 @@ export class FileSystemRepo {
       isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
+      ignorePublish: localFileContent.ignorePublish,
       itemPath,
     });
   }
@@ -400,6 +412,7 @@ export class FileSystemRepo {
       isOlderThanRemote: localFileContent.isOlderThan(remoteFileContent),
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
+      ignorePublish: localFileContent.ignorePublish,
       itemPath,
     });
   }

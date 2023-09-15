@@ -26,6 +26,7 @@ export const publish = async (argv: string[]) => {
   let targetItems: QiitaItem[];
   if (args["--all"]) {
     targetItems = (await fileSystemRepo.loadItems()).filter((item) => {
+      if (item.ignorePublish === true) return false;
       return item.modified || item.id === null;
     });
   } else {
