@@ -75,7 +75,7 @@ describe("config", () => {
 
     it("returns default path", () => {
       expect(config.getCredentialDir()).toEqual(
-        "/home/test-user/.config/qiita-cli"
+        "/home/test-user/.config/qiita-cli",
       );
     });
 
@@ -88,7 +88,7 @@ describe("config", () => {
 
       it("returns customized path", () => {
         expect(config.getCredentialDir()).toEqual(
-          "/home/test-user/qiita-articles/my-credential"
+          "/home/test-user/qiita-articles/my-credential",
         );
       });
     });
@@ -102,7 +102,7 @@ describe("config", () => {
 
       it("returns default path", () => {
         expect(config.getItemsRootDir()).toEqual(
-          "/home/test-user/qiita-articles"
+          "/home/test-user/qiita-articles",
         );
       });
 
@@ -115,7 +115,7 @@ describe("config", () => {
 
         it("returns customized path", () => {
           expect(config.getItemsRootDir()).toEqual(
-            "/home/test-user/qiita-articles/my-root"
+            "/home/test-user/qiita-articles/my-root",
           );
         });
       });
@@ -130,7 +130,7 @@ describe("config", () => {
 
       it("returns default path", () => {
         expect(config.getUserConfigDir()).toEqual(
-          "/home/test-user/qiita-articles"
+          "/home/test-user/qiita-articles",
         );
       });
 
@@ -143,7 +143,7 @@ describe("config", () => {
 
         it("returns customized path", () => {
           expect(config.getUserConfigDir()).toEqual(
-            "/home/test-user/qiita-articles/my-root"
+            "/home/test-user/qiita-articles/my-root",
           );
         });
       });
@@ -158,7 +158,7 @@ describe("config", () => {
 
       it("returns default path", () => {
         expect(config.getUserConfigFilePath()).toEqual(
-          "/home/test-user/qiita-articles/qiita.config.json"
+          "/home/test-user/qiita-articles/qiita.config.json",
         );
       });
 
@@ -171,7 +171,7 @@ describe("config", () => {
 
         it("returns customized path", () => {
           expect(config.getUserConfigFilePath()).toEqual(
-            "/home/test-user/qiita-articles/my-root/qiita.config.json"
+            "/home/test-user/qiita-articles/my-root/qiita.config.json",
           );
         });
       });
@@ -185,7 +185,7 @@ describe("config", () => {
 
     it("returns default path", () => {
       expect(config.getCacheDataDir()).toEqual(
-        "/home/test-user/.cache/qiita-cli"
+        "/home/test-user/.cache/qiita-cli",
       );
     });
 

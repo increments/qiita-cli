@@ -32,7 +32,7 @@ export const ArticleInfo = ({
   isOlderThanRemote,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(
-    localStorage.getItem("openInfoState") === "true" ? true : false
+    localStorage.getItem("openInfoState") === "true" ? true : false,
   );
 
   const toggleAccordion = (event: React.MouseEvent<HTMLInputElement>) => {

@@ -38,7 +38,7 @@ export const SlideViewerContent = ({
         onPrevious();
       }
     },
-    [onPrevious, onNext]
+    [onPrevious, onNext],
   );
 
   return (

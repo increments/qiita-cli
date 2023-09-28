@@ -11,7 +11,7 @@ export const useWindowSize = () => {
   }, [isClient]);
 
   const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
+    getWindowDimensions(),
   );
   useEffect(() => {
     const onResize = () => {

@@ -7,7 +7,7 @@ export const itemsIndexPath = () => {
 
 export const itemsShowPath = (
   itemId: string,
-  params?: ItemsShowQueryParams
+  params?: ItemsShowQueryParams,
 ): string => {
   const url: string = `/items/${itemId}`;
 
@@ -22,7 +22,7 @@ export const itemsShowPath = (
 
 export const apiItemsShowPath = (
   itemId: string,
-  params?: ItemsShowQueryParams
+  params?: ItemsShowQueryParams,
 ): string => {
   const url: string = `/api/items/${itemId}`;
 

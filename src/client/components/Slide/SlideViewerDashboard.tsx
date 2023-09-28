@@ -50,10 +50,14 @@ export const SlideViewerDashboard = ({
         onMouseMove={(event) => {
           setIsTooltipVisible(true);
           setTooltipLeftDistance(
-            event.clientX - event.currentTarget.getBoundingClientRect().left
+            event.clientX - event.currentTarget.getBoundingClientRect().left,
           );
           setDestinationPage(
-            getMagnitudeFromRange(event.currentTarget, event.clientX, totalPage)
+            getMagnitudeFromRange(
+              event.currentTarget,
+              event.clientX,
+              totalPage,
+            ),
           );
         }}
         onMouseLeave={() => {

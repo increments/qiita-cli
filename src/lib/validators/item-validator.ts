@@ -62,7 +62,7 @@ const validateOrganizationSecretItem: Validator = {
 
 const getValidationErrorMessages = (
   item: Item,
-  validators: Validator[]
+  validators: Validator[],
 ): string[] => {
   return validators.reduce((errorMessages: string[], validator) => {
     if (!validator.isValid(item)) {

@@ -24,5 +24,5 @@ export const breakpoint = {
   XXL: 2559,
 } as const;
 export const viewport = fromEntries(
-  entries(breakpoint).map(([k, v]) => [k, viewportMaker(v)])
+  entries(breakpoint).map(([k, v]) => [k, viewportMaker(v)]),
 );

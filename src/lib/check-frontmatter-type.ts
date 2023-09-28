@@ -80,7 +80,7 @@ const checkId: CheckType = {
 
 const getErrorMessages = (
   frontMatter: FrontMatter,
-  checkTypes: CheckType[]
+  checkTypes: CheckType[],
 ): string[] => {
   return checkTypes.reduce((errorMessages: string[], checkType) => {
     if (!checkType.isValid(frontMatter)) {

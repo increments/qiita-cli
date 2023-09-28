@@ -6,7 +6,7 @@ import * as packageVersionCache from "./package-version-cache";
 describe("getLatestPackageVersion", () => {
   const mockFetchLatestPackageVersion = jest.spyOn(
     fetchPackageVersion,
-    "fetchLatestPackageVersion"
+    "fetchLatestPackageVersion",
   );
   const mockGetCacheData = jest.spyOn(packageVersionCache, "getCacheData");
   const mockSetCacheData = jest.spyOn(packageVersionCache, "setCacheData");
@@ -27,7 +27,7 @@ describe("getLatestPackageVersion", () => {
     beforeEach(() => {
       mockGetCacheData.mockReturnValue(cacheData);
       mockDateNow.mockReturnValue(
-        new Date("2023-07-13T11:00:00.000Z").getTime()
+        new Date("2023-07-13T11:00:00.000Z").getTime(),
       );
     });
 

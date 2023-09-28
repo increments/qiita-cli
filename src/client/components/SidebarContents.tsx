@@ -28,7 +28,7 @@ type SortType = (typeof SortType)[keyof typeof SortType];
 export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
   const [items, setItems] = useState<ItemsIndexViewModel>();
   const [isOpen, setIsOpen] = useState(
-    localStorage.getItem("openSidebarState") === "true"
+    localStorage.getItem("openSidebarState") === "true",
   );
 
   const [sortType, setSortType] = useState<SortType>(SortType.ByUpdatedAt);
@@ -646,7 +646,7 @@ const articlesListItemStyle = css({
   gap: getSpace(1),
   lineHeight: LineHeight.bodyDense,
   padding: `${getSpace(3 / 4)}px ${getSpace(5 / 2)}px ${getSpace(
-    3 / 4
+    3 / 4,
   )}px ${getSpace(3 / 2)}px`,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",

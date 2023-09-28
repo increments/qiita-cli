@@ -97,7 +97,7 @@ export class QiitaApi {
         JSON.stringify({
           status: response.status,
           responseBody,
-        })
+        }),
       );
     }
 

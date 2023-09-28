@@ -36,7 +36,7 @@ class Config {
     this.itemsRootDir = this.resolveItemsRootDir(options.itemsRootDir);
     this.userConfigDir = this.resolveUserConfigDirPath(options.userConfigDir);
     this.userConfigFilePath = this.resolveUserConfigFilePath(
-      options.userConfigDir
+      options.userConfigDir,
     );
     this.cacheDataDir = this.resolveCacheDataDir();
     this.credential = new Credential({
@@ -51,7 +51,7 @@ class Config {
         itemsRootDir: this.itemsRootDir,
         userConfigFilePath: this.userConfigFilePath,
         cacheDataDir: this.cacheDataDir,
-      })
+      }),
     );
   }
 
@@ -114,10 +114,10 @@ class Config {
 
     if (fsSync.existsSync(this.getUserConfigFilePath())) {
       const userConfigFileData = await fs.readFile(
-        this.userConfigFilePath as string
+        this.userConfigFilePath as string,
       );
       const userConfig = JSON.parse(
-        userConfigFileData.toString()
+        userConfigFileData.toString(),
       ) as UserConfig;
       return { ...defaultConfig, ...userConfig };
     }
@@ -262,7 +262,7 @@ class Credential {
       ? this.currentProfile
       : credentialData.default;
     const credential = credentialData.credentials.find(
-      (cred) => cred.name === profile
+      (cred) => cred.name === profile,
     );
 
     if (!credential) {
@@ -273,7 +273,7 @@ class Credential {
 
     configDebugger(
       "use credential",
-      JSON.stringify({ ...credential, accessToken: "******" })
+      JSON.stringify({ ...credential, accessToken: "******" }),
     );
 
     return credential;
@@ -302,7 +302,7 @@ class Credential {
       default: credentialData.default,
       credentials: [
         ...credentialData.credentials.filter(
-          (cred) => cred.name !== credential.name
+          (cred) => cred.name !== credential.name,
         ),
         credential,
       ],
@@ -311,7 +311,7 @@ class Credential {
     await fs.writeFile(
       this.credentialFilePath,
       JSON.stringify(newCredentialData, null, 2),
-      { encoding: "utf8", mode: 0o600 }
+      { encoding: "utf8", mode: 0o600 },
     );
 
     this.refresh();

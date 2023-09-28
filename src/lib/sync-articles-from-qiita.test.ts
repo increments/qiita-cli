@@ -16,7 +16,7 @@ describe("syncArticlesFromQiita", () => {
 
   const mockAuthenticatedUserItems = jest.spyOn(
     qiitaApi,
-    "authenticatedUserItems"
+    "authenticatedUserItems",
   );
   const mockSaveItems = jest.spyOn(fileSystemRepo, "saveItems");
   const mockGetUserConfig = jest.spyOn(mockConfig, "getUserConfig");
@@ -71,7 +71,7 @@ describe("syncArticlesFromQiita", () => {
 
   describe("with forceUpdate", () => {
     const expectSaveItemsToBeCalledWithForceUpdate = async (
-      forceUpdate: boolean
+      forceUpdate: boolean,
     ) => {
       mockGetUserConfig.mockImplementation(async () => ({
         includePrivate: true,

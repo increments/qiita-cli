@@ -49,7 +49,7 @@ export const Snackbar = ({ message, setMessage }: Props) => {
 
 const snackbarStyle = (
   isMessageExists: boolean,
-  isMessageTypeSuccess: boolean
+  isMessageTypeSuccess: boolean,
 ) =>
   css({
     alignItems: "center",

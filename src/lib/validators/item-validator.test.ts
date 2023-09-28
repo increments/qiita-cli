@@ -72,7 +72,7 @@ describe("validateItem", () => {
       it("return validation error message", () => {
         expect(errorMessages.length).toEqual(1);
         expect(errorMessages[0]).toContain(
-          "タグは1つ以上、5つ以内で指定してください"
+          "タグは1つ以上、5つ以内で指定してください",
         );
       });
     });
@@ -86,7 +86,7 @@ describe("validateItem", () => {
       it("return validation error message", () => {
         expect(errorMessages.length).toEqual(1);
         expect(errorMessages[0]).toContain(
-          "タグは1つ以上、5つ以内で指定してください"
+          "タグは1つ以上、5つ以内で指定してください",
         );
       });
     });
@@ -106,7 +106,7 @@ describe("validateItem", () => {
         it("returns validation error message", () => {
           expect(errorMessages.length).toEqual(1);
           expect(errorMessages[0]).toContain(
-            "限定共有記事にOrganizationを紐付けることはできません"
+            "限定共有記事にOrganizationを紐付けることはできません",
           );
         });
       });

@@ -37,7 +37,7 @@ const rootDir = process.cwd();
 const workflowsDirectoryPath = path.join(rootDir, ".github/workflows");
 const publishWorkflowFilePath = path.join(
   workflowsDirectoryPath,
-  "publish.yml"
+  "publish.yml",
 );
 
 const gitignoreFilePath = path.join(rootDir, ".gitignore");
@@ -62,7 +62,7 @@ export const init = async () => {
   const userConfigFileContent = JSON.stringify(
     await config.getUserConfig(),
     null,
-    2
+    2,
   );
   writeFile(userConfigFilePath, userConfigFileContent);
 

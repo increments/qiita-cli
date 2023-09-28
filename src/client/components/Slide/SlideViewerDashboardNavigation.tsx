@@ -25,7 +25,7 @@ export const SlideViewerDashboardNavigation = ({
           "slideMode-Dashboard_button--prev",
           {
             "slideMode-Dashboard_button--clickable": !disablePrevious,
-          }
+          },
         )}
         disabled={disablePrevious}
         onClick={() => onPrevious()}
@@ -41,7 +41,7 @@ export const SlideViewerDashboardNavigation = ({
           "slideMode-Dashboard_button--next",
           {
             "slideMode-Dashboard_button--clickable": !disableNext,
-          }
+          },
         )}
         disabled={disableNext}
         onClick={() => onNext()}

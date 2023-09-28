@@ -9,7 +9,7 @@ export const pull = async (argv: string[]) => {
       "--force": Boolean,
       "-f": "--force",
     },
-    { argv }
+    { argv },
   );
 
   const qiitaApi = await getQiitaApiInstance();
