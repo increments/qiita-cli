@@ -241,7 +241,7 @@ Qiita CLI の認証情報（`credentials.json`）を配置する・している�
 デフォルトでは`$XDG_CONFIG_HOME/qiita-cli`もしくは`$HOME/.config/qiita-cli`になっています。
 
 ```console
-npx qiita login ---credential ./my_conf/
+npx qiita login --credential ./my_conf/
 npx qiita preview --credential ./my_conf/
 ```
 
