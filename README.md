@@ -3,7 +3,8 @@
 Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。
 Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。
 
-> 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
+- よくあるお問い合わせ等を記載しております→[FAQ](#FAQ)
+- 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
 
 ## ご利用の前に
 
@@ -229,7 +230,7 @@ npx qiita version
 このファイルを用いて、Qiita CLI の設定を行うことができます。
 設定できるオプションは以下の通りです。
 
-- includePrivate: 限定共有記事を含めるかどうかを選べます。デフォルトは`false`です。
+- includePrivate: qiita.com からダウンロードして保存する記事に限定共有記事を含めるかどうかを選べます。デフォルトは`false`です。
 - host: `qiita preview`コマンドで利用するホストを指定できます。デフォルトは`localhost`です。
 - port: `qiita preview`コマンドで利用するポートを指定できます。デフォルトは`8888`です。
 
@@ -278,3 +279,25 @@ npx qiita publish c732657828b83976db47 --root ./my_articles/
 npx qiita login --verbose
 npx qiita preview --verbose
 ```
+
+## FAQ
+
+### 限定共有投稿をする方法がわからない
+
+[ユーザー設定ファイル](#%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E8%A8%AD%E5%AE%9A%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)で下記指定をします。  
+`includePrivate: true` (デフォルトは`false`です。)  
+qiita.com からダウンロードして保存する記事に限定共有記事を含めるかどうかを選べます。
+
+[記事ファイル](#%E8%A8%98%E4%BA%8B%E3%81%AE%E4%BD%9C%E6%88%90)で下記指定をします。  
+`private: true`（private: false # true: 限定共有記事 / false: 公開記事）
+
+### エラーが出て解決しない
+
+現在、エラー内容が適切に表示できていない場合がございます。
+
+エラーを解決できない場合は、こちらのDiscussions も参考にしてみてください🙇  
+https://github.com/increments/qiita-discussions/discussions/561
+
+## 不具合・ご意見は Discussions へ
+
+不具合・ご意見等ございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へお寄せください。
