@@ -1,15 +1,16 @@
 # Qiita CLI、Qiita Preview へようこそ！
 
-Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。
+Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。  
 Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。
 
-> 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
+- よくあるお問い合わせ等を記載しております→[FAQ](#FAQ)
+- 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
 
 ## ご利用の前に
 
 Qiita CLI、Qiita Preview を利用されたら、[利用規約](https://qiita.com/terms)、[プライバシーポリシー](https://qiita.com/privacy)に同意したものとみなします。
 
-[コミュニティガイドライン](https://help.qiita.com/ja/articles/qiita-community-guideline) をご確認ください。
+[コミュニティガイドライン](https://help.qiita.com/ja/articles/qiita-community-guideline) をご確認ください。  
 みんながより良い体験をするためのマナーについて書かれています。
 
 また、記事を書く上で意識すると望ましいもの、気をつけるべき点を[良い記事を書くためのガイドライン](https://help.qiita.com/ja/articles/qiita-article-guideline)にまとめています。
@@ -20,7 +21,8 @@ Qiita の Markdown 記法については[Markdown 記法 チートシート](htt
 
 ### 1. 事前準備
 
-Qiita CLI を使うには `Node.js 18.0.0` 以上が必要です。Node.js をはじめて使う場合はインストールする必要があります。
+Qiita CLI を使うには `Node.js 18.0.0` 以上が必要です。  
+Node.js をはじめて使う場合はインストールする必要があります。
 
 ### 2. Qiita CLI をインストールする
 
@@ -88,19 +90,19 @@ Hi ユーザー名!
 
 ## Qiita Preview の起動（プレビュー画面の表示）
 
-本文の執筆は、ブラウザでプレビューしながら確認できます。ブラウザでプレビューするためには以下のコマンドを実行します。
-コマンド実行時に、Qiita に投稿している記事がダウンロードされます。
+本文の執筆は、ブラウザでプレビューしながら確認できます。  
+ブラウザでプレビューするためには以下のコマンドを実行します。コマンド実行時に、Qiita に投稿している記事がダウンロードされます。
 
 ```console
 npx qiita preview
 ```
 
-コマンド実行すると、Qiita Preview(プレビュー画面)にアクセスすることが可能になります。
+コマンド実行すると、Qiita Preview(プレビュー画面)にアクセスすることが可能になります。  
 プレビュー画面のデフォルトの URL は http://localhost:8888 です。
 
 ### 記事ファイルの配置について
 
-1 つの記事の内容は、1 つの markdown ファイル（◯◯.md）で管理します。
+1 つの記事の内容は、1 つの markdown ファイル（◯◯.md）で管理します。  
 記事ファイルは`public`ディレクトリ内に含める必要があります。
 
 ```console
@@ -143,7 +145,7 @@ ignorePublish: false # true: `publish`コマンドにおいて無視されます
 # new article body
 ```
 
-ファイルの上部には`---`に挟まれる形で記事の設定（Front Matter）が含まれています。
+ファイルの上部には`---`に挟まれる形で記事の設定（Front Matter）が含まれています。  
 ここに記事のタイトル（title）やタグ(tags)などを yaml 形式で指定します。
 
 ### 記事の投稿・更新
@@ -170,7 +172,7 @@ npx qiita publish 記事ファイルのベース名 -f
 
 ### 記事の削除
 
-Qiita CLI、Qiita Preview から記事の削除はできません。
+Qiita CLI、Qiita Preview から記事の削除はできません。  
 `public`ディレクトリから markdown ファイルを削除しても Qiita 上では削除はされません。
 
 [Qiita](https://qiita.com)上で記事の削除を行なえます。
@@ -185,7 +187,7 @@ Qiita CLI、Qiita Preview から記事の削除はできません。
 1. https://github.com/[ユーザー名]/[リポジトリ名]/settings/secrets/actions から、シークレットに`QIITA_TOKEN`という名前で発行した Qiita のトークンを保存します。
 1. qiita init を実行したディレクトリ全体を作成したリポジトリにプッシュします。
 
-デフォルトは`main`または`master`ブランチにコミットがあった場合、自動で Qiita へ記事の投稿・更新がされます。
+デフォルトは`main`または`master`ブランチにコミットがあった場合、自動で Qiita へ記事の投稿・更新がされます。  
 処理の実行の条件は`.github/workflows/publish.yml`から変更することが可能です。
 
 ## Qiita CLI のコマンド、オプションについて
@@ -200,7 +202,7 @@ npx qiita help
 
 ### pull
 
-記事ファイルを Qiita と同期します。
+記事ファイルを Qiita と同期します。  
 Qiita 上で更新を行い、手元で変更を行っていない記事ファイルのみ同期されます。
 
 ```console
@@ -225,11 +227,11 @@ npx qiita version
 
 ## ユーザー設定ファイルについて
 
-`npx qiita init`コマンドで生成される`qiita.config.json`について説明します。
-このファイルを用いて、Qiita CLI の設定を行うことができます。
+`npx qiita init`コマンドで生成される`qiita.config.json`について説明します。  
+このファイルを用いて、Qiita CLI の設定を行うことができます。  
 設定できるオプションは以下の通りです。
 
-- includePrivate: 限定共有記事を含めるかどうかを選べます。デフォルトは`false`です。
+- includePrivate: qiita.com からダウンロードして保存する記事に限定共有記事を含めるかどうかを選べます。デフォルトは`false`です。
 - host: `qiita preview`コマンドで利用するホストを指定できます。デフォルトは`localhost`です。
 - port: `qiita preview`コマンドで利用するポートを指定できます。デフォルトは`8888`です。
 
@@ -260,7 +262,7 @@ npx qiita preview --config ./my_conf/
 
 ### --root \<root_dir>
 
-記事ファイルがダウンロードされるディレクトリを指定できます。
+記事ファイルがダウンロードされるディレクトリを指定できます。  
 デフォルトでは、カレントディレクトリになります。
 
 例）
@@ -278,3 +280,25 @@ npx qiita publish c732657828b83976db47 --root ./my_articles/
 npx qiita login --verbose
 npx qiita preview --verbose
 ```
+
+## FAQ
+
+### 限定共有投稿をする方法がわからない
+
+[ユーザー設定ファイル](#%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E8%A8%AD%E5%AE%9A%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)で下記指定をします。  
+`includePrivate: true` (デフォルトは`false`です。)  
+qiita.com からダウンロードして保存する記事に限定共有記事を含めるかどうかを選べます。
+
+[記事ファイル](#%E8%A8%98%E4%BA%8B%E3%81%AE%E4%BD%9C%E6%88%90)で下記指定をします。  
+`private: true`（private: false # true: 限定共有記事 / false: 公開記事）
+
+### エラーが出て解決しない
+
+現在、エラー内容が適切に表示できていない場合がございます。
+
+エラーを解決できない場合は、こちらのDiscussions も参考にしてみてください🙇  
+https://github.com/increments/qiita-discussions/discussions/561
+
+## 不具合・ご意見は Discussions へ
+
+不具合・ご意見等ございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へお寄せください。
