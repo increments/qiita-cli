@@ -32,7 +32,7 @@
     "@types/webpack": "^5.28.5",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "classnames": "^2.3.2",
     "eslint": "^8.44.0",
     "eslint-plugin-react": "^7.33.2",
