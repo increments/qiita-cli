@@ -21,7 +21,7 @@ Qiita の Markdown 記法については[Markdown 記法 チートシート](htt
 
 ### 1. 事前準備
 
-Qiita CLI を使うには `Node.js 18.0.0` 以上が必要です。  
+Qiita CLI を使うには `Node.js 18.12.0` 以上が必要です。  
 Node.js をはじめて使う場合はインストールする必要があります。
 
 ### 2. Qiita CLI をインストールする
