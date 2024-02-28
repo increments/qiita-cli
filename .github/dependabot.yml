@@ -7,6 +7,9 @@ updates:
       day: "monday"
       time: "14:00"
       timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "increments/qiita-dev-group"
 
   - package-ecosystem: "github-actions"
     directory: "/actions/publish"
@@ -15,6 +18,9 @@ updates:
       day: "monday"
       time: "14:00"
       timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "increments/qiita-dev-group"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -24,3 +30,6 @@ updates:
       time: "14:00"
       timezone: "Asia/Tokyo"
     versioning-strategy: increase
+    open-pull-requests-limit: 5
+    reviewers:
+      - "increments/qiita-dev-group"
