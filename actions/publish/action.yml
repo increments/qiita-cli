@@ -16,7 +16,7 @@ runs:
   steps:
     - uses: actions/setup-node@v4
       with:
-        node-version: "18.16.0"
+        node-version: "20.12.2"
     - name: Install qiita-cli
       run: npm install -g @qiita/qiita-cli@v1.4.1
       shell: bash
