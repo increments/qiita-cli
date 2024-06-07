@@ -2,6 +2,7 @@ import {
   QiitaBadRequestError,
   QiitaFetchError,
   QiitaForbiddenError,
+  QiitaForbiddenOrBadRequestError,
   QiitaInternalServerError,
   QiitaNotFoundError,
   QiitaRateLimitError,
@@ -41,6 +42,14 @@ export const handleError = async (error: Error) => {
       console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));
       console.error(
         chalk.red("  Qiitaのアクセストークンが正しいかご確認ください"),
+      );
+      console.error(chalk.red(""));
+      break;
+    case QiitaForbiddenOrBadRequestError.name:
+      console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));
+      console.error(chalk.red("  記事ファイルに不備がないかご確認ください"));
+      console.error(
+        chalk.red("  または、Qiitaのアクセストークンが正しいかご確認ください"),
       );
       console.error(chalk.red(""));
       break;

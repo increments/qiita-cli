@@ -53,3 +53,11 @@ export class QiitaUnknownError extends Error {
     this.name = "QiitaUnknownError";
   }
 }
+
+export class QiitaForbiddenOrBadRequestError extends Error {
+  constructor(message: string, options?: { cause?: Error }) {
+    // @ts-expect-error This error is fixed in ES2022.
+    super(message, options);
+    this.name = "QiitaForbiddenOrBadRequestError";
+  }
+}
