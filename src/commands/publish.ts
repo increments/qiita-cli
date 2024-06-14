@@ -6,7 +6,11 @@ import { getFileSystemRepo } from "../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { validateItem } from "../lib/validators/item-validator";
-import { Item } from "../qiita-api";
+import {
+  Item,
+  QiitaForbiddenError,
+  QiitaForbiddenOrBadRequestError,
+} from "../qiita-api";
 
 export const publish = async (argv: string[]) => {
   const args = arg(
@@ -117,6 +121,14 @@ export const publish = async (argv: string[]) => {
     await fileSystemRepo.saveItem(responseItem, false, true);
   });
 
-  await Promise.all(promises);
+  try {
+    await Promise.all(promises);
+  } catch (err) {
+    if (err instanceof QiitaForbiddenError) {
+      // patchItem and postItem is possible to return 403 by bad request.
+      throw new QiitaForbiddenOrBadRequestError(err.message, { cause: err });
+    }
+    throw err;
+  }
   console.log("Successful!");
 };
