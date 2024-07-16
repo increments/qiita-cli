@@ -1,13 +1,12 @@
 import type Express from "express";
 import { Router } from "express";
+import { getQiitaApiInstance } from "../../lib/get-qiita-api-instance";
 
 const redirectToArticleCss = async (
   req: Express.Request,
   res: Express.Response,
 ) => {
-  const url =
-    process.env.QIITA_ASSETS_ARTICLE_CSS ||
-    (await resolveAssetsUrl("public/article.css"));
+  const url = await resolveAssetsUrl("article_css_url");
   res.redirect(url);
 };
 
@@ -15,9 +14,7 @@ const redirectToEmbedInitJs = async (
   req: Express.Request,
   res: Express.Response,
 ) => {
-  const url =
-    process.env.QIITA_ASSETS_EMBED_INIT_JS ||
-    (await resolveAssetsUrl("public/v3-embed-init.js"));
+  const url = await resolveAssetsUrl("v3_embed_init_js_url");
   res.redirect(url);
 };
 
@@ -25,32 +22,29 @@ const redirectToFavicon = async (
   req: Express.Request,
   res: Express.Response,
 ) => {
-  const url =
-    process.env.QIITA_ASSETS_FAVICON ||
-    (await resolveAssetsUrl("favicons/public/production.ico"));
+  const url = await resolveAssetsUrl("favicon_url");
   res.redirect(url);
 };
 
-const resolveAssetsUrl = async (key: string) => {
-  const latest_manifest_url =
-    "https://qiita.com/assets/.latest_client_manifest_name_production";
+const resolveAssetsUrl = (() => {
+  let cachedAssetUrls: { [key: string]: string } | null = null;
 
-  const cdnAssetsUrl = "https://cdn.qiita.com/assets";
+  return async (key: string) => {
+    if (cachedAssetUrls === null) {
+      const qiitaApi = await getQiitaApiInstance();
+      const assetUrls = await qiitaApi.getAssetUrls();
 
-  const clientManifestFileName = await (
-    await fetch(latest_manifest_url)
-  ).text();
-  const json = await (
-    await fetch(`${cdnAssetsUrl}/${clientManifestFileName}`)
-  ).json();
+      cachedAssetUrls = assetUrls;
+    }
 
-  const filename = json[key];
-  if (filename === undefined) {
-    throw new Error(`Asset not found: ${key}`);
-  }
+    const url = cachedAssetUrls[key];
+    if (!url) {
+      throw new Error(`Asset not found: ${key}`);
+    }
 
-  return `${cdnAssetsUrl}/${filename}`;
-};
+    return url;
+  };
+})();
 
 export const AssetsRouter = Router()
   .get("/article.css", redirectToArticleCss)

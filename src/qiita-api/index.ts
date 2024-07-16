@@ -269,4 +269,8 @@ export class QiitaApi {
       body: data,
     });
   }
+
+  async getAssetUrls() {
+    return await this.get<{ [key: string]: string }>("/api/qiita-cli/assets");
+  }
 }
