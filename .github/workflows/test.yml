@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20.12.2"
+          node-version: "20.16.0"
       - run: yarn install
       - run: yarn run lint
 
@@ -41,9 +41,9 @@ jobs:
     strategy:
       matrix:
         node:
-          - "18.12.0"
-          - "18.19.0"
-          - "20.11.0"
+          - "18.18.0"
+          - "18.20.4"
+          - "20.16.0"
     needs:
       - check_test_execution_conditions
     steps:
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20.12.2"
+          node-version: "20.16.0"
       - run: yarn install
       - run: yarn run build
         env:
