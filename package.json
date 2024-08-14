@@ -67,6 +67,7 @@
     "lint:eslint:fix": "eslint --fix",
     "lint:eslint": "eslint .",
     "lint:typecheck": "tsc --noEmit",
+    "prepack": "run-s clean build",
     "prepare": "husky install",
     "qiita": "node dist/main.js",
     "test": "jest"
