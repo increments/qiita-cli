@@ -1,39 +1,39 @@
+![Qiita CLI](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/88/92b6e4ce-4803-b06e-2d56-e7a9507c612f.png)
+
 # Qiita CLI、Qiita Preview へようこそ！
 
-Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。  
+Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。
 Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。
-
-### ⭐ スターのお願い
-
-少しでも興味が湧いたり、実際に使用してみてQiita CLIが便利だと感じたら、ぜひGitHubリポジトリにスターをつけていただけると嬉しいです。
-スターをいただけると、開発のモチベーションが上がり、さらに良いツールをみなさんにお届けする力になります。
-
-### 📝 記事投稿のお願い
-
-Qiita CLIを使って記事が書けたら、ぜひQiitaに投稿してみてください。
-投稿された記事は、多くの人々に役立ち、知識が共有されることに繋がります。
-どんな些細な内容でも大丈夫ですので、ぜひ気軽にご投稿ください🙇‍♂️
-
-また、Qiita CLIを使用した感想や思ったことについて記事にしていただくことも大歓迎です。
-みなさんオリジナルのおすすめ使用方法や「こんな使い方もある！」といったアイデアなど、記事のテーマは自由です。
-[Qiitaに投稿された記事](https://qiita.com/search?sort=created&q=%22Qiita+CLI%22)を参考に、ぜひQiita CLIの使用レビュー記事を作成してみてください。
-
-みなさんの記事がQiita CLIの認知度アップに繋がります。
-より多くのフィードバックが集まることで、みなさんのお役に立てる機能をどんどん追加することができます。どうぞよろしくお願いします🙇‍♂️
-
-- よくあるお問い合わせ等を記載しております→[FAQ](#FAQ)
-- 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
 
 ## ご利用の前に
 
 Qiita CLI、Qiita Preview を利用されたら、[利用規約](https://qiita.com/terms)、[プライバシーポリシー](https://qiita.com/privacy)に同意したものとみなします。
 
-[コミュニティガイドライン](https://help.qiita.com/ja/articles/qiita-community-guideline) をご確認ください。  
-みんながより良い体験をするためのマナーについて書かれています。
+こちらの記事リンクもご覧ください
 
-また、記事を書く上で意識すると望ましいもの、気をつけるべき点を[良い記事を書くためのガイドライン](https://help.qiita.com/ja/articles/qiita-article-guideline)にまとめています。
+- [コミュニティガイドライン](https://help.qiita.com/ja/articles/qiita-community-guideline)
+- [良い記事を書くためのガイドライン](https://help.qiita.com/ja/articles/qiita-article-guideline)
+- [Markdown 記法 チートシート](https://qiita.com/Qiita/items/c686397e4a0f4f11683d)
 
-Qiita の Markdown 記法については[Markdown 記法 チートシート](https://qiita.com/Qiita/items/c686397e4a0f4f11683d)をご覧ください。
+#### ⭐ スターのお願い
+
+少しでも興味が湧いたり、実際に使用してみてQiita CLIが便利だと感じたら、ぜひGitHubリポジトリにスターをつけていただけると嬉しいです。
+スターをいただけると、開発のモチベーションが上がり、さらに良いツールをみなさんにお届けする力になります。
+
+#### 📝 記事投稿のお願い
+
+Qiita CLIを使って記事が書けたら、ぜひQiitaに投稿してみてください。
+投稿された記事は、多くの人々に役立ち、知識が共有されることに繋がります。
+どんな些細な内容でも大丈夫ですので、ぜひ気軽にご投稿ください🙇‍♂️
+
+[Qiita CLI関する記事](https://qiita.com/search?sort=created&q=%22Qiita+CLI%22)
+
+#### 👉🏻 ご質問・フィードバックについて
+
+より多くのフィードバックが集まることで、みなさんのお役に立てる機能をどんどん追加することができます。
+
+- よくあるお問い合わせ等を記載しております → [FAQ](#FAQ)
+- 不具合やご意見などございましたら[Qiita Discussions](https://github.com/increments/qiita-discussions/discussions)へご投稿ください。
 
 ## Qiita CLI の導入方法について
 
