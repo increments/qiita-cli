@@ -10,6 +10,10 @@ inputs:
   qiita-token:
     required: true
     description: "Qiita API token"
+  commit-message:
+    required: false
+    description: "Git commit message"
+    default: "Updated by qiita-cli"
 
 runs:
   using: "composite"
@@ -31,7 +35,7 @@ runs:
         if ! git diff --staged --exit-code --quiet; then
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Updated by qiita-cli'
+          git commit -m ${{ inputs.commit-message }}
           git push
         fi
       shell: bash
