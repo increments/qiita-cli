@@ -35,7 +35,9 @@ runs:
         if ! git diff --staged --exit-code --quiet; then
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m ${{ inputs.commit-message }}
+          git commit -m "${COMMIT_MESSAGE}"
           git push
         fi
       shell: bash
+      env:
+        COMMIT_MESSAGE: ${{ inputs.commit-message }}
