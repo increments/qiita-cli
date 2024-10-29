@@ -977,10 +977,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@remix-run/router@1.18.0":
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.18.0.tgz#20b033d1f542a100c1d57cfd18ecf442d1784732"
-  integrity sha512-L3jkqmqoSVBVKHfpGZmLrex0lxR5SucGA0sUfFzGctehw+S/ggL9L/0NnC5mw6P8HUWpFZ3nQw3cRApjjWx9Sw==
+"@remix-run/router@1.20.0":
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.20.0.tgz#03554155b45d8b529adf635b2f6ad1165d70d8b4"
+  integrity sha512-mUnk8rPJBI9loFDZ+YzPGdeniYK+FTmRD1TMCz7ev2SNIozyKKpnGgsxO34u6Z4z/t0ITuu7voi/AshfsGsgFg==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
@@ -5209,20 +5209,20 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-router-dom@^6.25.1:
-  version "6.25.1"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.25.1.tgz#b89f8d63fc8383ea4e89c44bf31c5843e1f7afa0"
-  integrity sha512-0tUDpbFvk35iv+N89dWNrJp+afLgd+y4VtorJZuOCXK0kkCWjEvb3vTJM++SYvMEpbVwXKf3FjeVveVEb6JpDQ==
+react-router-dom@^6.27.0:
+  version "6.27.0"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.27.0.tgz#8d7972a425fd75f91c1e1ff67e47240c5752dc3f"
+  integrity sha512-+bvtFWMC0DgAFrfKXKG9Fc+BcXWRUO1aJIihbB79xaeq0v5UzfvnM5houGUm1Y461WVRcgAQ+Clh5rdb1eCx4g==
   dependencies:
-    "@remix-run/router" "1.18.0"
-    react-router "6.25.1"
+    "@remix-run/router" "1.20.0"
+    react-router "6.27.0"
 
-react-router@6.25.1:
-  version "6.25.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.25.1.tgz#70b4f1af79954cfcfd23f6ddf5c883e8c904203e"
-  integrity sha512-u8ELFr5Z6g02nUtpPAggP73Jigj1mRePSwhS/2nkTrlPU5yEkH1vYzWNyvSnSzeeE2DNqWdH+P8OhIh9wuXhTw==
+react-router@6.27.0:
+  version "6.27.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.27.0.tgz#db292474926c814c996c0ff3ef0162d1f9f60ed4"
+  integrity sha512-YA+HGZXz4jaAkVoYBE98VQl+nVzI+cVI2Oj/06F5ZM+0u3TgedN9Y9kmMRo2mnkSK2nCpNQn0DVob4HCsY/WLw==
   dependencies:
-    "@remix-run/router" "1.18.0"
+    "@remix-run/router" "1.20.0"
 
 react@^18.2.0:
   version "18.2.0"
