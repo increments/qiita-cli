@@ -26,7 +26,7 @@ Qiita CLIを使って記事が書けたら、ぜひQiitaに投稿してみてく
 投稿された記事は、多くの人々に役立ち、知識が共有されることに繋がります。
 どんな些細な内容でも大丈夫ですので、ぜひ気軽にご投稿ください🙇‍♂️
 
-[Qiita CLI関する記事](https://qiita.com/search?sort=created&q=%22Qiita+CLI%22)
+[Qiita CLIに関する記事](https://qiita.com/search?sort=created&q=%22Qiita+CLI%22)
 
 #### 👉🏻 ご質問・フィードバックについて
 
