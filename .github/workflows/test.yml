@@ -44,6 +44,7 @@ jobs:
           - "18.18.0"
           - "18.20.4"
           - "20.16.0"
+          - "22.14.0"
     needs:
       - check_test_execution_conditions
     steps:
