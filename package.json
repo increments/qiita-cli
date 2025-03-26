@@ -22,7 +22,7 @@
     "README.md"
   ],
   "devDependencies": {
-    "@emotion/react": "^11.13.0",
+    "@emotion/react": "^11.14.0",
     "@types/debug": "^4.1.12",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
