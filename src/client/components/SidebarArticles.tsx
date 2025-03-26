@@ -110,7 +110,7 @@ const articleSummaryStyle = css({
 
   ...pointerFine({
     "&:hover": {
-      backgroundColor: Colors.gray5,
+      backgroundColor: Colors.gray10,
       cursor: "pointer",
       textDecoration: "none",
     },
@@ -145,7 +145,7 @@ const articlesListItemStyle = css({
 
   ...pointerFine({
     "&:hover": {
-      backgroundColor: Colors.gray5,
+      backgroundColor: Colors.gray10,
       textDecoration: "none",
     },
   }),

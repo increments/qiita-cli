@@ -12,7 +12,7 @@ export const Main = ({ children }: Props) => {
 };
 
 const mainStyle = css({
-  backgroundColor: Colors.gray5,
+  backgroundColor: Colors.gray10,
   display: "grid",
   gridTemplateAreas: `
   "sidebar contents"
