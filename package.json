@@ -1,6 +1,6 @@
 {
   "name": "@qiita/qiita-cli",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Qiita CLI is a tool that allows you to write, preview and publish articles on Qiita from local environment.",
   "keywords": [
     "Qiita"
