@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { ItemsIndex } from "../pages/items";
 import { ItemsShow } from "../pages/items/show";
 import { Layout } from "./Layout";

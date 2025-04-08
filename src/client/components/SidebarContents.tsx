@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { itemsIndexPath } from "../../lib/qiita-cli-url";
 import { ItemsIndexViewModel } from "../../lib/view-models/items";
 import { breakpoint, pointerFine, viewport } from "../lib/mixins";

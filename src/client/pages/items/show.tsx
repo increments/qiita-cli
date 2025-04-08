@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 import { apiItemsShowPath } from "../../../lib/qiita-cli-url";
 import type { ItemsShowViewModel } from "../../../lib/view-models/items";
 import { Article } from "../../components/Article";

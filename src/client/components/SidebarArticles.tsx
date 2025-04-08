@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
 import { MaterialSymbol } from "./MaterialSymbol";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { pointerFine } from "../lib/mixins";
 import {
   Colors,
