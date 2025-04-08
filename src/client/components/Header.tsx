@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { apiItemsUpdatePath, itemsShowPath } from "../../lib/qiita-cli-url";
 import { breakpoint, pointerFine } from "../lib/mixins";
 import { Colors, Typography, Weight, getSpace } from "../lib/variables";
