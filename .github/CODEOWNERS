@@ -1,0 +1,9 @@
+# package-ecosystem: github-actions, directories: /
+/.github/workflows @increments/qiita-dev-group
+
+# package-ecosystem: github-actions, directories: /actions/publish
+/actions/publish/action.yml @increments/qiita-dev-group
+
+# package-ecosystem: npm, directories: /
+/package.json @increments/qiita-dev-group
+/yarn.lock @increments/qiita-dev-group
