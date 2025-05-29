@@ -29,7 +29,10 @@ export async function startServer() {
   app.use("/assets", AssetsRouter);
   app.use("/emoji", EmojiRouter);
 
-  app.use("*", express.static(path.join(__dirname, "../public/index.html")));
+  app.use(
+    "*name",
+    express.static(path.join(__dirname, "../public/index.html")),
+  );
 
   const server = createServer(app);
   const userConfig = await config.getUserConfig();

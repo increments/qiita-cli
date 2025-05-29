@@ -6,4 +6,4 @@ const redirect = (req: Express.Request, res: Express.Response) => {
   res.redirect(`${cdnUrl}${req.baseUrl}${req.path}`);
 };
 
-export const EmojiRouter = Router().get("/:q*", redirect);
+export const EmojiRouter = Router().get("/{*q}", redirect);
