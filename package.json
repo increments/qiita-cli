@@ -80,7 +80,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "gray-matter": "^4.0.3",
-    "open": "^10.1.1",
+    "open": "^10.1.2",
     "ws": "^8.18.2"
   },
   "packageManager": "yarn@1.22.19",
