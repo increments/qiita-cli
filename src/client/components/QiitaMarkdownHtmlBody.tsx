@@ -9,7 +9,7 @@ export const QiitaMarkdownHtmlBody = ({
   bodyRef,
 }: {
   renderedBody: string;
-  bodyRef: RefObject<HTMLDivElement>;
+  bodyRef: RefObject<HTMLDivElement | null>;
 }) => {
   const [isRendered, setIsRendered] = useState(false);
 

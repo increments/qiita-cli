@@ -13,7 +13,7 @@ export const SlideViewerContent = ({
   currentPageIndex: number;
   onPrevious: () => void;
   onNext: () => void;
-  contentRef: RefObject<HTMLDivElement>;
+  contentRef: RefObject<HTMLDivElement | null>;
 }) => {
   const handleClickScreen = useCallback<
     (event: ReactMouseEvent<HTMLDivElement, MouseEvent>) => void
