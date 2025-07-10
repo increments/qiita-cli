@@ -28,30 +28,30 @@ describe("pull", () => {
   it("pulls articles", async () => {
     await pull([]);
 
-    expect(mockSyncArticlesFromQiita).toBeCalledWith({
+    expect(mockSyncArticlesFromQiita).toHaveBeenCalledWith({
       fileSystemRepo,
       qiitaApi,
       forceUpdate: undefined,
     });
-    expect(mockSyncArticlesFromQiita).toBeCalledTimes(1);
+    expect(mockSyncArticlesFromQiita).toHaveBeenCalledTimes(1);
   });
 
   describe('with "--force" option', () => {
     it("pulls articles with forceUpdate", async () => {
       await pull(["--force"]);
 
-      expect(mockSyncArticlesFromQiita).toBeCalledWith({
+      expect(mockSyncArticlesFromQiita).toHaveBeenCalledWith({
         fileSystemRepo,
         qiitaApi,
         forceUpdate: true,
       });
-      expect(mockSyncArticlesFromQiita).toBeCalledTimes(1);
+      expect(mockSyncArticlesFromQiita).toHaveBeenCalledTimes(1);
     });
 
     it("pulls articles with forceUpdate", async () => {
       await pull(["-f"]);
 
-      expect(mockSyncArticlesFromQiita).toBeCalledWith({
+      expect(mockSyncArticlesFromQiita).toHaveBeenCalledWith({
         fileSystemRepo,
         qiitaApi,
         forceUpdate: true,
