@@ -56,7 +56,7 @@ describe("getLatestPackageVersion", () => {
 
     it("returns latest version and updates cache", async () => {
       expect(await getLatestPackageVersion()).toEqual("0.0.1");
-      expect(mockGetCacheData).toBeCalled();
+      expect(mockGetCacheData).toHaveBeenCalled();
       expect(mockDateNow).toHaveBeenCalled();
       expect(mockFetchLatestPackageVersion).toHaveBeenCalled();
       expect(mockSetCacheData).toHaveBeenCalledWith({
@@ -78,7 +78,7 @@ describe("getLatestPackageVersion", () => {
 
     it("returns latest version and updates cache", async () => {
       expect(await getLatestPackageVersion()).toEqual("0.0.1");
-      expect(mockGetCacheData).toBeCalled();
+      expect(mockGetCacheData).toHaveBeenCalled();
       expect(mockDateNow).toHaveBeenCalled();
       expect(mockFetchLatestPackageVersion).toHaveBeenCalled();
       expect(mockSetCacheData).toHaveBeenCalledWith({

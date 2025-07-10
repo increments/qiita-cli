@@ -46,9 +46,9 @@ describe("syncArticlesFromQiita", () => {
 
         expect(mockAuthenticatedUserItems).toHaveBeenNthCalledWith(1, 1, 100);
         expect(mockAuthenticatedUserItems).toHaveBeenNthCalledWith(2, 2, 100);
-        expect(mockAuthenticatedUserItems).toBeCalledTimes(2);
+        expect(mockAuthenticatedUserItems).toHaveBeenCalledTimes(2);
         expect(mockSaveItems).toHaveBeenCalledWith(items, false);
-        expect(mockSaveItems).toBeCalledTimes(1);
+        expect(mockSaveItems).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -62,9 +62,9 @@ describe("syncArticlesFromQiita", () => {
 
         expect(mockAuthenticatedUserItems).toHaveBeenNthCalledWith(1, 1, 100);
         expect(mockAuthenticatedUserItems).toHaveBeenNthCalledWith(2, 2, 100);
-        expect(mockAuthenticatedUserItems).toBeCalledTimes(2);
+        expect(mockAuthenticatedUserItems).toHaveBeenCalledTimes(2);
         expect(mockSaveItems).toHaveBeenCalledWith([items[0]], false);
-        expect(mockSaveItems).toBeCalledTimes(1);
+        expect(mockSaveItems).toHaveBeenCalledTimes(1);
       });
     });
   });
@@ -85,9 +85,9 @@ describe("syncArticlesFromQiita", () => {
 
       expect(mockAuthenticatedUserItems).toHaveBeenNthCalledWith(1, 1, 100);
       expect(mockAuthenticatedUserItems).toHaveBeenNthCalledWith(2, 2, 100);
-      expect(mockAuthenticatedUserItems).toBeCalledTimes(2);
+      expect(mockAuthenticatedUserItems).toHaveBeenCalledTimes(2);
       expect(mockSaveItems).toHaveBeenCalledWith(items, forceUpdate);
-      expect(mockSaveItems).toBeCalledTimes(1);
+      expect(mockSaveItems).toHaveBeenCalledTimes(1);
     };
 
     describe("when forceUpdate is true", () => {
