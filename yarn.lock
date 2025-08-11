@@ -5957,10 +5957,10 @@ react-is@^18.3.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-router@^7.6.1:
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.6.1.tgz#a54f9b980b94594bcb4b7f26611612a9f6e17461"
-  integrity sha512-hPJXXxHJZEsPFNVbtATH7+MMX43UDeOauz+EAU4cgqTn7ojdI9qQORqS8Z0qmDlL1TclO/6jLRYUEtbWidtdHQ==
+react-router@^7.8.0:
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.8.0.tgz#2bc07e0a9ff74d88ee38c2f27897e968b8f59170"
+  integrity sha512-r15M3+LHKgM4SOapNmsH3smAizWds1vJ0Z9C4mWaKnT9/wD7+d/0jYcj6LmOvonkrO4Rgdyp4KQ/29gWN2i1eg==
   dependencies:
     cookie "^1.0.1"
     set-cookie-parser "^2.6.0"
