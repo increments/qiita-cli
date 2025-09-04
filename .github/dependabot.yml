@@ -4,8 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "14:00"
+      day: "sunday"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 5
 
@@ -13,8 +12,7 @@ updates:
     directory: "/actions/publish"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "14:00"
+      day: "sunday"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 5
 
@@ -22,8 +20,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "14:00"
+      day: "sunday"
       timezone: "Asia/Tokyo"
     versioning-strategy: increase
     open-pull-requests-limit: 5
