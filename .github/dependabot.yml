@@ -7,6 +7,8 @@ updates:
       day: "sunday"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: "/actions/publish"
@@ -15,6 +17,8 @@ updates:
       day: "sunday"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -24,3 +28,5 @@ updates:
       timezone: "Asia/Tokyo"
     versioning-strategy: increase
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
