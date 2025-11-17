@@ -1,4 +1,3 @@
-import { config } from "../lib/config";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { getUrlAddress } from "../lib/getUrlAddress";
@@ -23,6 +22,6 @@ export const preview = async () => {
 
   startLocalChangeWatcher({
     server,
-    watchPath: config.getItemsRootDir(),
+    watchPath: fileSystemRepo.getRootPath(),
   });
 };
