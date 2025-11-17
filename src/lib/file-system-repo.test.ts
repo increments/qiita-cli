@@ -401,4 +401,12 @@ updated
       });
     });
   });
+
+  describe("getRootPath()", () => {
+    it("returns the root path", () => {
+      const dataRootDir = "./tmp";
+      const instance = new FileSystemRepo({ dataRootDir });
+      expect(instance.getRootPath()).toBe(`tmp/public`);
+    });
+  });
 });
