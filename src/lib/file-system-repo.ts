@@ -206,7 +206,7 @@ export class FileSystemRepo {
   }
 
   private parseFilename(filename: string) {
-    return filename.split(".md")[0];
+    return filename.replace(/\.md$/, "");
   }
 
   private getFilePath(uuid: string, remote: boolean = false) {
