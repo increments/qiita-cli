@@ -66,7 +66,8 @@ export function startLocalChangeWatcher({
 }) {
   const wsServer = new WebSocketServer({ server });
   const watcher = chokidar.watch(watchPath, {
-    ignored: ["**/.remote/**"],
+    ignored: [/node_modules|\.git/, "**/.remote/**"],
+    persistent: true,
   });
   watcher.on("change", () => {
     wsServer.clients.forEach((client) => {
