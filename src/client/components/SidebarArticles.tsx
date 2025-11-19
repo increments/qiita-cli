@@ -116,7 +116,7 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((child) => renderNode(child, `${path}/${child.name}`))}
 
-            {node.items.sort(cmp).map((item) => (
+            {[...node.items].sort(cmp).map((item) => (
               <li key={item.items_show_path}>
                 <Link css={articlesListItemStyle} to={item.items_show_path}>
                   <MaterialSymbol
