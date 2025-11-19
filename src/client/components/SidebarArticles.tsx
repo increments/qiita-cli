@@ -178,17 +178,43 @@ const articleDetailsStyle = css({
   "&[open] > summary::before": {
     content: "'expand_more'",
   },
-  // nested lists: give visual indentation for hierarchy
+  // nested lists: draw vertical guide lines inside the padded area
   "& ul": {
     listStyle: "none",
     margin: 0,
-    paddingLeft: 0,
+    paddingLeft: getSpace(1),
   },
   "& ul ul": {
-    paddingLeft: getSpace(4),
+    position: "relative",
+    paddingLeft: getSpace(3),
+  },
+  "& ul ul::before": {
+    content: "''",
+    position: "absolute",
+    left: getSpace(3),
+    top: 0,
+    bottom: 0,
+    width: 1,
+    backgroundColor: Colors.gray20,
+  },
+  "& ul ul > li": {
+    paddingLeft: getSpace(1.5),
   },
   "& ul ul ul": {
+    position: "relative",
     paddingLeft: getSpace(4),
+  },
+  "& ul ul ul::before": {
+    content: "''",
+    position: "absolute",
+    left: getSpace(3),
+    top: 0,
+    bottom: 0,
+    width: 1,
+    backgroundColor: Colors.gray20,
+  },
+  "& ul ul ul > li": {
+    paddingLeft: getSpace(1.5),
   },
 });
 
