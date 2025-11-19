@@ -59,6 +59,33 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
     localStorage.setItem(StorageName[articleState], isDetailsOpen.toString());
   }, [isDetailsOpen]);
 
+  console.log(items);
+
+  const rootGrouped: {
+    [root: string]: {
+      direct: ItemViewModel[];
+      children: { [child: string]: ItemViewModel[] };
+    };
+  } = {};
+  const topLevelItems: ItemViewModel[] = [];
+  items.forEach((item) => {
+    if (!item.parent || item.parent.length === 0) {
+      topLevelItems.push(item);
+    } else {
+      const root = item.parent[0];
+      const rest = item.parent.slice(1);
+      const child = rest.length === 0 ? null : rest.join("/");
+      if (!rootGrouped[root]) rootGrouped[root] = { direct: [], children: {} };
+      if (child === null) {
+        rootGrouped[root].direct.push(item);
+      } else {
+        if (!rootGrouped[root].children[child])
+          rootGrouped[root].children[child] = [];
+        rootGrouped[root].children[child].push(item);
+      }
+    }
+  });
+
   return (
     <details css={articleDetailsStyle} open={isDetailsOpen}>
       <summary css={articleSummaryStyle} onClick={toggleAccordion}>
@@ -66,17 +93,99 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
         <span css={articleSectionTitleCountStyle}>{items.length}</span>
       </summary>
       <ul>
-        {items.sort(compare[sortType]).map((item) => (
-          <li key={item.items_show_path}>
-            <Link css={articlesListItemStyle} to={item.items_show_path}>
-              <MaterialSymbol fill={item.modified && articleState !== "Draft"}>
-                note
-              </MaterialSymbol>
-              <span css={articleListItemInnerStyle}>
-                {item.modified && articleState !== "Draft" && "(差分あり) "}
-                {item.title}
-              </span>
-            </Link>
+        {topLevelItems.length > 0 &&
+          topLevelItems.sort(compare[sortType]).map((item) => (
+            <li key={item.items_show_path}>
+              <Link css={articlesListItemStyle} to={item.items_show_path}>
+                <MaterialSymbol
+                  fill={item.modified && articleState !== "Draft"}
+                >
+                  note
+                </MaterialSymbol>
+                <span css={articleListItemInnerStyle}>
+                  {item.modified && articleState !== "Draft" && "(差分あり) "}
+                  {item.title}
+                </span>
+              </Link>
+            </li>
+          ))}
+
+        {Object.entries(rootGrouped).map(([root, group]) => (
+          <li key={root}>
+            <details css={articleDetailsStyle} open>
+              <summary css={articleSummaryStyle}>
+                {root}
+                <span css={articleSectionTitleCountStyle}>
+                  {group.direct.length +
+                    Object.values(group.children).reduce(
+                      (s, arr) => s + arr.length,
+                      0,
+                    )}
+                </span>
+              </summary>
+              <ul>
+                {group.direct.length > 0 &&
+                  group.direct.sort(compare[sortType]).map((item) => (
+                    <li key={item.items_show_path}>
+                      <Link
+                        css={articlesListItemStyle}
+                        to={item.items_show_path}
+                      >
+                        <MaterialSymbol
+                          fill={item.modified && articleState !== "Draft"}
+                        >
+                          note
+                        </MaterialSymbol>
+                        <span css={articleListItemInnerStyle}>
+                          {item.modified &&
+                            articleState !== "Draft" &&
+                            "(差分あり) "}
+                          {item.title}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+
+                {Object.entries(group.children).map(
+                  ([childPath, groupedItems]) => (
+                    <li key={childPath}>
+                      <details css={articleDetailsStyle} open>
+                        <summary css={articleSummaryStyle}>
+                          {childPath}
+                          <span css={articleSectionTitleCountStyle}>
+                            {groupedItems.length}
+                          </span>
+                        </summary>
+                        <ul>
+                          {groupedItems.sort(compare[sortType]).map((item) => (
+                            <li key={item.items_show_path}>
+                              <Link
+                                css={articlesListItemStyle}
+                                to={item.items_show_path}
+                              >
+                                <MaterialSymbol
+                                  fill={
+                                    item.modified && articleState !== "Draft"
+                                  }
+                                >
+                                  note
+                                </MaterialSymbol>
+                                <span css={articleListItemInnerStyle}>
+                                  {item.modified &&
+                                    articleState !== "Draft" &&
+                                    "(差分あり) "}
+                                  {item.title}
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </details>
           </li>
         ))}
       </ul>
@@ -92,6 +201,18 @@ const articleDetailsStyle = css({
 
   "&[open] > summary::before": {
     content: "'expand_more'",
+  },
+  // nested lists: give visual indentation for hierarchy
+  "& ul": {
+    listStyle: "none",
+    margin: 0,
+    paddingLeft: 0,
+  },
+  "& ul ul": {
+    paddingLeft: getSpace(4),
+  },
+  "& ul ul ul": {
+    paddingLeft: getSpace(4),
   },
 });
 
@@ -137,9 +258,9 @@ const articlesListItemStyle = css({
   fontSize: Typography.body2,
   gap: getSpace(1),
   lineHeight: LineHeight.bodyDense,
-  padding: `${getSpace(3 / 4)}px ${getSpace(5 / 2)}px ${getSpace(
-    3 / 4,
-  )}px ${getSpace(3 / 2)}px`,
+  padding: `${getSpace(3 / 4)}px ${getSpace(5 / 2)}px ${getSpace(3 / 4)}px ${getSpace(
+    3,
+  )}px`,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
 
