@@ -59,32 +59,83 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
     localStorage.setItem(StorageName[articleState], isDetailsOpen.toString());
   }, [isDetailsOpen]);
 
-  console.log(items);
-
-  const rootGrouped: {
-    [root: string]: {
-      direct: ItemViewModel[];
-      children: { [child: string]: ItemViewModel[] };
-    };
-  } = {};
+  // build recursive tree from item.parent (segments array)
   const topLevelItems: ItemViewModel[] = [];
+
+  type TreeNode = {
+    name: string;
+    items: ItemViewModel[];
+    children: { [name: string]: TreeNode };
+  };
+
+  const roots: { [name: string]: TreeNode } = {};
+
+  const addToTree = (segments: string[], item: ItemViewModel) => {
+    const rootName = segments[0];
+    if (!roots[rootName])
+      roots[rootName] = { name: rootName, items: [], children: {} };
+    let node = roots[rootName];
+    const rest = segments.slice(1);
+    if (rest.length === 0) {
+      node.items.push(item);
+      return;
+    }
+    for (const seg of rest) {
+      if (!node.children[seg])
+        node.children[seg] = { name: seg, items: [], children: {} };
+      node = node.children[seg];
+    }
+    node.items.push(item);
+  };
+
   items.forEach((item) => {
     if (!item.parent || item.parent.length === 0) {
       topLevelItems.push(item);
     } else {
-      const root = item.parent[0];
-      const rest = item.parent.slice(1);
-      const child = rest.length === 0 ? null : rest.join("/");
-      if (!rootGrouped[root]) rootGrouped[root] = { direct: [], children: {} };
-      if (child === null) {
-        rootGrouped[root].direct.push(item);
-      } else {
-        if (!rootGrouped[root].children[child])
-          rootGrouped[root].children[child] = [];
-        rootGrouped[root].children[child].push(item);
-      }
+      addToTree(item.parent, item);
     }
   });
+
+  const countSubtreeItems = (node: TreeNode): number =>
+    node.items.length +
+    Object.values(node.children).reduce((s, c) => s + countSubtreeItems(c), 0);
+
+  const renderNode = (node: TreeNode, path: string) => {
+    const cmp = compare[sortType];
+    return (
+      <li key={path}>
+        <details css={articleDetailsStyle} open>
+          <summary css={articleSummaryStyle}>
+            {node.name}
+            <span css={articleSectionTitleCountStyle}>
+              {countSubtreeItems(node)}
+            </span>
+          </summary>
+          <ul>
+            {node.items.sort(cmp).map((item) => (
+              <li key={item.items_show_path}>
+                <Link css={articlesListItemStyle} to={item.items_show_path}>
+                  <MaterialSymbol
+                    fill={item.modified && articleState !== "Draft"}
+                  >
+                    note
+                  </MaterialSymbol>
+                  <span css={articleListItemInnerStyle}>
+                    {item.modified && articleState !== "Draft" && "(差分あり) "}
+                    {item.title}
+                  </span>
+                </Link>
+              </li>
+            ))}
+
+            {Object.values(node.children)
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((child) => renderNode(child, `${path}/${child.name}`))}
+          </ul>
+        </details>
+      </li>
+    );
+  };
 
   return (
     <details css={articleDetailsStyle} open={isDetailsOpen}>
@@ -110,84 +161,9 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
             </li>
           ))}
 
-        {Object.entries(rootGrouped).map(([root, group]) => (
-          <li key={root}>
-            <details css={articleDetailsStyle} open>
-              <summary css={articleSummaryStyle}>
-                {root}
-                <span css={articleSectionTitleCountStyle}>
-                  {group.direct.length +
-                    Object.values(group.children).reduce(
-                      (s, arr) => s + arr.length,
-                      0,
-                    )}
-                </span>
-              </summary>
-              <ul>
-                {group.direct.length > 0 &&
-                  group.direct.sort(compare[sortType]).map((item) => (
-                    <li key={item.items_show_path}>
-                      <Link
-                        css={articlesListItemStyle}
-                        to={item.items_show_path}
-                      >
-                        <MaterialSymbol
-                          fill={item.modified && articleState !== "Draft"}
-                        >
-                          note
-                        </MaterialSymbol>
-                        <span css={articleListItemInnerStyle}>
-                          {item.modified &&
-                            articleState !== "Draft" &&
-                            "(差分あり) "}
-                          {item.title}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-
-                {Object.entries(group.children).map(
-                  ([childPath, groupedItems]) => (
-                    <li key={childPath}>
-                      <details css={articleDetailsStyle} open>
-                        <summary css={articleSummaryStyle}>
-                          {childPath}
-                          <span css={articleSectionTitleCountStyle}>
-                            {groupedItems.length}
-                          </span>
-                        </summary>
-                        <ul>
-                          {groupedItems.sort(compare[sortType]).map((item) => (
-                            <li key={item.items_show_path}>
-                              <Link
-                                css={articlesListItemStyle}
-                                to={item.items_show_path}
-                              >
-                                <MaterialSymbol
-                                  fill={
-                                    item.modified && articleState !== "Draft"
-                                  }
-                                >
-                                  note
-                                </MaterialSymbol>
-                                <span css={articleListItemInnerStyle}>
-                                  {item.modified &&
-                                    articleState !== "Draft" &&
-                                    "(差分あり) "}
-                                  {item.title}
-                                </span>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                  ),
-                )}
-              </ul>
-            </details>
-          </li>
-        ))}
+        {Object.values(roots)
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((r) => renderNode(r, r.name))}
       </ul>
     </details>
   );
