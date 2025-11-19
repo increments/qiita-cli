@@ -206,7 +206,7 @@ export class FileSystemRepo {
   }
 
   private parseFilename(filename: string) {
-    return path.basename(filename, ".md");
+    return filename.replace(/\.md$/, "");
   }
 
   private getFilePath(uuid: string, remote: boolean = false) {
@@ -214,9 +214,14 @@ export class FileSystemRepo {
   }
 
   private async getItemFilenames(remote: boolean = false) {
-    return await fs.readdir(
-      this.getRootOrRemotePath(remote),
-      FileSystemRepo.fileSystemOptions(),
+    return (
+      await fs.readdir(
+        this.getRootOrRemotePath(remote),
+        FileSystemRepo.fileSystemOptions(),
+      )
+    ).filter(
+      (itemFilename) =>
+        /\.md$/.test(itemFilename) && !itemFilename.startsWith(".remote/"),
     );
   }
 
@@ -246,6 +251,8 @@ export class FileSystemRepo {
   private static fileSystemOptions() {
     return {
       encoding: "utf8",
+      withFileTypes: false,
+      recursive: true,
     } as const;
   }
 
@@ -325,12 +332,10 @@ export class FileSystemRepo {
   async loadItems(): Promise<QiitaItem[]> {
     const itemFilenames = await this.getItemFilenames();
 
-    const promises = itemFilenames
-      .filter((itemFilename) => /\.md$/.test(itemFilename))
-      .map(async (itemFilename) => {
-        const basename = this.parseFilename(itemFilename);
-        return await this.loadItemByBasename(basename);
-      });
+    const promises = itemFilenames.map(async (itemFilename) => {
+      const basename = this.parseFilename(itemFilename);
+      return await this.loadItemByBasename(basename);
+    });
 
     const items = excludeNull(await Promise.all(promises));
     return items;
