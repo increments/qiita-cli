@@ -112,6 +112,10 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
             </span>
           </summary>
           <ul>
+            {Object.values(node.children)
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((child) => renderNode(child, `${path}/${child.name}`))}
+
             {node.items.sort(cmp).map((item) => (
               <li key={item.items_show_path}>
                 <Link css={articlesListItemStyle} to={item.items_show_path}>
@@ -127,10 +131,6 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
                 </Link>
               </li>
             ))}
-
-            {Object.values(node.children)
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((child) => renderNode(child, `${path}/${child.name}`))}
           </ul>
         </details>
       </li>
@@ -144,6 +144,10 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
         <span css={articleSectionTitleCountStyle}>{items.length}</span>
       </summary>
       <ul>
+        {Object.values(roots)
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((r) => renderNode(r, r.name))}
+
         {topLevelItems.length > 0 &&
           topLevelItems.sort(compare[sortType]).map((item) => (
             <li key={item.items_show_path}>
@@ -160,10 +164,6 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
               </Link>
             </li>
           ))}
-
-        {Object.values(roots)
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((r) => renderNode(r, r.name))}
       </ul>
     </details>
   );
