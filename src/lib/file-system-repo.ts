@@ -187,7 +187,7 @@ export class FileSystemRepo {
     await fs.mkdir(this.getRemotePath(), { recursive: true });
   }
 
-  private getRootPath() {
+  public getRootPath() {
     const subdir = "public";
     return path.join(this.dataRootDir, subdir);
   }
