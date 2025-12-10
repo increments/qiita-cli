@@ -30,3 +30,29 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
+    groups:
+      debug:
+        patterns:
+          - "@types/debug"
+          - "debug"
+      express:
+        patterns:
+          - "@types/express"
+          - "express"
+      jest:
+        patterns:
+          - "@types/jest"
+          - "jest"
+      react:
+        patterns:
+          - "@types/react"
+          - "@types/react-dom"
+          - "react"
+          - "react-dom"
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
+      ws:
+        patterns:
+          - "@types/ws"
+          - "ws"
