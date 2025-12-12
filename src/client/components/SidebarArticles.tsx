@@ -59,6 +59,84 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
     localStorage.setItem(StorageName[articleState], isDetailsOpen.toString());
   }, [isDetailsOpen]);
 
+  // build recursive tree from item.parent (segments array)
+  const topLevelItems: ItemViewModel[] = [];
+
+  type TreeNode = {
+    name: string;
+    items: ItemViewModel[];
+    children: { [name: string]: TreeNode };
+  };
+
+  const roots: { [name: string]: TreeNode } = {};
+
+  const addToTree = (segments: string[], item: ItemViewModel) => {
+    const rootName = segments[0];
+    if (!roots[rootName])
+      roots[rootName] = { name: rootName, items: [], children: {} };
+    let node = roots[rootName];
+    const rest = segments.slice(1);
+    if (rest.length === 0) {
+      node.items.push(item);
+      return;
+    }
+    for (const seg of rest) {
+      if (!node.children[seg])
+        node.children[seg] = { name: seg, items: [], children: {} };
+      node = node.children[seg];
+    }
+    node.items.push(item);
+  };
+
+  items.forEach((item) => {
+    if (!item.parent || item.parent.length === 0) {
+      topLevelItems.push(item);
+    } else {
+      addToTree(item.parent, item);
+    }
+  });
+
+  const countSubtreeItems = (node: TreeNode): number =>
+    node.items.length +
+    Object.values(node.children).reduce((s, c) => s + countSubtreeItems(c), 0);
+
+  const renderNode = (node: TreeNode, path: string) => {
+    const cmp = compare[sortType];
+    return (
+      <li key={path}>
+        <details css={articleDetailsStyle} open>
+          <summary css={articleSummaryStyle}>
+            {node.name}
+            <span css={articleSectionTitleCountStyle}>
+              {countSubtreeItems(node)}
+            </span>
+          </summary>
+          <ul>
+            {Object.values(node.children)
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((child) => renderNode(child, `${path}/${child.name}`))}
+
+            {[...node.items].sort(cmp).map((item) => (
+              <li key={item.items_show_path}>
+                <Link css={articlesListItemStyle} to={item.items_show_path}>
+                  <MaterialSymbol
+                    fill={item.modified && articleState !== "Draft"}
+                  >
+                    note
+                  </MaterialSymbol>
+                  <span css={articleListItemInnerStyle}>
+                    {item.modified && articleState !== "Draft" && "(差分あり) "}
+                    {item.title}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </details>
+      </li>
+    );
+  };
+
   return (
     <details css={articleDetailsStyle} open={isDetailsOpen}>
       <summary css={articleSummaryStyle} onClick={toggleAccordion}>
@@ -66,19 +144,26 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
         <span css={articleSectionTitleCountStyle}>{items.length}</span>
       </summary>
       <ul>
-        {items.sort(compare[sortType]).map((item) => (
-          <li key={item.items_show_path}>
-            <Link css={articlesListItemStyle} to={item.items_show_path}>
-              <MaterialSymbol fill={item.modified && articleState !== "Draft"}>
-                note
-              </MaterialSymbol>
-              <span css={articleListItemInnerStyle}>
-                {item.modified && articleState !== "Draft" && "(差分あり) "}
-                {item.title}
-              </span>
-            </Link>
-          </li>
-        ))}
+        {Object.values(roots)
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((r) => renderNode(r, r.name))}
+
+        {topLevelItems.length > 0 &&
+          [...topLevelItems].sort(compare[sortType]).map((item) => (
+            <li key={item.items_show_path}>
+              <Link css={articlesListItemStyle} to={item.items_show_path}>
+                <MaterialSymbol
+                  fill={item.modified && articleState !== "Draft"}
+                >
+                  note
+                </MaterialSymbol>
+                <span css={articleListItemInnerStyle}>
+                  {item.modified && articleState !== "Draft" && "(差分あり) "}
+                  {item.title}
+                </span>
+              </Link>
+            </li>
+          ))}
       </ul>
     </details>
   );
@@ -92,6 +177,44 @@ const articleDetailsStyle = css({
 
   "&[open] > summary::before": {
     content: "'expand_more'",
+  },
+  // nested lists: draw vertical guide lines inside the padded area
+  "& ul": {
+    listStyle: "none",
+    margin: 0,
+    paddingLeft: getSpace(1),
+  },
+  "& ul ul": {
+    position: "relative",
+    paddingLeft: getSpace(3),
+  },
+  "& ul ul::before": {
+    content: "''",
+    position: "absolute",
+    left: getSpace(3),
+    top: 0,
+    bottom: 0,
+    width: 1,
+    backgroundColor: Colors.gray20,
+  },
+  "& ul ul > li": {
+    paddingLeft: getSpace(1.5),
+  },
+  "& ul ul ul": {
+    position: "relative",
+    paddingLeft: getSpace(4),
+  },
+  "& ul ul ul::before": {
+    content: "''",
+    position: "absolute",
+    left: getSpace(3),
+    top: 0,
+    bottom: 0,
+    width: 1,
+    backgroundColor: Colors.gray20,
+  },
+  "& ul ul ul > li": {
+    paddingLeft: getSpace(1.5),
   },
 });
 
@@ -137,9 +260,9 @@ const articlesListItemStyle = css({
   fontSize: Typography.body2,
   gap: getSpace(1),
   lineHeight: LineHeight.bodyDense,
-  padding: `${getSpace(3 / 4)}px ${getSpace(5 / 2)}px ${getSpace(
-    3 / 4,
-  )}px ${getSpace(3 / 2)}px`,
+  padding: `${getSpace(3 / 4)}px ${getSpace(5 / 2)}px ${getSpace(3 / 4)}px ${getSpace(
+    3,
+  )}px`,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
 
