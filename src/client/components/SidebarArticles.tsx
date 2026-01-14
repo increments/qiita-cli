@@ -75,10 +75,13 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
     node.items.length +
     Object.values(node.children).reduce((s, c) => s + countSubtreeItems(c), 0);
 
-  const renderNode = (node: TreeNode, path: string) => {
+  const renderNode = (node: TreeNode, path: string, depth = 1) => {
     const cmp = compare[sortType];
     return (
-      <li key={path}>
+      <li
+        key={path}
+        css={depth >= 2 ? articleDetailsNestedItemStyle : undefined}
+      >
         <details css={articleDetailsStyle} open>
           <summary css={articleSummaryStyle}>
             {node.name}
@@ -86,13 +89,24 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
               {countSubtreeItems(node)}
             </span>
           </summary>
-          <ul>
+          <ul
+            css={
+              depth === 1
+                ? articleDetailsListStyle
+                : [articleDetailsListStyle, articleDetailsNestedStyle]
+            }
+          >
             {Object.values(node.children)
               .sort((a, b) => a.name.localeCompare(b.name))
-              .map((child) => renderNode(child, `${path}/${child.name}`))}
+              .map((child) =>
+                renderNode(child, `${path}/${child.name}`, depth + 1),
+              )}
 
             {[...node.items].sort(cmp).map((item) => (
-              <li key={item.items_show_path}>
+              <li
+                key={item.items_show_path}
+                css={depth >= 2 ? articleDetailsNestedItemStyle : undefined}
+              >
                 <Link css={articlesListItemStyle} to={item.items_show_path}>
                   <MaterialSymbol
                     fill={item.modified && articleState !== "Draft"}
@@ -118,10 +132,10 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
         {ArticleState[articleState]}
         <span css={articleSectionTitleCountStyle}>{items.length}</span>
       </summary>
-      <ul>
+      <ul css={articleDetailsListStyle}>
         {Object.values(roots)
           .sort((a, b) => a.name.localeCompare(b.name))
-          .map((r) => renderNode(r, r.name))}
+          .map((r) => renderNode(r, r.name, 1))}
 
         {topLevelItems.length > 0 &&
           [...topLevelItems].sort(compare[sortType]).map((item) => (
@@ -143,6 +157,31 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
     </details>
   );
 };
+
+const articleDetailsListStyle = css({
+  listStyle: "none",
+  margin: 0,
+  paddingLeft: getSpace(1),
+});
+
+const articleDetailsNestedStyle = css({
+  position: "relative",
+  paddingLeft: getSpace(3),
+
+  "&:before": {
+    content: "''",
+    position: "absolute",
+    left: getSpace(3),
+    top: 0,
+    bottom: 0,
+    width: 1,
+    backgroundColor: Colors.gray20,
+  },
+});
+
+const articleDetailsNestedItemStyle = css({
+  paddingLeft: getSpace(3 / 2),
+});
 
 const articleDetailsStyle = css({
   "& > summary::before": {
