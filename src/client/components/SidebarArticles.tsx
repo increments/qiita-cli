@@ -11,12 +11,19 @@ import {
   Weight,
 } from "../lib/variables";
 import { ItemViewModel } from "../../lib/view-models/items";
+import { fileTreeFromItemViewModels } from "../lib/fileTree";
 
 interface Props {
   items: ItemViewModel[];
   sortType: (typeof SortType)[keyof typeof SortType];
   articleState: "Draft" | "Public" | "Private";
 }
+
+export type TreeNode = {
+  name: string;
+  items: ItemViewModel[];
+  children: { [name: string]: TreeNode };
+};
 
 export const SortType = {
   ByUpdatedAt: 1,
@@ -60,41 +67,9 @@ export const SidebarArticles = ({ items, sortType, articleState }: Props) => {
   }, [isDetailsOpen]);
 
   // build recursive tree from item.parent (segments array)
-  const topLevelItems: ItemViewModel[] = [];
-
-  type TreeNode = {
-    name: string;
-    items: ItemViewModel[];
-    children: { [name: string]: TreeNode };
-  };
-
-  const roots: { [name: string]: TreeNode } = {};
-
-  const addToTree = (segments: string[], item: ItemViewModel) => {
-    const rootName = segments[0];
-    if (!roots[rootName])
-      roots[rootName] = { name: rootName, items: [], children: {} };
-    let node = roots[rootName];
-    const rest = segments.slice(1);
-    if (rest.length === 0) {
-      node.items.push(item);
-      return;
-    }
-    for (const seg of rest) {
-      if (!node.children[seg])
-        node.children[seg] = { name: seg, items: [], children: {} };
-      node = node.children[seg];
-    }
-    node.items.push(item);
-  };
-
-  items.forEach((item) => {
-    if (!item.parent || item.parent.length === 0) {
-      topLevelItems.push(item);
-    } else {
-      addToTree(item.parent, item);
-    }
-  });
+  const fileTree = fileTreeFromItemViewModels(items);
+  const topLevelItems = fileTree.items;
+  const roots: { [name: string]: TreeNode } = fileTree.children;
 
   const countSubtreeItems = (node: TreeNode): number =>
     node.items.length +
