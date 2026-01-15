@@ -45,7 +45,7 @@
     "prettier": "^3.6.2",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "react-router": "^7.8.2",
+    "react-router": "^7.10.1",
     "ts-jest": "^29.4.6",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
