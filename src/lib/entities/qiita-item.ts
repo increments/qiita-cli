@@ -1,4 +1,4 @@
-import { dirname, sep } from "path";
+import { sep } from "path";
 
 export class QiitaItem {
   public readonly id: string | null;
@@ -68,6 +68,6 @@ export class QiitaItem {
   }
 
   getParentDirNames() {
-    return dirname(this.itemPath).split(sep).slice(0, -1);
+    return this.name.split(sep).slice(0, -1);
   }
 }
