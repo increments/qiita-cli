@@ -1,3 +1,5 @@
+import { sep } from "path";
+
 export class QiitaItem {
   public readonly id: string | null;
   public readonly title: string;
@@ -63,5 +65,9 @@ export class QiitaItem {
     this.itemPath = itemPath;
     this.slide = slide;
     this.ignorePublish = ignorePublish;
+  }
+
+  getParentDirNames() {
+    return this.name.split(sep).slice(0, -1);
   }
 }
