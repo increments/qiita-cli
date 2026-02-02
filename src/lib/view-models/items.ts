@@ -5,6 +5,7 @@ export type ItemViewModel = {
   title: string;
   updated_at: string;
   modified: boolean;
+  parent: string[];
 };
 
 export type ItemsIndexViewModel = {

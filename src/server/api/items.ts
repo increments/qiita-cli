@@ -27,6 +27,7 @@ const itemsIndex = async (req: Express.Request, res: Express.Response) => {
         title: item.title,
         updated_at: item.updatedAt,
         modified: item.modified,
+        parent: item.getParentDirNames(),
       };
 
       if (item.id) {
