@@ -72,5 +72,6 @@ const tagListItemStyle = css({
 });
 
 const bodyStyle = css({
+  textAutospace: "normal",
   marginTop: getSpace(6),
 });
