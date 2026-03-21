@@ -24,7 +24,7 @@
   "devDependencies": {
     "@emotion/react": "^11.14.0",
     "@types/debug": "^4.1.12",
-    "@types/express": "^5.0.3",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.15.30",
     "@types/react": "^19.2.7",
@@ -78,7 +78,7 @@
     "chokidar": "^4.0.3",
     "debug": "^4.4.0",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "gray-matter": "^4.0.3",
     "open": "^10.1.2",
     "ws": "^8.18.3"
