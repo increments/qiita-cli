@@ -13,7 +13,9 @@ export const QiitaMarkdownHtmlBody = ({
 }) => {
   const [isRendered, setIsRendered] = useState(false);
 
+  // TODO: Refactor to remove useEffect for derived state
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsRendered(true);
   }, []);
 
