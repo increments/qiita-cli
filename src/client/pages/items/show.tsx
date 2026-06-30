@@ -95,6 +95,7 @@ export const ItemsShow = () => {
                   secret={item.secret}
                   modified={item.modified}
                   organizationUrlName={item.organization_url_name}
+                  postingCampaign={item.posting_campaign}
                   published={item.published}
                   errorMessages={item.error_messages}
                   qiitaItemUrl={item.qiita_item_url}

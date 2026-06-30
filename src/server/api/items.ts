@@ -9,9 +9,20 @@ import type {
   ItemsIndexViewModel,
   ItemsShowViewModel,
 } from "../../lib/view-models/items";
-import { Item } from "../../qiita-api";
+import { Item, PostingCampaign, QiitaApi } from "../../qiita-api";
 import { getCurrentUser } from "../lib/get-current-user";
 import { itemUrl } from "../lib/qiita-url";
+
+const fetchPostingCampaign = async (
+  qiitaApi: QiitaApi,
+  uuid: string,
+): Promise<PostingCampaign | null> => {
+  try {
+    return await qiitaApi.postingCampaign(uuid);
+  } catch {
+    return null;
+  }
+};
 
 const itemsIndex = async (req: Express.Request, res: Express.Response) => {
   const fileSystemRepo = await getFileSystemRepo();
@@ -82,6 +93,17 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
   const qiitaApi = await getQiitaApiInstance();
   const renderedBody = await qiitaApi.preview(item.rawBody);
 
+  const campaign = item.postingCampaignUuid
+    ? await fetchPostingCampaign(qiitaApi, item.postingCampaignUuid)
+    : null;
+  const postingCampaign: ItemsShowViewModel["posting_campaign"] = campaign
+    ? {
+        title: campaign.title,
+        link_url: campaign.link_url,
+        agreed: item.agreedPostingCampaignTerm,
+      }
+    : null;
+
   const currentUser = await getCurrentUser();
   const qiitaItemUrl = published
     ? itemUrl({
@@ -93,6 +115,11 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
 
   // validate
   const errorMessages = validateItem(item);
+  if (item.postingCampaignUuid && !campaign) {
+    errorMessages.push(
+      `指定したキャンペーン(UUID: ${item.postingCampaignUuid})が見つかりません`,
+    );
+  }
 
   const result: ItemsShowViewModel = {
     error_messages: errorMessages,
@@ -100,6 +127,7 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
     item_path: itemPath,
     modified,
     organization_url_name: item.organizationUrlName,
+    posting_campaign: postingCampaign,
     secret: item.secret,
     published,
     qiita_item_url: qiitaItemUrl,

@@ -311,6 +311,12 @@ export class QiitaApi {
     return await this.get<PostingCampaign[]>(path);
   }
 
+  async postingCampaign(uuid: string) {
+    const path = `/api/v2/posting-campaigns/${uuid}`;
+
+    return await this.get<PostingCampaign>(path);
+  }
+
   async getAssetUrls() {
     return await this.get<{ [key: string]: string }>("/api/qiita-cli/assets");
   }
