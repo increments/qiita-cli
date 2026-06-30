@@ -153,6 +153,8 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
         isPrivate: result.secret,
         organizationUrlName: result.organizationUrlName,
         slide: result.slide,
+        postingCampaignUuid: result.postingCampaignUuid,
+        agreedPostingCampaignTerm: result.agreedPostingCampaignTerm,
       });
       if (item) {
         fileSystemRepo.updateItemUuid(basename, item.id);
@@ -167,6 +169,8 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
         isPrivate: result.secret,
         organizationUrlName: result.organizationUrlName,
         slide: result.slide,
+        postingCampaignUuid: result.postingCampaignUuid,
+        agreedPostingCampaignTerm: result.agreedPostingCampaignTerm,
       });
     } else {
       throw new Error("Unknown Error");

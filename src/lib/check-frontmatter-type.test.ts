@@ -9,6 +9,8 @@ describe("checkFrontmatterType", () => {
     id: null,
     organizationUrlName: null,
     slide: false,
+    postingCampaignUuid: null,
+    agreedPostingCampaignTerm: false,
   };
 
   it("returns no errors", () => {
@@ -125,6 +127,65 @@ describe("checkFrontmatterType", () => {
 
       it("returns no errors", () => {
         expect(errorMessages).toEqual([]);
+      });
+    });
+  });
+
+  describe("checkPostingCampaignUuid", () => {
+    describe("when postingCampaignUuid is null", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        postingCampaignUuid: null,
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when postingCampaignUuid is string", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        postingCampaignUuid: "abcde12345fghij67890",
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when postingCampaignUuid is number", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        postingCampaignUuid: 123 as unknown as string,
+      });
+
+      it("returns errors", () => {
+        expect(errorMessages.length).toEqual(1);
+      });
+    });
+  });
+
+  describe("checkAgreedPostingCampaignTerm", () => {
+    describe("when agreedPostingCampaignTerm is boolean", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        agreedPostingCampaignTerm: true,
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when agreedPostingCampaignTerm is String", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        agreedPostingCampaignTerm: "true" as unknown as boolean,
+      });
+
+      it("returns errors", () => {
+        expect(errorMessages.length).toEqual(1);
       });
     });
   });

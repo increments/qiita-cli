@@ -33,6 +33,13 @@ export class QiitaNotFoundError extends Error {
   }
 }
 
+export class QiitaUnprocessableEntityError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "QiitaUnprocessableEntityError";
+  }
+}
+
 export class QiitaRateLimitError extends Error {
   constructor(message: string) {
     super(message);

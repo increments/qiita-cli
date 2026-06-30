@@ -4,6 +4,8 @@ interface Item {
   tags: string[];
   secret: boolean;
   organizationUrlName: string | null;
+  postingCampaignUuid: string | null;
+  agreedPostingCampaignTerm: boolean;
 }
 
 interface Validator {
@@ -18,6 +20,8 @@ export const validateItem = (item: Item): string[] => {
     validateItemTags,
     validateLengthItemTags,
     validateOrganizationSecretItem,
+    validatePostingCampaignAgreement,
+    validatePostingCampaignSecretItem,
   ];
   return getValidationErrorMessages(item, validators);
 };
@@ -56,6 +60,23 @@ const validateOrganizationSecretItem: Validator = {
   getMessage: () => "限定共有記事にOrganizationを紐付けることはできません",
   isValid: ({ organizationUrlName, secret }) => {
     if (secret && organizationUrlName) return false;
+    return true;
+  },
+};
+
+const validatePostingCampaignAgreement: Validator = {
+  getMessage: () =>
+    "キャンペーンに参加するには規約への同意が必要です。規約を確認のうえ、frontmatterにagreed_posting_campaign_term: trueを設定してください（規約URLはposting-campaignsコマンドで確認できます）",
+  isValid: ({ postingCampaignUuid, agreedPostingCampaignTerm }) => {
+    if (postingCampaignUuid && !agreedPostingCampaignTerm) return false;
+    return true;
+  },
+};
+
+const validatePostingCampaignSecretItem: Validator = {
+  getMessage: () => "限定共有記事にキャンペーンを紐付けることはできません",
+  isValid: ({ postingCampaignUuid, secret }) => {
+    if (secret && postingCampaignUuid) return false;
     return true;
   },
 };

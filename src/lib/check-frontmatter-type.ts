@@ -6,6 +6,8 @@ interface FrontMatter {
   id: string | null;
   organizationUrlName: string | null;
   slide: boolean;
+  postingCampaignUuid: string | null;
+  agreedPostingCampaignTerm: boolean;
 }
 
 interface CheckType {
@@ -22,6 +24,8 @@ export const checkFrontmatterType = (frontMatter: FrontMatter): string[] => {
     checkId,
     checkOrganizationUrlName,
     checkSlide,
+    checkPostingCampaignUuid,
+    checkAgreedPostingCampaignTerm,
   ];
   return getErrorMessages(frontMatter, checkFrontMatterTypes);
 };
@@ -68,6 +72,23 @@ const checkSlide: CheckType = {
     "slideの設定はtrue/falseで入力してください（破壊的な変更がありました。詳しくはリリースをご確認ください https://github.com/increments/qiita-cli/releases/tag/v0.5.0）",
   isValid: ({ slide }) => {
     return typeof slide === "boolean";
+  },
+};
+
+const checkPostingCampaignUuid: CheckType = {
+  getMessage: () => "posting_campaign_uuidは文字列で入力してください",
+  isValid: ({ postingCampaignUuid }) => {
+    return (
+      postingCampaignUuid === null || typeof postingCampaignUuid === "string"
+    );
+  },
+};
+
+const checkAgreedPostingCampaignTerm: CheckType = {
+  getMessage: () =>
+    "agreed_posting_campaign_termの設定はtrue/falseで入力してください",
+  isValid: ({ agreedPostingCampaignTerm }) => {
+    return typeof agreedPostingCampaignTerm === "boolean";
   },
 };
 

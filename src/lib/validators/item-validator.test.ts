@@ -7,6 +7,8 @@ describe("validateItem", () => {
     tags: ["Qiita", "Ruby"],
     secret: false,
     organizationUrlName: null,
+    postingCampaignUuid: null,
+    agreedPostingCampaignTerm: false,
   };
 
   it("returns no errors", () => {
@@ -149,6 +151,80 @@ describe("validateItem", () => {
         it("returns no validation error message", () => {
           expect(errorMessages).toEqual([]);
         });
+      });
+    });
+  });
+
+  describe("validatePostingCampaignAgreement", () => {
+    const postingCampaignUuid = "abcde12345fghij67890";
+
+    describe("when postingCampaignUuid exists and agreed is false", () => {
+      const errorMessages = validateItem({
+        ...item,
+        postingCampaignUuid,
+        agreedPostingCampaignTerm: false,
+      });
+
+      it("returns validation error message", () => {
+        expect(errorMessages.length).toEqual(1);
+        expect(errorMessages[0]).toContain("規約への同意が必要です");
+      });
+    });
+
+    describe("when postingCampaignUuid exists and agreed is true", () => {
+      const errorMessages = validateItem({
+        ...item,
+        postingCampaignUuid,
+        agreedPostingCampaignTerm: true,
+      });
+
+      it("returns no validation error message", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when postingCampaignUuid does not exist", () => {
+      const errorMessages = validateItem({
+        ...item,
+        postingCampaignUuid: null,
+        agreedPostingCampaignTerm: false,
+      });
+
+      it("returns no validation error message", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+  });
+
+  describe("validatePostingCampaignSecretItem", () => {
+    const postingCampaignUuid = "abcde12345fghij67890";
+
+    describe("when postingCampaignUuid exists and secret is true", () => {
+      const errorMessages = validateItem({
+        ...item,
+        secret: true,
+        postingCampaignUuid,
+        agreedPostingCampaignTerm: true,
+      });
+
+      it("returns validation error message", () => {
+        expect(errorMessages.length).toEqual(1);
+        expect(errorMessages[0]).toContain(
+          "限定共有記事にキャンペーンを紐付けることはできません",
+        );
+      });
+    });
+
+    describe("when postingCampaignUuid exists and secret is false", () => {
+      const errorMessages = validateItem({
+        ...item,
+        secret: false,
+        postingCampaignUuid,
+        agreedPostingCampaignTerm: true,
+      });
+
+      it("returns no validation error message", () => {
+        expect(errorMessages).toEqual([]);
       });
     });
   });

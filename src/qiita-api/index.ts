@@ -8,6 +8,7 @@ import {
   QiitaRateLimitError,
   QiitaUnauthorizedError,
   QiitaUnknownError,
+  QiitaUnprocessableEntityError,
 } from "./errors";
 import { qiitaApiDebugger } from "./lib/debugger";
 
@@ -26,6 +27,7 @@ export interface Item {
   created_at: string;
   updated_at: string;
   slide: boolean;
+  posting_campaign_uuid: string | null;
 }
 
 export interface PostingCampaign {
@@ -122,6 +124,8 @@ export class QiitaApi {
         throw new QiitaForbiddenError(errorMessage);
       case 404:
         throw new QiitaNotFoundError(errorMessage);
+      case 422:
+        throw new QiitaUnprocessableEntityError(errorMessage);
       case 429:
         throw new QiitaRateLimitError(errorMessage);
       case 500:
@@ -214,6 +218,8 @@ export class QiitaApi {
     isPrivate,
     organizationUrlName,
     slide,
+    postingCampaignUuid,
+    agreedPostingCampaignTerm,
   }: {
     rawBody: string;
     tags: string[];
@@ -221,6 +227,8 @@ export class QiitaApi {
     isPrivate: boolean;
     organizationUrlName: string | null;
     slide: boolean;
+    postingCampaignUuid: string | null;
+    agreedPostingCampaignTerm: boolean;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -234,6 +242,8 @@ export class QiitaApi {
       private: isPrivate,
       organization_url_name: organizationUrlName,
       slide,
+      posting_campaign_uuid: postingCampaignUuid,
+      agreed_posting_campaign_term: agreedPostingCampaignTerm,
     });
 
     const path = `/api/v2/items`;
@@ -251,6 +261,8 @@ export class QiitaApi {
     isPrivate,
     organizationUrlName,
     slide,
+    postingCampaignUuid,
+    agreedPostingCampaignTerm,
   }: {
     uuid: string;
     rawBody: string;
@@ -259,6 +271,8 @@ export class QiitaApi {
     isPrivate: boolean;
     organizationUrlName: string | null;
     slide: boolean;
+    postingCampaignUuid: string | null;
+    agreedPostingCampaignTerm: boolean;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -272,6 +286,8 @@ export class QiitaApi {
       private: isPrivate,
       organization_url_name: organizationUrlName,
       slide,
+      posting_campaign_uuid: postingCampaignUuid,
+      agreed_posting_campaign_term: agreedPostingCampaignTerm,
     });
 
     const path = `/api/v2/items/${uuid}`;
