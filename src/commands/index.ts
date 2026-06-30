@@ -4,6 +4,7 @@ import { help, helpText } from "./help";
 import { init } from "./init";
 import { login } from "./login";
 import { newArticles } from "./newArticles";
+import { postingCampaigns } from "./postingCampaigns";
 import { preview } from "./preview";
 import { publish } from "./publish";
 import { pull } from "./pull";
@@ -14,6 +15,7 @@ export const exec = async (commandName: string, commandArgs: string[]) => {
     init,
     login,
     new: newArticles,
+    "posting-campaigns": postingCampaigns,
     preview,
     publish,
     pull,

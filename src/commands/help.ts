@@ -9,6 +9,7 @@ COMMAND:
   publish <basename> ...  記事を投稿、更新
   publish --all           全ての記事を投稿、更新
   pull                    記事ファイルをQiitaと同期
+  posting-campaigns       開催中の記事投稿キャンペーン一覧を表示（最大100件）
   version                 Qiita CLIのバージョンを表示
   help                    ヘルプを表示
 

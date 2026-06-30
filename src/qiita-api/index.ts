@@ -28,6 +28,17 @@ export interface Item {
   slide: boolean;
 }
 
+export interface PostingCampaign {
+  uuid: string;
+  title: string;
+  banner_url: string | null;
+  link_url: string;
+  term_url: string;
+  start_at: string;
+  end_at: string;
+  is_after_end: boolean;
+}
+
 export class QiitaApi {
   private readonly token: string;
   private readonly userAgent: string;
@@ -268,6 +279,20 @@ export class QiitaApi {
     return await this.patch<Item>(path, {
       body: data,
     });
+  }
+
+  async postingCampaigns(page?: number, per?: number) {
+    const params = new URLSearchParams();
+    if (page !== undefined) {
+      params.set("page", page.toString());
+    }
+    if (per !== undefined) {
+      params.set("per_page", per.toString());
+    }
+
+    const path = `/api/v2/posting-campaigns?${params}`;
+
+    return await this.get<PostingCampaign[]>(path);
   }
 
   async getAssetUrls() {

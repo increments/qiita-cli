@@ -239,6 +239,15 @@ npx qiita pull --force
 npx qiita pull -f
 ```
 
+### posting-campaigns
+
+開催中の記事投稿キャンペーンの一覧を表示します。（最大100件）  
+記事を紐付ける際に frontmatter へ指定する UUID や、規約 URL を確認できます。
+
+```console
+npx qiita posting-campaigns
+```
+
 ### version
 
 Qiita CLI のバージョンを確認できます。
