@@ -296,6 +296,7 @@ slide: false
       updated_at: "",
       organization_url_name: null,
       slide: false,
+      posting_campaign_uuid: null,
     };
     const remoteFilename = `${id}.md`;
     const localFilename = remoteFilename;

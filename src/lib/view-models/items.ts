@@ -20,6 +20,11 @@ export type ItemsShowViewModel = {
   item_path: string;
   modified: boolean;
   organization_url_name: string | null;
+  posting_campaign: {
+    title: string;
+    link_url: string;
+    agreed: boolean;
+  } | null;
   published: boolean;
   qiita_item_url: string | null;
   rendered_body: string;

@@ -8,6 +8,7 @@ import {
   QiitaRateLimitError,
   QiitaUnauthorizedError,
   QiitaUnknownError,
+  QiitaUnprocessableEntityError,
 } from "./errors";
 import { qiitaApiDebugger } from "./lib/debugger";
 
@@ -26,6 +27,18 @@ export interface Item {
   created_at: string;
   updated_at: string;
   slide: boolean;
+  posting_campaign_uuid: string | null;
+}
+
+export interface PostingCampaign {
+  uuid: string;
+  title: string;
+  banner_url: string | null;
+  link_url: string;
+  term_url: string;
+  start_at: string;
+  end_at: string;
+  is_after_end: boolean;
 }
 
 export class QiitaApi {
@@ -111,6 +124,8 @@ export class QiitaApi {
         throw new QiitaForbiddenError(errorMessage);
       case 404:
         throw new QiitaNotFoundError(errorMessage);
+      case 422:
+        throw new QiitaUnprocessableEntityError(errorMessage);
       case 429:
         throw new QiitaRateLimitError(errorMessage);
       case 500:
@@ -203,6 +218,8 @@ export class QiitaApi {
     isPrivate,
     organizationUrlName,
     slide,
+    postingCampaignUuid,
+    agreedPostingCampaignTerm,
   }: {
     rawBody: string;
     tags: string[];
@@ -210,6 +227,8 @@ export class QiitaApi {
     isPrivate: boolean;
     organizationUrlName: string | null;
     slide: boolean;
+    postingCampaignUuid: string | null;
+    agreedPostingCampaignTerm: boolean;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -223,6 +242,8 @@ export class QiitaApi {
       private: isPrivate,
       organization_url_name: organizationUrlName,
       slide,
+      posting_campaign_uuid: postingCampaignUuid,
+      agreed_posting_campaign_term: agreedPostingCampaignTerm,
     });
 
     const path = `/api/v2/items`;
@@ -240,6 +261,8 @@ export class QiitaApi {
     isPrivate,
     organizationUrlName,
     slide,
+    postingCampaignUuid,
+    agreedPostingCampaignTerm,
   }: {
     uuid: string;
     rawBody: string;
@@ -248,6 +271,8 @@ export class QiitaApi {
     isPrivate: boolean;
     organizationUrlName: string | null;
     slide: boolean;
+    postingCampaignUuid: string | null;
+    agreedPostingCampaignTerm: boolean;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -261,6 +286,8 @@ export class QiitaApi {
       private: isPrivate,
       organization_url_name: organizationUrlName,
       slide,
+      posting_campaign_uuid: postingCampaignUuid,
+      agreed_posting_campaign_term: agreedPostingCampaignTerm,
     });
 
     const path = `/api/v2/items/${uuid}`;
@@ -268,6 +295,26 @@ export class QiitaApi {
     return await this.patch<Item>(path, {
       body: data,
     });
+  }
+
+  async postingCampaigns(page?: number, per?: number) {
+    const params = new URLSearchParams();
+    if (page !== undefined) {
+      params.set("page", page.toString());
+    }
+    if (per !== undefined) {
+      params.set("per_page", per.toString());
+    }
+
+    const path = `/api/v2/posting-campaigns?${params}`;
+
+    return await this.get<PostingCampaign[]>(path);
+  }
+
+  async postingCampaign(uuid: string) {
+    const path = `/api/v2/posting-campaigns/${uuid}`;
+
+    return await this.get<PostingCampaign>(path);
   }
 
   async getAssetUrls() {

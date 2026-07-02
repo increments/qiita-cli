@@ -8,6 +8,7 @@ import {
   QiitaRateLimitError,
   QiitaUnauthorizedError,
   QiitaUnknownError,
+  QiitaUnprocessableEntityError,
 } from "../qiita-api";
 
 export const handleError = async (error: Error) => {
@@ -58,6 +59,10 @@ export const handleError = async (error: Error) => {
       console.error(
         chalk.red("  Qiita上で記事が削除されていないかご確認ください"),
       );
+      break;
+    case QiitaUnprocessableEntityError.name:
+      console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));
+      console.error(chalk.red(`  ${error.message}`));
       break;
     case QiitaRateLimitError.name:
       console.error(chalk.red.bold("Qiita APIのレートリミットに達しました"));

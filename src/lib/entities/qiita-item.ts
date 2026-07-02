@@ -16,6 +16,8 @@ export class QiitaItem {
   public readonly itemPath: string;
   public readonly slide: boolean;
   public readonly ignorePublish: boolean;
+  public readonly postingCampaignUuid: string | null;
+  public readonly agreedPostingCampaignTerm: boolean;
 
   constructor({
     id,
@@ -33,6 +35,8 @@ export class QiitaItem {
     itemPath,
     slide,
     ignorePublish,
+    postingCampaignUuid,
+    agreedPostingCampaignTerm,
   }: {
     id: string | null;
     title: string;
@@ -49,6 +53,8 @@ export class QiitaItem {
     itemPath: string;
     slide: boolean;
     ignorePublish: boolean;
+    postingCampaignUuid: string | null;
+    agreedPostingCampaignTerm: boolean;
   }) {
     this.id = id;
     this.title = title;
@@ -65,6 +71,8 @@ export class QiitaItem {
     this.itemPath = itemPath;
     this.slide = slide;
     this.ignorePublish = ignorePublish;
+    this.postingCampaignUuid = postingCampaignUuid;
+    this.agreedPostingCampaignTerm = agreedPostingCampaignTerm;
   }
 
   getParentDirNames() {

@@ -15,6 +15,8 @@ class FileContent {
   public readonly rawBody: string;
   public readonly slide: boolean;
   public readonly ignorePublish: boolean;
+  public readonly postingCampaignUuid: string | null;
+  public readonly agreedPostingCampaignTerm: boolean;
 
   constructor({
     title,
@@ -26,6 +28,8 @@ class FileContent {
     rawBody,
     slide,
     ignorePublish = false,
+    postingCampaignUuid,
+    agreedPostingCampaignTerm,
   }: {
     title: string;
     tags: string[];
@@ -36,6 +40,8 @@ class FileContent {
     rawBody: string;
     slide: boolean;
     ignorePublish: boolean;
+    postingCampaignUuid: string | null;
+    agreedPostingCampaignTerm: boolean;
   }) {
     this.title = title;
     this.tags = tags;
@@ -46,6 +52,8 @@ class FileContent {
     this.rawBody = rawBody;
     this.slide = slide;
     this.ignorePublish = ignorePublish;
+    this.postingCampaignUuid = postingCampaignUuid;
+    this.agreedPostingCampaignTerm = agreedPostingCampaignTerm;
   }
 
   static read(fileContent: string): FileContent {
@@ -60,6 +68,8 @@ class FileContent {
       organizationUrlName: data.organization_url_name,
       slide: data.slide,
       ignorePublish: data.ignorePublish ?? false,
+      postingCampaignUuid: data.posting_campaign_uuid ?? null,
+      agreedPostingCampaignTerm: data.agreed_posting_campaign_term ?? false,
     });
   }
 
@@ -80,6 +90,8 @@ class FileContent {
       organizationUrlName: null,
       slide: false,
       ignorePublish: false,
+      postingCampaignUuid: null,
+      agreedPostingCampaignTerm: false,
     });
   }
 
@@ -94,6 +106,9 @@ class FileContent {
       organizationUrlName: item.organization_url_name,
       slide: item.slide,
       ignorePublish: false,
+      postingCampaignUuid: item.posting_campaign_uuid,
+      // The response has no agreement state, so treat a linked campaign as already agreed
+      agreedPostingCampaignTerm: item.posting_campaign_uuid !== null,
     });
   }
 
@@ -108,6 +123,8 @@ class FileContent {
       organizationUrlName: item.organizationUrlName,
       slide: item.slide,
       ignorePublish: item.ignorePublish,
+      postingCampaignUuid: item.postingCampaignUuid,
+      agreedPostingCampaignTerm: item.agreedPostingCampaignTerm,
     });
   }
 
@@ -121,6 +138,8 @@ class FileContent {
       organization_url_name: this.organizationUrlName,
       slide: this.slide,
       ignorePublish: this.ignorePublish,
+      posting_campaign_uuid: this.postingCampaignUuid,
+      agreed_posting_campaign_term: this.agreedPostingCampaignTerm,
     });
   }
 
@@ -141,7 +160,9 @@ class FileContent {
       this.secret === aFileContent.secret &&
       this.rawBody === aFileContent.rawBody &&
       this.slide === aFileContent.slide &&
-      this.ignorePublish === aFileContent.ignorePublish
+      this.ignorePublish === aFileContent.ignorePublish &&
+      this.postingCampaignUuid === aFileContent.postingCampaignUuid &&
+      this.agreedPostingCampaignTerm === aFileContent.agreedPostingCampaignTerm
     );
   }
 
@@ -164,6 +185,8 @@ class FileContent {
       rawBody: this.rawBody,
       slide: this.slide,
       ignorePublish: this.ignorePublish,
+      postingCampaignUuid: this.postingCampaignUuid,
+      agreedPostingCampaignTerm: this.agreedPostingCampaignTerm,
     });
   }
 }
@@ -381,6 +404,8 @@ export class FileSystemRepo {
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
       ignorePublish: localFileContent.ignorePublish,
+      postingCampaignUuid: localFileContent.postingCampaignUuid,
+      agreedPostingCampaignTerm: localFileContent.agreedPostingCampaignTerm,
       itemPath,
     });
   }
@@ -418,6 +443,8 @@ export class FileSystemRepo {
       itemsShowPath: this.generateItemsShowPath(localFileContent.id, basename),
       published: remoteFileContent !== null,
       ignorePublish: localFileContent.ignorePublish,
+      postingCampaignUuid: localFileContent.postingCampaignUuid,
+      agreedPostingCampaignTerm: localFileContent.agreedPostingCampaignTerm,
       itemPath,
     });
   }

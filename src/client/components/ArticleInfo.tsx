@@ -14,6 +14,11 @@ interface Props {
   secret: boolean;
   modified: boolean;
   organizationUrlName: string | null;
+  postingCampaign: {
+    title: string;
+    link_url: string;
+    agreed: boolean;
+  } | null;
   published: boolean;
   errorMessages: string[];
   qiitaItemUrl: string | null;
@@ -25,6 +30,7 @@ export const ArticleInfo = ({
   secret,
   modified,
   organizationUrlName,
+  postingCampaign,
   published,
   errorMessages,
   qiitaItemUrl,
@@ -89,6 +95,22 @@ export const ArticleInfo = ({
           {organizationUrlName || "紐付けなし"}
         </InfoItem>
         <InfoItem title="スライドモード">{slide ? "ON" : "OFF"}</InfoItem>
+        {postingCampaign && (
+          <>
+            <InfoItem title="記事投稿キャンペーン">
+              <a
+                href={postingCampaign.link_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {postingCampaign.title}
+              </a>
+            </InfoItem>
+            <InfoItem title="規約同意">
+              {postingCampaign.agreed ? "同意済み" : "未同意"}
+            </InfoItem>
+          </>
+        )}
       </details>
       {isOlderThanRemote && (
         <div css={errorContentsStyle}>
