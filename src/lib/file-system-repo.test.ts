@@ -140,6 +140,95 @@ tags: []
         });
       });
     });
+
+    describe("when posting campaign keys are absent in frontmatter", () => {
+      it("keeps them undefined", () => {
+        const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
+        const basename = "abc";
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        mockFs.readdir.mockResolvedValueOnce([`${basename}.md`] as any[]);
+        mockFs.readFile.mockResolvedValue(`---
+id: this_is_id
+tags: []
+---`);
+
+        return instance.loadItemByBasename(basename).then((item) => {
+          expect(item?.postingCampaignUuid).toBeUndefined();
+          expect(item?.agreedPostingCampaignTerm).toBeUndefined();
+        });
+      });
+
+      it("does not detect modification against remote data with default values", () => {
+        const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
+        const basename = "abc";
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        mockFs.readdir.mockResolvedValueOnce([`${basename}.md`] as any[]);
+        mockFs.readFile.mockResolvedValueOnce(`---
+title: title
+tags: []
+private: false
+id: this_is_id
+slide: false
+---
+body`);
+        mockFs.readFile.mockResolvedValueOnce(`---
+title: title
+tags: []
+private: false
+id: this_is_id
+slide: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
+---
+body`);
+
+        return instance.loadItemByBasename(basename).then((item) => {
+          expect(item?.modified).toBe(false);
+        });
+      });
+    });
+
+    describe("when posting campaign keys are explicitly set in frontmatter", () => {
+      it("returns the explicit values", () => {
+        const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
+        const basename = "abc";
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        mockFs.readdir.mockResolvedValueOnce([`${basename}.md`] as any[]);
+        mockFs.readFile.mockResolvedValue(`---
+id: this_is_id
+tags: []
+posting_campaign_uuid: abcde12345fghij67890
+agreed_posting_campaign_term: true
+---`);
+
+        return instance.loadItemByBasename(basename).then((item) => {
+          expect(item?.postingCampaignUuid).toBe("abcde12345fghij67890");
+          expect(item?.agreedPostingCampaignTerm).toBe(true);
+        });
+      });
+
+      it("returns null for an explicit null", () => {
+        const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
+        const basename = "abc";
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        mockFs.readdir.mockResolvedValueOnce([`${basename}.md`] as any[]);
+        mockFs.readFile.mockResolvedValue(`---
+id: this_is_id
+tags: []
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
+---`);
+
+        return instance.loadItemByBasename(basename).then((item) => {
+          expect(item?.postingCampaignUuid).toBeNull();
+          expect(item?.agreedPostingCampaignTerm).toBe(false);
+        });
+      });
+    });
   });
 
   describe("loadItems", () => {

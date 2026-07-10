@@ -16,8 +16,8 @@ export class QiitaItem {
   public readonly itemPath: string;
   public readonly slide: boolean;
   public readonly ignorePublish: boolean;
-  public readonly postingCampaignUuid: string | null;
-  public readonly agreedPostingCampaignTerm: boolean;
+  public readonly postingCampaignUuid: string | null | undefined;
+  public readonly agreedPostingCampaignTerm: boolean | undefined;
 
   constructor({
     id,
@@ -53,8 +53,8 @@ export class QiitaItem {
     itemPath: string;
     slide: boolean;
     ignorePublish: boolean;
-    postingCampaignUuid: string | null;
-    agreedPostingCampaignTerm: boolean;
+    postingCampaignUuid: string | null | undefined;
+    agreedPostingCampaignTerm: boolean | undefined;
   }) {
     this.id = id;
     this.title = title;

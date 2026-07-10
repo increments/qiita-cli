@@ -4,8 +4,8 @@ interface Item {
   tags: string[];
   secret: boolean;
   organizationUrlName: string | null;
-  postingCampaignUuid: string | null;
-  agreedPostingCampaignTerm: boolean;
+  postingCampaignUuid: string | null | undefined;
+  agreedPostingCampaignTerm: boolean | undefined;
 }
 
 interface Validator {

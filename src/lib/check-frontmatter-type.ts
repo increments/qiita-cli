@@ -6,8 +6,8 @@ interface FrontMatter {
   id: string | null;
   organizationUrlName: string | null;
   slide: boolean;
-  postingCampaignUuid: string | null;
-  agreedPostingCampaignTerm: boolean;
+  postingCampaignUuid: string | null | undefined;
+  agreedPostingCampaignTerm: boolean | undefined;
 }
 
 interface CheckType {
@@ -79,7 +79,9 @@ const checkPostingCampaignUuid: CheckType = {
   getMessage: () => "posting_campaign_uuidは文字列で入力してください",
   isValid: ({ postingCampaignUuid }) => {
     return (
-      postingCampaignUuid === null || typeof postingCampaignUuid === "string"
+      postingCampaignUuid === undefined ||
+      postingCampaignUuid === null ||
+      typeof postingCampaignUuid === "string"
     );
   },
 };
@@ -88,7 +90,10 @@ const checkAgreedPostingCampaignTerm: CheckType = {
   getMessage: () =>
     "agreed_posting_campaign_termの設定はtrue/falseで入力してください",
   isValid: ({ agreedPostingCampaignTerm }) => {
-    return typeof agreedPostingCampaignTerm === "boolean";
+    return (
+      agreedPostingCampaignTerm === undefined ||
+      typeof agreedPostingCampaignTerm === "boolean"
+    );
   },
 };
 
