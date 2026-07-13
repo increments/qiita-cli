@@ -143,6 +143,17 @@ describe("checkFrontmatterType", () => {
       });
     });
 
+    describe("when postingCampaignUuid is undefined", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        postingCampaignUuid: undefined,
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
     describe("when postingCampaignUuid is string", () => {
       const errorMessages = checkFrontmatterType({
         ...frontMatter,
@@ -171,6 +182,17 @@ describe("checkFrontmatterType", () => {
       const errorMessages = checkFrontmatterType({
         ...frontMatter,
         agreedPostingCampaignTerm: true,
+      });
+
+      it("returns no errors", () => {
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when agreedPostingCampaignTerm is undefined", () => {
+      const errorMessages = checkFrontmatterType({
+        ...frontMatter,
+        agreedPostingCampaignTerm: undefined,
       });
 
       it("returns no errors", () => {

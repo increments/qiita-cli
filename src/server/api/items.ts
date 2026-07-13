@@ -100,7 +100,7 @@ const itemsShow = async (req: Express.Request, res: Express.Response) => {
     ? {
         title: campaign.title,
         link_url: campaign.link_url,
-        agreed: item.agreedPostingCampaignTerm,
+        agreed: item.agreedPostingCampaignTerm ?? false,
       }
     : null;
 

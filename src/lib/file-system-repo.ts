@@ -15,8 +15,8 @@ class FileContent {
   public readonly rawBody: string;
   public readonly slide: boolean;
   public readonly ignorePublish: boolean;
-  public readonly postingCampaignUuid: string | null;
-  public readonly agreedPostingCampaignTerm: boolean;
+  public readonly postingCampaignUuid: string | null | undefined;
+  public readonly agreedPostingCampaignTerm: boolean | undefined;
 
   constructor({
     title,
@@ -40,8 +40,8 @@ class FileContent {
     rawBody: string;
     slide: boolean;
     ignorePublish: boolean;
-    postingCampaignUuid: string | null;
-    agreedPostingCampaignTerm: boolean;
+    postingCampaignUuid: string | null | undefined;
+    agreedPostingCampaignTerm: boolean | undefined;
   }) {
     this.title = title;
     this.tags = tags;
@@ -68,8 +68,8 @@ class FileContent {
       organizationUrlName: data.organization_url_name,
       slide: data.slide,
       ignorePublish: data.ignorePublish ?? false,
-      postingCampaignUuid: data.posting_campaign_uuid ?? null,
-      agreedPostingCampaignTerm: data.agreed_posting_campaign_term ?? false,
+      postingCampaignUuid: data.posting_campaign_uuid,
+      agreedPostingCampaignTerm: data.agreed_posting_campaign_term,
     });
   }
 
@@ -138,8 +138,12 @@ class FileContent {
       organization_url_name: this.organizationUrlName,
       slide: this.slide,
       ignorePublish: this.ignorePublish,
-      posting_campaign_uuid: this.postingCampaignUuid,
-      agreed_posting_campaign_term: this.agreedPostingCampaignTerm,
+      ...(this.postingCampaignUuid !== undefined && {
+        posting_campaign_uuid: this.postingCampaignUuid,
+      }),
+      ...(this.agreedPostingCampaignTerm !== undefined && {
+        agreed_posting_campaign_term: this.agreedPostingCampaignTerm,
+      }),
     });
   }
 
@@ -161,8 +165,10 @@ class FileContent {
       this.rawBody === aFileContent.rawBody &&
       this.slide === aFileContent.slide &&
       this.ignorePublish === aFileContent.ignorePublish &&
-      this.postingCampaignUuid === aFileContent.postingCampaignUuid &&
-      this.agreedPostingCampaignTerm === aFileContent.agreedPostingCampaignTerm
+      (this.postingCampaignUuid ?? null) ===
+        (aFileContent.postingCampaignUuid ?? null) &&
+      (this.agreedPostingCampaignTerm ?? false) ===
+        (aFileContent.agreedPostingCampaignTerm ?? false)
     );
   }
 

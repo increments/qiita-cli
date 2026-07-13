@@ -227,8 +227,8 @@ export class QiitaApi {
     isPrivate: boolean;
     organizationUrlName: string | null;
     slide: boolean;
-    postingCampaignUuid: string | null;
-    agreedPostingCampaignTerm: boolean;
+    postingCampaignUuid: string | null | undefined;
+    agreedPostingCampaignTerm: boolean | undefined;
   }) {
     const data = JSON.stringify({
       body: rawBody,
@@ -271,8 +271,8 @@ export class QiitaApi {
     isPrivate: boolean;
     organizationUrlName: string | null;
     slide: boolean;
-    postingCampaignUuid: string | null;
-    agreedPostingCampaignTerm: boolean;
+    postingCampaignUuid: string | null | undefined;
+    agreedPostingCampaignTerm: boolean | undefined;
   }) {
     const data = JSON.stringify({
       body: rawBody,
