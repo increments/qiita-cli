@@ -23,7 +23,7 @@
   ],
   "devDependencies": {
     "@emotion/react": "^11.14.0",
-    "@types/debug": "^4.1.12",
+    "@types/debug": "^4.1.13",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.15.30",
