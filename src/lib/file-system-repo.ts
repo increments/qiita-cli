@@ -160,7 +160,7 @@ class FileContent {
     return (
       this.organizationUrlName === aFileContent.organizationUrlName &&
       this.title === aFileContent.title &&
-      this.tags.sort().join() === aFileContent.tags.sort().join() &&
+      tagsEqual(this.tags, aFileContent.tags) &&
       this.secret === aFileContent.secret &&
       this.rawBody === aFileContent.rawBody &&
       this.slide === aFileContent.slide &&
@@ -494,6 +494,10 @@ export class FileSystemRepo {
     return itemId ? itemsShowPath(itemId) : itemsShowPath("show", { basename });
   }
 }
+
+const tagsEqual = (a: string[], b: string[]): boolean => {
+  return a.length === b.length && a.every((tag, index) => tag === b[index]);
+};
 
 const excludeNull = <T>(array: (T | null)[]): T[] => {
   return array.filter((val): val is T => val !== null);

@@ -190,6 +190,65 @@ body`);
       });
     });
 
+    describe("when only tag order differs from remote", () => {
+      it("detects modification", () => {
+        const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
+        const basename = "abc";
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        mockFs.readdir.mockResolvedValueOnce([`${basename}.md`] as any[]);
+        mockFs.readFile.mockResolvedValueOnce(`---
+title: title
+tags:
+  - Ruby
+  - Rails
+private: false
+id: this_is_id
+slide: false
+---
+body`);
+        mockFs.readFile.mockResolvedValueOnce(`---
+title: title
+tags:
+  - Rails
+  - Ruby
+private: false
+id: this_is_id
+slide: false
+---
+body`);
+
+        return instance.loadItemByBasename(basename).then((item) => {
+          expect(item?.modified).toBe(true);
+        });
+      });
+    });
+
+    describe("when tags are not empty", () => {
+      it("keeps tags in the order written in frontmatter", () => {
+        const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
+        const basename = "abc";
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        mockFs.readdir.mockResolvedValueOnce([`${basename}.md`] as any[]);
+        mockFs.readFile.mockResolvedValue(`---
+title: title
+tags:
+  - Ruby
+  - Rails
+private: false
+id: this_is_id
+slide: false
+---
+body`);
+
+        return instance.loadItemByBasename(basename).then((item) => {
+          expect(item?.modified).toBe(false);
+          expect(item?.tags).toStrictEqual(["Ruby", "Rails"]);
+        });
+      });
+    });
+
     describe("when posting campaign keys are explicitly set in frontmatter", () => {
       it("returns the explicit values", () => {
         const instance = new FileSystemRepo({ dataRootDir: "data_root_dir" });
