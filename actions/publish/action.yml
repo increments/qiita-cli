@@ -22,7 +22,7 @@ runs:
       with:
         node-version: "22.23.1"
     - name: Install qiita-cli
-      run: npm install -g @qiita/qiita-cli@v1.9.1
+      run: npm install -g @qiita/qiita-cli@v1.10.0
       shell: bash
     - name: Publish articles
       run: qiita publish --all --root ${{ inputs.root }}
