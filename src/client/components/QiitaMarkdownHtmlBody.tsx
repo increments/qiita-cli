@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from "react";
+import { RefObject, useEffect } from "react";
 import {
   applyMathJax,
   executeScriptTagsInElement,
@@ -11,20 +11,12 @@ export const QiitaMarkdownHtmlBody = ({
   renderedBody: string;
   bodyRef: RefObject<HTMLDivElement | null>;
 }) => {
-  const [isRendered, setIsRendered] = useState(false);
-
-  // TODO: Refactor to remove useEffect for derived state
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsRendered(true);
-  }, []);
+    if (!bodyRef.current) return;
 
-  useEffect(() => {
-    if (isRendered && bodyRef.current) {
-      executeScriptTagsInElement(bodyRef.current);
-      applyMathJax(bodyRef.current);
-    }
-  }, [isRendered, bodyRef, renderedBody]);
+    executeScriptTagsInElement(bodyRef.current);
+    applyMathJax(bodyRef.current);
+  }, [bodyRef, renderedBody]);
 
   return (
     <div dangerouslySetInnerHTML={{ __html: renderedBody }} ref={bodyRef}></div>
