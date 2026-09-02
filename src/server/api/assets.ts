@@ -6,7 +6,9 @@ const redirectToArticleCss = async (
   req: Express.Request,
   res: Express.Response,
 ) => {
-  const url = await resolveAssetsUrl("article_css_url");
+  const url =
+    process.env.QIITA_ASSETS_ARTICLE_CSS ||
+    (await resolveAssetsUrl("article_css_url"));
   res.redirect(url);
 };
 
@@ -14,7 +16,9 @@ const redirectToEmbedInitJs = async (
   req: Express.Request,
   res: Express.Response,
 ) => {
-  const url = await resolveAssetsUrl("v3_embed_init_js_url");
+  const url =
+    process.env.QIITA_ASSETS_EMBED_INIT_JS ||
+    (await resolveAssetsUrl("v3_embed_init_js_url"));
   res.redirect(url);
 };
 
@@ -22,7 +26,8 @@ const redirectToFavicon = async (
   req: Express.Request,
   res: Express.Response,
 ) => {
-  const url = await resolveAssetsUrl("favicon_url");
+  const url =
+    process.env.QIITA_ASSETS_FAVICON || (await resolveAssetsUrl("favicon_url"));
   res.redirect(url);
 };
 
