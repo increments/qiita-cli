@@ -5,6 +5,9 @@ COMMAND:
   init                    記事をGitHubで管理するための初期設定
   login                   Qiita APIの認証認可
   new [<basename>] ...    新しい記事を追加
+  new --slide [<basename>] ...
+                          新しいスライドを追加(実験的機能。qiita.config.jsonで
+                          experimentalSlideFeatureEnabledをtrueにすると使用可能)
   preview                 コンテンツをブラウザでプレビュー
   publish <basename> ...  記事を投稿、更新
   publish --all           全ての記事を投稿、更新

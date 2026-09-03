@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { itemsIndexPath } from "../../lib/qiita-cli-url";
 import { ItemsIndexViewModel } from "../../lib/view-models/items";
+import { SlidesIndexViewModel } from "../../lib/view-models/slides";
 import { breakpoint, pointerFine, viewport } from "../lib/mixins";
 import {
   Colors,
@@ -16,6 +17,7 @@ import { useHotReloadEffect } from "./HotReloadRoot";
 import { QiitaLogo, QiitaPreviewLogo } from "./Logo";
 import { MaterialSymbol } from "./MaterialSymbol";
 import { SidebarArticles, SortType } from "./SidebarArticles";
+import { SidebarSlides } from "./SidebarSlides";
 import { Tooltip } from "./Tooltip";
 
 interface Props {
@@ -27,6 +29,7 @@ type SortType = (typeof SortType)[keyof typeof SortType];
 
 export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
   const [items, setItems] = useState<ItemsIndexViewModel>();
+  const [slides, setSlides] = useState<SlidesIndexViewModel>();
   const [isOpen, setIsOpen] = useState(
     localStorage.getItem("openSidebarState") === "true",
   );
@@ -39,6 +42,15 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
     fetch("/api/items").then((result) => {
       result.json().then((data) => {
         setItems(data);
+      });
+    });
+  }, []);
+
+  useHotReloadEffect(() => {
+    fetch("/api/slides").then((result) => {
+      if (!result.ok) return;
+      result.json().then((data) => {
+        setSlides(data);
       });
     });
   }, []);
@@ -56,6 +68,20 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
         const params = new URLSearchParams(location.search);
         params.set("basename", data.basename);
         const url = new URL("/items/show", location.href);
+        url.search = params.toString();
+        location.href = url.toString();
+      });
+    });
+  };
+
+  const handleNewSlide = () => {
+    fetch("/api/slides", {
+      method: "POST",
+    }).then((response) => {
+      response.json().then((data) => {
+        const params = new URLSearchParams(location.search);
+        params.set("basename", data.basename);
+        const url = new URL("/slides/show", location.href);
         url.search = params.toString();
         location.href = url.toString();
       });
@@ -120,6 +146,16 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               新規記事作成
             </button>
           </li>
+          {slides && (
+            <li>
+              <button css={articlesListItemStyle} onClick={handleNewSlide}>
+                <MaterialSymbol css={{ color: Colors.disabled }}>
+                  add
+                </MaterialSymbol>
+                新規スライド作成
+              </button>
+            </li>
+          )}
         </ul>
         <div css={articlesStyle}>
           <div css={articlesHeaderStyle}>
@@ -164,6 +200,25 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
             )}
           </div>
         </div>
+        {slides && (
+          <div css={articlesStyle}>
+            <div css={articlesHeaderStyle}>
+              <h1 css={articlesHeaderTitleStyle}>Slides</h1>
+            </div>
+            <div>
+              <SidebarSlides
+                slides={slides.draft}
+                sortType={sortType}
+                slideState={"Draft"}
+              />
+              <SidebarSlides
+                slides={slides.published}
+                sortType={sortType}
+                slideState={"Published"}
+              />
+            </div>
+          </div>
+        )}
       </nav>
       <footer css={articleFooterStyle}>
         <a
@@ -305,6 +360,16 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
               新規記事作成
             </button>
           </li>
+          {slides && (
+            <li>
+              <button css={articlesListItemStyle} onClick={handleNewSlide}>
+                <MaterialSymbol css={{ color: Colors.disabled }}>
+                  add
+                </MaterialSymbol>
+                新規スライド作成
+              </button>
+            </li>
+          )}
         </ul>
         <div css={articlesStyle}>
           <div css={articlesHeaderStyle}>
@@ -349,6 +414,25 @@ export const SidebarContents = ({ isStateOpen, handleMobileClose }: Props) => {
             )}
           </div>
         </div>
+        {slides && (
+          <div css={articlesStyle}>
+            <div css={articlesHeaderStyle}>
+              <h1 css={articlesHeaderTitleStyle}>Slides</h1>
+            </div>
+            <div>
+              <SidebarSlides
+                slides={slides.draft}
+                sortType={sortType}
+                slideState={"Draft"}
+              />
+              <SidebarSlides
+                slides={slides.published}
+                sortType={sortType}
+                slideState={"Published"}
+              />
+            </div>
+          </div>
+        )}
       </nav>
       <footer css={articleFooterStyle}>
         <a

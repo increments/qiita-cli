@@ -2,8 +2,10 @@ import {
   apiItemsShowPath,
   apiItemsUpdatePath,
   apiReadmeShowPath,
+  apiSlidesShowPath,
   itemsIndexPath,
   itemsShowPath,
+  slidesShowPath,
 } from "./qiita-cli-url";
 
 describe("apiItemsShowPath", () => {
@@ -72,6 +74,44 @@ describe("itemsShowPath", () => {
     it("returns items show path", () => {
       const url = itemsShowPath(itemId, { basename: basename });
       expect(url).toEqual(`/items/${itemId}?basename=${basename}`);
+    });
+  });
+});
+
+describe("slidesShowPath", () => {
+  const slideId = "c686397e4a0f4f11683d";
+
+  it("returns slides show path", () => {
+    const url = slidesShowPath(slideId);
+    expect(url).toEqual(`/slides/${slideId}`);
+  });
+
+  describe("when slideId is 'show' and basename param exists", () => {
+    const slideId = "show";
+    const basename = "newSlide";
+
+    it("returns slides show path", () => {
+      const url = slidesShowPath(slideId, { basename: basename });
+      expect(url).toEqual(`/slides/${slideId}?basename=${basename}`);
+    });
+  });
+});
+
+describe("apiSlidesShowPath", () => {
+  const slideId = "c686397e4a0f4f11683d";
+
+  it("returns api slides show path", () => {
+    const url = apiSlidesShowPath(slideId);
+    expect(url).toEqual(`/api/slides/${slideId}`);
+  });
+
+  describe("when slideId is 'show' and basename param exists", () => {
+    const slideId = "show";
+    const basename = "newSlide";
+
+    it("returns api slides show path", () => {
+      const url = apiSlidesShowPath(slideId, { basename: basename });
+      expect(url).toEqual(`/api/slides/${slideId}?basename=${basename}`);
     });
   });
 });

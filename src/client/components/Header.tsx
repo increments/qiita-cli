@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { apiItemsUpdatePath, itemsShowPath } from "../../lib/qiita-cli-url";
 import { breakpoint, pointerFine } from "../lib/mixins";
 import { Colors, Typography, Weight, getSpace } from "../lib/variables";
@@ -110,6 +110,53 @@ export const Header = ({
         <MaterialSymbol>publish</MaterialSymbol>
       </button>
       <Snackbar message={snackbarMessage} setMessage={setSnackbarMessage} />
+    </header>
+  );
+};
+
+export const HeaderSlide = ({
+  slidePath,
+  presentPath,
+  handleMobileOpen,
+}: {
+  slidePath: string;
+  presentPath: string;
+  handleMobileOpen: () => void;
+}) => {
+  const { currentWidth } = useWindowSize();
+  const mobileSize = currentWidth <= breakpoint.S;
+
+  return (
+    <header css={headerStyle}>
+      {mobileSize ? (
+        <div css={headerItemStyle}>
+          <button
+            aria-label="メニューを開く"
+            css={headerMenuButtonStyle}
+            onClick={handleMobileOpen}
+          >
+            <MaterialSymbol size={24}>menu</MaterialSymbol>
+          </button>
+          <div css={mobileHeaderCopyButtonStyle}>
+            ファイルパスをコピー
+            <CopyButton text={slidePath} />
+          </div>
+        </div>
+      ) : (
+        <div css={headerItemStyle}>
+          <p>{slidePath}</p>
+          <CopyButton text={slidePath} />
+        </div>
+      )}
+      <Link
+        css={headerButtonStyle}
+        to={presentPath}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {mobileSize ? "プレゼンモード" : "プレゼンテーションモードで開く"}
+        <MaterialSymbol>slideshow</MaterialSymbol>
+      </Link>
     </header>
   );
 };
