@@ -237,6 +237,25 @@ describe("config", () => {
           includePrivate: true,
           host: "localhost",
           port: 9999,
+          experimentalSlideFeatureEnabled: false,
+        });
+      });
+
+      describe("and it enables the experimental slide feature", () => {
+        beforeEach(() => {
+          const userConfigData = {
+            includePrivate: true,
+            host: "localhost",
+            port: 9999,
+            experimentalSlideFeatureEnabled: true,
+          };
+          resetFiles();
+          setFile(userConfigFilePath, JSON.stringify(userConfigData, null, 2));
+        });
+
+        it("returns experimentalSlideFeatureEnabled: true", async () => {
+          const userConfig = await config.getUserConfig();
+          expect(userConfig.experimentalSlideFeatureEnabled).toBe(true);
         });
       });
     });
@@ -252,6 +271,7 @@ describe("config", () => {
           includePrivate: false,
           host: "localhost",
           port: 8888,
+          experimentalSlideFeatureEnabled: false,
         });
       });
     });

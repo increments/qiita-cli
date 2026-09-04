@@ -46,6 +46,7 @@ module.exports = {
         "src/lib/config.ts",
         "src/lib/file-system-repo.test.ts",
         "src/lib/file-system-repo.ts",
+        "src/lib/slide-file-system-repo.test.ts",
         "src/server/api/readme.ts",
       ],
     },

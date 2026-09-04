@@ -30,6 +30,11 @@ export interface Item {
   posting_campaign_uuid: string | null;
 }
 
+export interface SlidePreview {
+  pages: { html: string; speaker_note: string[] }[];
+  css: string;
+}
+
 export interface PostingCampaign {
   uuid: string;
   title: string;
@@ -293,6 +298,16 @@ export class QiitaApi {
     const path = `/api/v2/items/${uuid}`;
 
     return await this.patch<Item>(path, {
+      body: data,
+    });
+  }
+
+  async previewSlide(rawBody: string) {
+    const data = JSON.stringify({
+      body: rawBody,
+    });
+
+    return await this.post<SlidePreview>(`/api/v2/slide_previews`, {
       body: data,
     });
   }

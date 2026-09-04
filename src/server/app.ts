@@ -9,11 +9,13 @@ import { AssetsRouter } from "./api/assets";
 import { EmojiRouter } from "./api/emoji";
 import { ItemsRouter } from "./api/items";
 import { ReadmeRouter } from "./api/readme";
+import { SlidesRouter } from "./api/slides";
 import { config } from "../lib/config";
 import { getUrlAddress } from "../lib/getUrlAddress";
 
 export async function startServer() {
   const app = express();
+  const userConfig = await config.getUserConfig();
 
   app.use(express.json());
 
@@ -25,17 +27,22 @@ export async function startServer() {
   app.use(express.static(path.join(__dirname, "../public")));
 
   app.use("/api/items", ItemsRouter);
+  if (userConfig.experimentalSlideFeatureEnabled) {
+    app.use("/api/slides", SlidesRouter);
+  } else {
+    app.use("/api/slides", (req, res) => {
+      res.status(404).json({ message: "Not found" });
+    });
+  }
   app.use("/api/readme", ReadmeRouter);
   app.use("/assets", AssetsRouter);
   app.use("/emoji", EmojiRouter);
 
-  app.use(
-    "*name",
-    express.static(path.join(__dirname, "../public/index.html")),
-  );
+  app.use("*name", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+  });
 
   const server = createServer(app);
-  const userConfig = await config.getUserConfig();
   const port = userConfig.port;
   const host = userConfig.host;
 
@@ -59,20 +66,23 @@ export async function startServer() {
 
 export function startLocalChangeWatcher({
   server,
-  watchPath,
+  watchPaths,
 }: {
   server: Server;
-  watchPath: string;
+  watchPaths: string | string[];
 }) {
   const wsServer = new WebSocketServer({ server });
-  const watcher = chokidar.watch(watchPath, {
+  const watcher = chokidar.watch(watchPaths, {
     ignored: [/node_modules|\.git/, "**/.remote/**"],
   });
-  watcher.on("change", () => {
+  const notifyClients = () => {
     wsServer.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send("local changed");
       }
     });
-  });
+  };
+  watcher.on("change", notifyClients);
+  watcher.on("add", notifyClients);
+  watcher.on("unlink", notifyClients);
 }
