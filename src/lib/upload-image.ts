@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { QiitaForbiddenError } from "../qiita-api";
 import type { QiitaApi, UploadPolicy } from "../qiita-api";
 
 const contentTypes: { [extension: string]: string } = {
@@ -20,6 +21,13 @@ export class UnsupportedImageTypeError extends Error {
       ).join(", ")} のみアップロードできます)`,
     );
     this.name = "UnsupportedImageTypeError";
+  }
+}
+
+export class ImageUploadRejectedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ImageUploadRejectedError";
   }
 }
 
@@ -47,15 +55,40 @@ export const uploadImage = async ({
     type: contentType,
   });
 
-  const policy = await qiitaApi.uploadPolicy({
+  const policy = await requestUploadPolicy({
     contentType,
     name,
+    qiitaApi,
     size: file.size,
   });
   await postToStorage({ file, name, policy });
 
   return policy.download_url;
 };
+
+const requestUploadPolicy = async ({
+  contentType,
+  name,
+  qiitaApi,
+  size,
+}: {
+  contentType: string;
+  name: string;
+  qiitaApi: QiitaApi;
+  size: number;
+}) => {
+  try {
+    return await qiitaApi.uploadPolicy({ contentType, name, size });
+  } catch (error) {
+    if (error instanceof QiitaForbiddenError) {
+      throw new ImageUploadRejectedError(rejectionMessage(error.message));
+    }
+    throw error;
+  }
+};
+
+const rejectionMessage = (responseBody: string) =>
+  responseBody.match(/"message":"([^"]*)"/)?.[1] ?? responseBody;
 
 const postToStorage = async ({
   file,

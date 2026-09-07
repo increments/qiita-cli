@@ -108,6 +108,21 @@ describe("uploadImage", () => {
     );
   });
 
+  it("reports the reason Qiita rejected the upload policy", async () => {
+    mockFetch.mockResolvedValueOnce(
+      new Response(
+        '{"message":"Asset size too large","type":"asset_size_too_large"}',
+        { status: 403 },
+      ),
+    );
+
+    await expect(uploadImage({ qiitaApi, filePath })).rejects.toMatchObject({
+      name: "ImageUploadRejectedError",
+      message: "Asset size too large",
+    });
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
   it("rejects a file whose type Qiita does not accept", async () => {
     const webpPath = path.join(dir, "screenshot.webp");
     await fs.writeFile(webpPath, "image binary");
