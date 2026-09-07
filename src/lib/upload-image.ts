@@ -1,0 +1,94 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import type { QiitaApi, UploadPolicy } from "../qiita-api";
+
+const contentTypes: { [extension: string]: string } = {
+  ".avif": "image/avif",
+  ".gif": "image/gif",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".tif": "image/tiff",
+  ".tiff": "image/tiff",
+};
+
+export class UnsupportedImageTypeError extends Error {
+  constructor(filePath: string) {
+    super(
+      `'${filePath}' はアップロードできない拡張子です (${Object.keys(
+        contentTypes,
+      ).join(", ")} のみアップロードできます)`,
+    );
+    this.name = "UnsupportedImageTypeError";
+  }
+}
+
+export class ImageStorageError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ImageStorageError";
+  }
+}
+
+export const uploadImage = async ({
+  qiitaApi,
+  filePath,
+}: {
+  qiitaApi: QiitaApi;
+  filePath: string;
+}) => {
+  const contentType = contentTypes[path.extname(filePath).toLowerCase()];
+  if (!contentType) {
+    throw new UnsupportedImageTypeError(filePath);
+  }
+
+  const name = path.basename(filePath);
+  const file = new Blob([new Uint8Array(await fs.readFile(filePath))], {
+    type: contentType,
+  });
+
+  const policy = await qiitaApi.uploadPolicy({
+    contentType,
+    name,
+    size: file.size,
+  });
+  await postToStorage({ file, name, policy });
+
+  return policy.download_url;
+};
+
+const postToStorage = async ({
+  file,
+  name,
+  policy,
+}: {
+  file: Blob;
+  name: string;
+  policy: UploadPolicy;
+}) => {
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(policy.form_data)) {
+    formData.append(key, value);
+  }
+  formData.append("file", file, name);
+
+  const response = await fetch(storageUrl(policy), {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new ImageStorageError(storageErrorMessage(await response.text()));
+  }
+};
+
+const storageUrl = ({ bucket, form_data }: UploadPolicy) => {
+  const region = form_data["x-amz-credential"].split("/")[2];
+  return `https://${bucket}.s3.${region}.amazonaws.com`;
+};
+
+const storageErrorMessage = (responseBody: string) => {
+  const code = responseBody.match(/<Code>([^<]*)<\/Code>/)?.[1];
+  const message = responseBody.match(/<Message>([^<]*)<\/Message>/)?.[1];
+  return code ? `${code}: ${message}` : responseBody.slice(0, 100);
+};
