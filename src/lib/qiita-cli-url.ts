@@ -76,3 +76,9 @@ export const apiSlidesUpdatePath = (slideId: string): string => {
 export const apiReadmeShowPath = () => {
   return "/api/readme";
 };
+
+export const apiImagesCreatePath = (name: string): string => {
+  const query = new URLSearchParams({ name }).toString();
+
+  return `/api/images?${query}`;
+};

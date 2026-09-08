@@ -6,6 +6,7 @@ import WebSocket, { WebSocketServer } from "ws";
 import { serverDebugger } from "../lib/debugger";
 import { AssetsRouter } from "./api/assets";
 import { EmojiRouter } from "./api/emoji";
+import { ImagesRouter } from "./api/images";
 import { ItemsRouter } from "./api/items";
 import { ReadmeRouter } from "./api/readme";
 import { SlidesRouter } from "./api/slides";
@@ -32,10 +33,13 @@ export async function startServer({
   app.use("/api/items", ItemsRouter);
   if (slideFeatureAvailable) {
     app.use("/api/slides", SlidesRouter);
+    app.use("/api/images", ImagesRouter);
   } else {
-    app.use("/api/slides", (req, res) => {
+    const notFound: express.RequestHandler = (req, res) => {
       res.status(404).json({ message: "Not found" });
-    });
+    };
+    app.use("/api/slides", notFound);
+    app.use("/api/images", notFound);
   }
   app.use("/api/readme", ReadmeRouter);
   app.use("/assets", AssetsRouter);
