@@ -38,22 +38,19 @@ export class ImageStorageError extends Error {
   }
 }
 
+export const supportedImageExtensions = Object.keys(contentTypes);
+
 export const uploadImage = async ({
   qiitaApi,
-  filePath,
+  name,
+  data,
 }: {
   qiitaApi: QiitaApi;
-  filePath: string;
+  name: string;
+  data: Uint8Array<ArrayBuffer>;
 }) => {
-  const contentType = contentTypes[path.extname(filePath).toLowerCase()];
-  if (!contentType) {
-    throw new UnsupportedImageTypeError(filePath);
-  }
-
-  const name = path.basename(filePath);
-  const file = new Blob([new Uint8Array(await fs.readFile(filePath))], {
-    type: contentType,
-  });
+  const contentType = requireImageContentType(name);
+  const file = new Blob([data], { type: contentType });
 
   const policy = await requestUploadPolicy({
     contentType,
@@ -64,6 +61,31 @@ export const uploadImage = async ({
   await postToStorage({ file, name, policy });
 
   return policy.download_url;
+};
+
+export const uploadImageFile = async ({
+  qiitaApi,
+  filePath,
+}: {
+  qiitaApi: QiitaApi;
+  filePath: string;
+}) => {
+  requireImageContentType(filePath);
+
+  return await uploadImage({
+    qiitaApi,
+    name: path.basename(filePath),
+    data: new Uint8Array(await fs.readFile(filePath)),
+  });
+};
+
+const requireImageContentType = (fileName: string) => {
+  const contentType = contentTypes[path.extname(fileName).toLowerCase()];
+  if (!contentType) {
+    throw new UnsupportedImageTypeError(fileName);
+  }
+
+  return contentType;
 };
 
 const requestUploadPolicy = async ({

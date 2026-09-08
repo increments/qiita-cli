@@ -2,13 +2,18 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { QiitaApi } from "../qiita-api";
-import { UnsupportedImageTypeError, uploadImage } from "./upload-image";
+import {
+  UnsupportedImageTypeError,
+  uploadImage,
+  uploadImageFile,
+} from "./upload-image";
 
 describe("uploadImage", () => {
   const originalFetch = global.fetch;
   const originalQiitaDomain = process.env.QIITA_DOMAIN;
   const mockFetch = jest.fn();
   const qiitaApi = new QiitaApi({ token: "token" });
+  const data = new Uint8Array(Buffer.from("image binary"));
   const policy = {
     bucket: "qiita-image-store",
     download_url: "https://qiita-image-store.s3.amazonaws.com/0/1/9dd0b2fd.png",
@@ -23,20 +28,12 @@ describe("uploadImage", () => {
       "x-amz-signature": "SIGNATURE",
     },
   };
-  let dir: string;
-  let filePath: string;
 
   const jsonResponse = (body: unknown) =>
     new Response(JSON.stringify(body), {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });
-
-  beforeAll(async () => {
-    dir = await fs.mkdtemp(path.join(os.tmpdir(), "qiita-cli-upload-image-"));
-    filePath = path.join(dir, "screenshot.png");
-    await fs.writeFile(filePath, "image binary");
-  });
 
   beforeEach(() => {
     process.env.QIITA_DOMAIN = "qiita.example.com";
@@ -53,12 +50,16 @@ describe("uploadImage", () => {
     }
   });
 
-  it("requests an upload policy and posts the file to the storage", async () => {
+  it("requests an upload policy and posts the image to the storage", async () => {
     mockFetch
       .mockResolvedValueOnce(jsonResponse(policy))
       .mockResolvedValueOnce(new Response(null, { status: 204 }));
 
-    const downloadUrl = await uploadImage({ qiitaApi, filePath });
+    const downloadUrl = await uploadImage({
+      qiitaApi,
+      name: "screenshot.png",
+      data,
+    });
 
     expect(downloadUrl).toBe(policy.download_url);
     expect(mockFetch).toHaveBeenCalledTimes(2);
@@ -103,7 +104,9 @@ describe("uploadImage", () => {
         ),
       );
 
-    await expect(uploadImage({ qiitaApi, filePath })).rejects.toThrow(
+    await expect(
+      uploadImage({ qiitaApi, name: "screenshot.png", data }),
+    ).rejects.toThrow(
       "ExpiredToken: Invalid according to Policy: Policy expired.",
     );
   });
@@ -116,7 +119,9 @@ describe("uploadImage", () => {
       ),
     );
 
-    await expect(uploadImage({ qiitaApi, filePath })).rejects.toMatchObject({
+    await expect(
+      uploadImage({ qiitaApi, name: "screenshot.png", data }),
+    ).rejects.toMatchObject({
       name: "ImageUploadRejectedError",
       message: "Asset size too large",
     });
@@ -131,7 +136,9 @@ describe("uploadImage", () => {
       ),
     );
 
-    await expect(uploadImage({ qiitaApi, filePath })).rejects.toMatchObject({
+    await expect(
+      uploadImage({ qiitaApi, name: "screenshot.png", data }),
+    ).rejects.toMatchObject({
       name: "ImageUploadRejectedError",
       message: "Monthly upload size limit",
     });
@@ -145,17 +152,84 @@ describe("uploadImage", () => {
       ),
     );
 
-    await expect(uploadImage({ qiitaApi, filePath })).rejects.toMatchObject({
+    await expect(
+      uploadImage({ qiitaApi, name: "screenshot.png", data }),
+    ).rejects.toMatchObject({
       name: "QiitaForbiddenError",
     });
   });
 
-  it("rejects a file whose type Qiita does not accept", async () => {
-    const webpPath = path.join(dir, "screenshot.webp");
-    await fs.writeFile(webpPath, "image binary");
+  it("rejects an image whose type Qiita does not accept", async () => {
+    await expect(
+      uploadImage({ qiitaApi, name: "screenshot.webp", data }),
+    ).rejects.toThrow(UnsupportedImageTypeError);
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+});
 
-    await expect(uploadImage({ qiitaApi, filePath: webpPath })).rejects.toThrow(
-      UnsupportedImageTypeError,
+describe("uploadImageFile", () => {
+  const originalFetch = global.fetch;
+  const originalQiitaDomain = process.env.QIITA_DOMAIN;
+  const mockFetch = jest.fn();
+  const qiitaApi = new QiitaApi({ token: "token" });
+  let dir: string;
+
+  beforeAll(async () => {
+    dir = await fs.mkdtemp(path.join(os.tmpdir(), "qiita-cli-upload-image-"));
+  });
+
+  beforeEach(() => {
+    process.env.QIITA_DOMAIN = "qiita.example.com";
+    global.fetch = mockFetch as unknown as typeof global.fetch;
+    mockFetch.mockReset();
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    if (originalQiitaDomain === undefined) {
+      delete process.env.QIITA_DOMAIN;
+    } else {
+      process.env.QIITA_DOMAIN = originalQiitaDomain;
+    }
+  });
+
+  it("uploads the file on the disk under its basename", async () => {
+    const filePath = path.join(dir, "screenshot.png");
+    await fs.writeFile(filePath, "image binary");
+    mockFetch
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            bucket: "qiita-image-store",
+            download_url: "https://qiita-image-store.s3.amazonaws.com/a.png",
+            form_data: {
+              "x-amz-credential":
+                "AKIAEXAMPLE/20260907/ap-northeast-1/s3/aws4_request",
+            },
+          }),
+          { status: 201, headers: { "Content-Type": "application/json" } },
+        ),
+      )
+      .mockResolvedValueOnce(new Response(null, { status: 204 }));
+
+    const downloadUrl = await uploadImageFile({ qiitaApi, filePath });
+
+    expect(downloadUrl).toBe(
+      "https://qiita-image-store.s3.amazonaws.com/a.png",
+    );
+    expect(JSON.parse(mockFetch.mock.calls[0][1].body)).toEqual({
+      content_type: "image/png",
+      name: "screenshot.png",
+      size: 12,
+    });
+  });
+
+  it("reports the path of a file whose type Qiita does not accept", async () => {
+    const filePath = path.join(dir, "screenshot.webp");
+    await fs.writeFile(filePath, "image binary");
+
+    await expect(uploadImageFile({ qiitaApi, filePath })).rejects.toThrow(
+      filePath,
     );
     expect(mockFetch).not.toHaveBeenCalled();
   });

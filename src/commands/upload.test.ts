@@ -1,12 +1,12 @@
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
-import { uploadImage } from "../lib/upload-image";
+import { uploadImageFile } from "../lib/upload-image";
 import { upload } from "./upload";
 
 jest.mock("../lib/get-qiita-api-instance");
 jest.mock("../lib/upload-image");
 
 const mockGetQiitaApiInstance = jest.mocked(getQiitaApiInstance);
-const mockUploadImage = jest.mocked(uploadImage);
+const mockUploadImageFile = jest.mocked(uploadImageFile);
 
 describe("upload", () => {
   const qiitaApi = {} as Awaited<ReturnType<typeof getQiitaApiInstance>>;
@@ -19,17 +19,17 @@ describe("upload", () => {
   });
 
   it("prints the download URL of every uploaded image", async () => {
-    mockUploadImage
+    mockUploadImageFile
       .mockResolvedValueOnce("https://image-store.example/first.png")
       .mockResolvedValueOnce("https://image-store.example/second.png");
 
     await upload(["first.png", "second.png"]);
 
-    expect(mockUploadImage).toHaveBeenCalledWith({
+    expect(mockUploadImageFile).toHaveBeenCalledWith({
       filePath: "first.png",
       qiitaApi,
     });
-    expect(mockUploadImage).toHaveBeenCalledWith({
+    expect(mockUploadImageFile).toHaveBeenCalledWith({
       filePath: "second.png",
       qiitaApi,
     });
@@ -46,7 +46,7 @@ describe("upload", () => {
   it("requires at least one file", async () => {
     await upload([]);
 
-    expect(mockUploadImage).not.toHaveBeenCalled();
+    expect(mockUploadImageFile).not.toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(1);
   });
 });
