@@ -81,14 +81,28 @@ const requestUploadPolicy = async ({
     return await qiitaApi.uploadPolicy({ contentType, name, size });
   } catch (error) {
     if (error instanceof QiitaForbiddenError) {
-      throw new ImageUploadRejectedError(rejectionMessage(error.message));
+      const rejection = imageRejection(error.message);
+      if (rejection) {
+        throw new ImageUploadRejectedError(rejection);
+      }
     }
     throw error;
   }
 };
 
-const rejectionMessage = (responseBody: string) =>
-  responseBody.match(/"message":"([^"]*)"/)?.[1] ?? responseBody;
+const imageRejectionTypes = [
+  "asset_size_too_large",
+  "monthly_upload_size_limit",
+];
+
+const imageRejection = (responseBody: string) => {
+  try {
+    const { message, type } = JSON.parse(responseBody);
+    return imageRejectionTypes.includes(type) ? (message as string) : undefined;
+  } catch {
+    return undefined;
+  }
+};
 
 const postToStorage = async ({
   file,

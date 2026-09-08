@@ -123,6 +123,33 @@ describe("uploadImage", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
+  it("reports the reason Qiita rejected the upload policy for a monthly limit", async () => {
+    mockFetch.mockResolvedValueOnce(
+      new Response(
+        '{"message":"Monthly upload size limit","type":"monthly_upload_size_limit"}',
+        { status: 403 },
+      ),
+    );
+
+    await expect(uploadImage({ qiitaApi, filePath })).rejects.toMatchObject({
+      name: "ImageUploadRejectedError",
+      message: "Monthly upload size limit",
+    });
+  });
+
+  it("keeps a forbidden response unrelated to the image as it is", async () => {
+    mockFetch.mockResolvedValueOnce(
+      new Response(
+        '{"message":"Forbidden in team only mode","type":"forbidden_in_team_only_mode"}',
+        { status: 403 },
+      ),
+    );
+
+    await expect(uploadImage({ qiitaApi, filePath })).rejects.toMatchObject({
+      name: "QiitaForbiddenError",
+    });
+  });
+
   it("rejects a file whose type Qiita does not accept", async () => {
     const webpPath = path.join(dir, "screenshot.webp");
     await fs.writeFile(webpPath, "image binary");
