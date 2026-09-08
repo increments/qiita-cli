@@ -4,7 +4,7 @@ import { uploadImage } from "../lib/upload-image";
 
 export const upload = async (argv: string[]) => {
   if (argv.length === 0) {
-    console.error("Error: アップロードする画像ファイルを指定してください");
+    console.error("Error: no image file is specified");
     process.exit(1);
     return;
   }
