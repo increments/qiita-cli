@@ -38,8 +38,6 @@ export class ImageStorageError extends Error {
   }
 }
 
-export const supportedImageExtensions = Object.keys(contentTypes);
-
 export const uploadImage = async ({
   qiitaApi,
   name,

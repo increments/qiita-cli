@@ -11,6 +11,7 @@ import { breakpoint, pointerFine } from "../lib/mixins";
 import { Colors, Typography, Weight, getSpace } from "../lib/variables";
 import { useWindowSize } from "../lib/window-size";
 import { CopyButton } from "./CopyButton";
+import { ImageUploadPanel } from "./ImageUploadPanel";
 import { QiitaPreviewLogo } from "./Logo";
 import { MaterialSymbol } from "./MaterialSymbol";
 import { Snackbar, Message as SnackbarMessage } from "./Snackbar";
@@ -141,6 +142,7 @@ export const HeaderSlide = ({
     useState<null | SnackbarMessage>(null);
   const { currentWidth } = useWindowSize();
   const mobileSize = currentWidth <= breakpoint.S;
+  const [isImageUploadPanelOpen, setIsImageUploadPanelOpen] = useState(false);
 
   const handlePublish = () => {
     if (isOlderThanRemote) {
@@ -203,6 +205,18 @@ export const HeaderSlide = ({
         </div>
       )}
       <div css={headerActionsStyle}>
+        <button
+          aria-label={mobileSize ? "画像をアップロード" : undefined}
+          css={[
+            headerButtonStyle,
+            headerGrayButtonStyle,
+            mobileSize && headerIconButtonStyle,
+          ]}
+          onClick={() => setIsImageUploadPanelOpen(true)}
+        >
+          {!mobileSize && "画像をアップロード"}
+          <MaterialSymbol>add_photo_alternate</MaterialSymbol>
+        </button>
         <Link
           aria-label={mobileSize ? "スライドショーを開始" : undefined}
           css={[
@@ -228,6 +242,10 @@ export const HeaderSlide = ({
         </button>
       </div>
       <Snackbar message={snackbarMessage} setMessage={setSnackbarMessage} />
+      <ImageUploadPanel
+        isOpen={isImageUploadPanelOpen}
+        onRequestClose={() => setIsImageUploadPanelOpen(false)}
+      />
     </header>
   );
 };
@@ -258,6 +276,7 @@ const headerStyle = css({
   backgroundColor: Colors.gray0,
   borderBottom: `1px solid ${Colors.divider}`,
   display: "flex",
+  gap: getSpace(1),
   justifyContent: "space-between",
   padding: `${getSpace(1)}px ${getSpace(2)}px`,
   position: "relative",
@@ -295,6 +314,7 @@ const headerButtonStyle = css({
   fontWeight: Weight.bold,
   gap: `0 ${getSpace(1 / 2)}px`,
   padding: `${getSpace(1 / 2)}px ${getSpace(2)}px`,
+  whiteSpace: "nowrap",
 
   "&:disabled": {
     opacity: 0.32,
@@ -315,6 +335,7 @@ const headerButtonStyle = css({
 const headerActionsStyle = css({
   alignItems: "center",
   display: "flex",
+  flexShrink: 0,
   gap: getSpace(1),
 });
 
