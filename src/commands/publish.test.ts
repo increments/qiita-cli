@@ -34,14 +34,10 @@ describe("publish", () => {
   const fileSystemRepo = {
     loadItems: jest.fn(),
     loadItemByBasename: jest.fn(),
-    saveItem: jest.fn(),
-    updateItemUuid: jest.fn(),
+    publishItem: jest.fn(),
   } as unknown as jest.Mocked<FileSystemRepo>;
 
-  const qiitaApi = {
-    postItem: jest.fn(),
-    patchItem: jest.fn(),
-  } as unknown as jest.Mocked<QiitaApi>;
+  const qiitaApi = {} as unknown as jest.Mocked<QiitaApi>;
 
   class ProcessExitError extends Error {
     constructor(public readonly code: string | number | null | undefined) {
@@ -118,66 +114,34 @@ describe("publish", () => {
   });
 
   describe("when a new article (id is null) is given by basename", () => {
-    it("posts the article, writes the uuid back and refreshes the mirror", async () => {
+    it("publishes it through the repository and reports it as posted", async () => {
       const item = buildItem();
       fileSystemRepo.loadItemByBasename.mockResolvedValue(item);
-      const responseItem = buildResponseItem();
-      qiitaApi.postItem.mockResolvedValue(responseItem);
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem(),
+        posted: true,
+      });
 
       await publish(["article"]);
 
-      expect(qiitaApi.postItem).toHaveBeenCalledWith({
-        rawBody: "# Title",
-        tags: ["qiita"],
-        title: "Title",
-        isPrivate: false,
-        organizationUrlName: null,
-        slide: false,
-        postingCampaignUuid: null,
-        agreedPostingCampaignTerm: false,
-      });
-      expect(fileSystemRepo.updateItemUuid).toHaveBeenCalledWith(
-        "article",
-        "new-item-id",
-      );
-      expect(fileSystemRepo.saveItem).toHaveBeenCalledWith(
-        responseItem,
-        false,
-        true,
-      );
-      expect(qiitaApi.patchItem).not.toHaveBeenCalled();
+      expect(fileSystemRepo.publishItem).toHaveBeenCalledWith(item, qiitaApi);
       expect(logSpy).toHaveBeenCalledWith("Posted: article -> new-item-id");
       expect(exitSpy).not.toHaveBeenCalled();
     });
   });
 
   describe("when an already published article (id is present) is given by basename", () => {
-    it("patches the article and refreshes the mirror without rewriting the uuid", async () => {
+    it("publishes it through the repository and reports it as updated", async () => {
       const item = buildItem({ id: "existing-item-id", published: true });
       fileSystemRepo.loadItemByBasename.mockResolvedValue(item);
-      const responseItem = buildResponseItem({ id: "existing-item-id" });
-      qiitaApi.patchItem.mockResolvedValue(responseItem);
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem({ id: "existing-item-id" }),
+        posted: false,
+      });
 
       await publish(["article"]);
 
-      expect(qiitaApi.patchItem).toHaveBeenCalledWith({
-        rawBody: "# Title",
-        tags: ["qiita"],
-        title: "Title",
-        uuid: "existing-item-id",
-        isPrivate: false,
-        organizationUrlName: null,
-        slide: false,
-        postingCampaignUuid: null,
-        agreedPostingCampaignTerm: false,
-      });
-      expect(qiitaApi.postItem).not.toHaveBeenCalled();
-      expect(fileSystemRepo.updateItemUuid).not.toHaveBeenCalled();
-      expect(fileSystemRepo.saveItem).toHaveBeenCalledWith(
-        responseItem,
-        false,
-        true,
-      );
+      expect(fileSystemRepo.publishItem).toHaveBeenCalledWith(item, qiitaApi);
       expect(logSpy).toHaveBeenCalledWith(
         "Updated: article -> existing-item-id",
       );
@@ -197,16 +161,16 @@ describe("publish", () => {
         }),
         buildItem({ name: "item-c", modified: false }),
       ]);
-      qiitaApi.patchItem.mockResolvedValue(buildResponseItem({ id: "id-a" }));
-      qiitaApi.postItem.mockResolvedValue(buildResponseItem({ id: "id-c" }));
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem(),
+        posted: true,
+      });
 
       await publish(["--all"]);
 
-      expect(qiitaApi.patchItem).toHaveBeenCalledTimes(1);
-      expect(qiitaApi.patchItem).toHaveBeenCalledWith(
-        expect.objectContaining({ uuid: "id-a" }),
-      );
-      expect(qiitaApi.postItem).toHaveBeenCalledTimes(1);
+      expect(
+        fileSystemRepo.publishItem.mock.calls.map(([item]) => item.name),
+      ).toStrictEqual(["item-a", "item-c"]);
     });
 
     it("skips an article whose ignorePublish is exactly true", async () => {
@@ -217,7 +181,7 @@ describe("publish", () => {
       await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
 
       expect(logSpy).toHaveBeenCalledWith("Nothing to publish");
-      expect(qiitaApi.patchItem).not.toHaveBeenCalled();
+      expect(fileSystemRepo.publishItem).not.toHaveBeenCalled();
     });
 
     it("does not skip an article whose ignorePublish is a truthy non-boolean", async () => {
@@ -228,11 +192,14 @@ describe("publish", () => {
           ignorePublish: "yes" as unknown as boolean,
         }),
       ]);
-      qiitaApi.patchItem.mockResolvedValue(buildResponseItem({ id: "id-a" }));
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem({ id: "id-a" }),
+        posted: false,
+      });
 
       await publish(["--all"]);
 
-      expect(qiitaApi.patchItem).toHaveBeenCalledTimes(1);
+      expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
     });
 
     it("logs and exits 0 when there is nothing to publish", async () => {
@@ -252,20 +219,21 @@ describe("publish", () => {
       await expect(publish(["article"])).rejects.toThrow(ProcessExitError);
 
       expect(exitSpy).toHaveBeenCalledWith(1);
-      expect(qiitaApi.patchItem).not.toHaveBeenCalled();
+      expect(fileSystemRepo.publishItem).not.toHaveBeenCalled();
     });
 
     it("publishes anyway with --force", async () => {
       fileSystemRepo.loadItemByBasename.mockResolvedValue(
         buildItem({ id: "existing-item-id", isOlderThanRemote: true }),
       );
-      qiitaApi.patchItem.mockResolvedValue(
-        buildResponseItem({ id: "existing-item-id" }),
-      );
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem({ id: "existing-item-id" }),
+        posted: false,
+      });
 
       await publish(["article", "--force"]);
 
-      expect(qiitaApi.patchItem).toHaveBeenCalledTimes(1);
+      expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
       expect(exitSpy).not.toHaveBeenCalled();
     });
   });
@@ -279,7 +247,7 @@ describe("publish", () => {
       await expect(publish(["article"])).rejects.toThrow(ProcessExitError);
 
       expect(exitSpy).toHaveBeenCalledWith(1);
-      expect(qiitaApi.postItem).not.toHaveBeenCalled();
+      expect(fileSystemRepo.publishItem).not.toHaveBeenCalled();
     });
   });
 
@@ -303,7 +271,9 @@ describe("publish", () => {
   describe("when the API rejects the request with 403", () => {
     it("rethrows it as QiitaForbiddenOrBadRequestError", async () => {
       fileSystemRepo.loadItemByBasename.mockResolvedValue(buildItem());
-      qiitaApi.postItem.mockRejectedValue(new QiitaForbiddenError("Forbidden"));
+      fileSystemRepo.publishItem.mockRejectedValue(
+        new QiitaForbiddenError("Forbidden"),
+      );
 
       await expect(publish(["article"])).rejects.toThrow(
         QiitaForbiddenOrBadRequestError,

@@ -7,7 +7,6 @@ import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { validateItem } from "../lib/validators/item-validator";
 import {
-  Item,
   QiitaForbiddenError,
   QiitaForbiddenOrBadRequestError,
 } from "../qiita-api";
@@ -91,38 +90,14 @@ export const publish = async (argv: string[]) => {
   }
 
   const promises = targetItems.map(async (item) => {
-    let responseItem: Item;
-    if (item.id) {
-      responseItem = await qiitaApi.patchItem({
-        rawBody: item.rawBody,
-        tags: item.tags,
-        title: item.title,
-        uuid: item.id,
-        isPrivate: item.secret,
-        organizationUrlName: item.organizationUrlName,
-        slide: item.slide,
-        postingCampaignUuid: item.postingCampaignUuid,
-        agreedPostingCampaignTerm: item.agreedPostingCampaignTerm,
-      });
+    const { item: responseItem, posted } = await fileSystemRepo.publishItem(
+      item,
+      qiitaApi,
+    );
 
-      console.log(`Updated: ${item.name} -> ${item.id}`);
-    } else {
-      responseItem = await qiitaApi.postItem({
-        rawBody: item.rawBody,
-        tags: item.tags,
-        title: item.title,
-        isPrivate: item.secret,
-        organizationUrlName: item.organizationUrlName,
-        slide: item.slide,
-        postingCampaignUuid: item.postingCampaignUuid,
-        agreedPostingCampaignTerm: item.agreedPostingCampaignTerm,
-      });
-      await fileSystemRepo.updateItemUuid(item.name, responseItem.id);
-
-      console.log(`Posted: ${item.name} -> ${responseItem.id}`);
-    }
-
-    await fileSystemRepo.saveItem(responseItem, false, true);
+    console.log(
+      `${posted ? "Posted" : "Updated"}: ${item.name} -> ${responseItem.id}`,
+    );
   });
 
   try {

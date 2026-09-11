@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
-import { Item } from "../qiita-api";
+import { Item, QiitaApi } from "../qiita-api";
+import { QiitaItem } from "./entities/qiita-item";
 import { FileSystemRepo } from "./file-system-repo";
 
 jest.mock("node:fs/promises");
@@ -547,6 +548,170 @@ updated
             );
           });
         });
+      });
+    });
+  });
+
+  describe("publishItem()", () => {
+    const dataRootDir = "data_root_dir";
+    const rootPath = `${dataRootDir}/public`;
+    const remotePath = `${rootPath}/.remote`;
+
+    const localFile = (id: string | null) => `---
+title: Title
+tags:
+  - qiita
+private: false
+updated_at: ''
+id: ${id === null ? "null" : id}
+organization_url_name: null
+slide: false
+ignorePublish: false
+---
+# Title
+`;
+
+    const buildItem = (
+      overrides: Partial<ConstructorParameters<typeof QiitaItem>[0]> = {},
+    ) =>
+      new QiitaItem({
+        id: null,
+        title: "Title",
+        tags: ["qiita"],
+        secret: false,
+        updatedAt: "",
+        organizationUrlName: null,
+        rawBody: "# Title",
+        name: "article",
+        modified: true,
+        isOlderThanRemote: false,
+        itemsShowPath: "/items/show?basename=article",
+        published: false,
+        itemPath: `${rootPath}/article.md`,
+        slide: false,
+        ignorePublish: false,
+        postingCampaignUuid: null,
+        agreedPostingCampaignTerm: false,
+        ...overrides,
+      });
+
+    const buildResponseItem = (overrides: Partial<Item> = {}): Item => ({
+      id: "new-item-id",
+      title: "Title",
+      body: "# Title",
+      tags: [{ name: "qiita" }],
+      private: false,
+      organization_url_name: null,
+      coediting: false,
+      created_at: "2026-09-01T00:00:00+09:00",
+      updated_at: "2026-09-01T00:00:00+09:00",
+      slide: false,
+      posting_campaign_uuid: null,
+      ...overrides,
+    });
+
+    const mockFileSystem = (files: Record<string, string>) => {
+      const mockFs = fs as jest.Mocked<typeof fs>;
+      mockFs.readdir.mockImplementation(async (dirPath) => {
+        const prefix = `${dirPath}/`;
+        return Object.keys(files)
+          .filter((filePath) => filePath.startsWith(prefix))
+          .map((filePath) => filePath.slice(prefix.length)) as any[];
+      });
+      mockFs.readFile.mockImplementation(async (filePath) => {
+        const content = files[filePath as string];
+        if (content === undefined) {
+          throw new Error(`ENOENT: ${filePath}`);
+        }
+        return content;
+      });
+      mockFs.writeFile.mockImplementation(async (filePath, data) => {
+        files[filePath as string] = data as string;
+      });
+      return files;
+    };
+
+    const writtenPaths = () =>
+      (fs as jest.Mocked<typeof fs>).writeFile.mock.calls.map((call) =>
+        String(call[0]),
+      );
+
+    const buildQiitaApi = () =>
+      ({
+        postItem: jest.fn(),
+        patchItem: jest.fn(),
+      }) as unknown as jest.Mocked<QiitaApi>;
+
+    describe("when the item has no id yet", () => {
+      it("posts it, writes the uuid back and then refreshes the mirror", async () => {
+        const files = mockFileSystem({
+          [`${rootPath}/article.md`]: localFile(null),
+        });
+        const qiitaApi = buildQiitaApi();
+        const responseItem = buildResponseItem();
+        qiitaApi.postItem.mockResolvedValue(responseItem);
+        const instance = new FileSystemRepo({ dataRootDir });
+
+        const result = await instance.publishItem(buildItem(), qiitaApi);
+
+        expect(qiitaApi.postItem).toHaveBeenCalledWith({
+          rawBody: "# Title",
+          tags: ["qiita"],
+          title: "Title",
+          isPrivate: false,
+          organizationUrlName: null,
+          slide: false,
+          postingCampaignUuid: null,
+          agreedPostingCampaignTerm: false,
+        });
+        expect(qiitaApi.patchItem).not.toHaveBeenCalled();
+        expect(result).toStrictEqual({ item: responseItem, posted: true });
+        // The uuid reaches the local file before the mirror is refreshed, so
+        // the mirror is written next to that basename instead of a new file.
+        expect(writtenPaths()).toStrictEqual([
+          `${rootPath}/article.md`,
+          `${remotePath}/new-item-id.md`,
+          `${rootPath}/article.md`,
+        ]);
+        expect(matter(files[`${rootPath}/article.md`]).data.id).toBe(
+          "new-item-id",
+        );
+      });
+    });
+
+    describe("when the item already has an id", () => {
+      it("patches it and refreshes the mirror without rewriting the uuid", async () => {
+        mockFileSystem({
+          [`${rootPath}/article.md`]: localFile("existing-item-id"),
+          [`${remotePath}/existing-item-id.md`]: localFile("existing-item-id"),
+        });
+        const qiitaApi = buildQiitaApi();
+        const responseItem = buildResponseItem({ id: "existing-item-id" });
+        qiitaApi.patchItem.mockResolvedValue(responseItem);
+        const instance = new FileSystemRepo({ dataRootDir });
+
+        const result = await instance.publishItem(
+          buildItem({ id: "existing-item-id", published: true }),
+          qiitaApi,
+        );
+
+        expect(qiitaApi.patchItem).toHaveBeenCalledWith({
+          rawBody: "# Title",
+          tags: ["qiita"],
+          title: "Title",
+          uuid: "existing-item-id",
+          isPrivate: false,
+          organizationUrlName: null,
+          slide: false,
+          postingCampaignUuid: null,
+          agreedPostingCampaignTerm: false,
+        });
+        expect(qiitaApi.postItem).not.toHaveBeenCalled();
+        expect(result).toStrictEqual({ item: responseItem, posted: false });
+        expect(writtenPaths()).toStrictEqual([
+          `${remotePath}/existing-item-id.md`,
+          `${rootPath}/article.md`,
+        ]);
       });
     });
   });

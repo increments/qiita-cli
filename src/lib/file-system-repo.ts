@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { Item } from "../qiita-api";
+import { Item, QiitaApi } from "../qiita-api";
 import { itemsShowPath } from "../lib/qiita-cli-url";
 import { QiitaItem } from "./entities/qiita-item";
 
@@ -356,6 +356,41 @@ export class FileSystemRepo {
     forceUpdate: boolean = false,
   ) {
     await this.syncItem(item, beforeSync, forceUpdate);
+  }
+
+  async publishItem(
+    item: QiitaItem,
+    qiitaApi: QiitaApi,
+  ): Promise<{ item: Item; posted: boolean }> {
+    const params = {
+      rawBody: item.rawBody,
+      tags: item.tags,
+      title: item.title,
+      isPrivate: item.secret,
+      organizationUrlName: item.organizationUrlName,
+      slide: item.slide,
+      postingCampaignUuid: item.postingCampaignUuid,
+      agreedPostingCampaignTerm: item.agreedPostingCampaignTerm,
+    };
+
+    if (item.id) {
+      const responseItem = await qiitaApi.patchItem({
+        ...params,
+        uuid: item.id,
+      });
+      await this.saveItem(responseItem, false, true);
+
+      return { item: responseItem, posted: false };
+    }
+
+    const responseItem = await qiitaApi.postItem(params);
+    // The uuid has to reach the local file before the mirror is refreshed,
+    // otherwise the sync cannot tell which file the returned item belongs to
+    // and would create a second one.
+    await this.updateItemUuid(item.name, responseItem.id);
+    await this.saveItem(responseItem, false, true);
+
+    return { item: responseItem, posted: true };
   }
 
   async loadItems(): Promise<QiitaItem[]> {
