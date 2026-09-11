@@ -32,7 +32,7 @@ const mockSyncArticlesFromQiita = jest.mocked(syncArticlesFromQiita);
 
 describe("publish", () => {
   const fileSystemRepo = {
-    loadItems: jest.fn(),
+    loadPublishTargets: jest.fn(),
     loadItemByBasename: jest.fn(),
     publishItem: jest.fn(),
   } as unknown as jest.Mocked<FileSystemRepo>;
@@ -95,7 +95,7 @@ describe("publish", () => {
     mockGetQiitaApiInstance.mockResolvedValue(qiitaApi);
     mockSyncArticlesFromQiita.mockResolvedValue();
 
-    fileSystemRepo.loadItems.mockResolvedValue([]);
+    fileSystemRepo.loadPublishTargets.mockResolvedValue([]);
     fileSystemRepo.loadItemByBasename.mockResolvedValue(null);
 
     exitSpy = jest
@@ -150,16 +150,10 @@ describe("publish", () => {
   });
 
   describe("with --all", () => {
-    it("publishes only the articles that differ from the remote or are unpublished", async () => {
-      fileSystemRepo.loadItems.mockResolvedValue([
+    it("publishes every target the repository reports", async () => {
+      fileSystemRepo.loadPublishTargets.mockResolvedValue([
         buildItem({ name: "item-a", id: "id-a", published: true }),
-        buildItem({
-          name: "item-b",
-          id: "id-b",
-          published: true,
-          modified: false,
-        }),
-        buildItem({ name: "item-c", modified: false }),
+        buildItem({ name: "item-c" }),
       ]);
       fileSystemRepo.publishItem.mockResolvedValue({
         item: buildResponseItem(),
@@ -171,35 +165,6 @@ describe("publish", () => {
       expect(
         fileSystemRepo.publishItem.mock.calls.map(([item]) => item.name),
       ).toStrictEqual(["item-a", "item-c"]);
-    });
-
-    it("skips an article whose ignorePublish is exactly true", async () => {
-      fileSystemRepo.loadItems.mockResolvedValue([
-        buildItem({ name: "item-a", id: "id-a", ignorePublish: true }),
-      ]);
-
-      await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
-
-      expect(logSpy).toHaveBeenCalledWith("Nothing to publish");
-      expect(fileSystemRepo.publishItem).not.toHaveBeenCalled();
-    });
-
-    it("does not skip an article whose ignorePublish is a truthy non-boolean", async () => {
-      fileSystemRepo.loadItems.mockResolvedValue([
-        buildItem({
-          name: "item-a",
-          id: "id-a",
-          ignorePublish: "yes" as unknown as boolean,
-        }),
-      ]);
-      fileSystemRepo.publishItem.mockResolvedValue({
-        item: buildResponseItem({ id: "id-a" }),
-        posted: false,
-      });
-
-      await publish(["--all"]);
-
-      expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
     });
 
     it("logs and exits 0 when there is nothing to publish", async () => {

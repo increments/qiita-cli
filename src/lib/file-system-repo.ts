@@ -358,6 +358,18 @@ export class FileSystemRepo {
     await this.syncItem(item, beforeSync, forceUpdate);
   }
 
+  async loadPublishTargets(): Promise<QiitaItem[]> {
+    const items = await this.loadItems();
+
+    return items.filter((item) => {
+      // Compared strictly because checkFrontmatterType does not validate
+      // ignorePublish and this filter runs before the validation.
+      if (item.ignorePublish === true) return false;
+
+      return item.modified || item.id === null;
+    });
+  }
+
   async publishItem(
     item: QiitaItem,
     qiitaApi: QiitaApi,

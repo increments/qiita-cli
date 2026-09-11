@@ -10,6 +10,99 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+const dataRootDir = "data_root_dir";
+const rootPath = `${dataRootDir}/public`;
+const remotePath = `${rootPath}/.remote`;
+
+const articleFile = ({
+  id = null,
+  body = "# Title",
+  ignorePublish = "false",
+}: { id?: string | null; body?: string; ignorePublish?: string } = {}) => `---
+title: Title
+tags:
+  - qiita
+private: false
+updated_at: ''
+id: ${id === null ? "null" : id}
+organization_url_name: null
+slide: false
+ignorePublish: ${ignorePublish}
+---
+${body}
+`;
+
+const buildItem = (
+  overrides: Partial<ConstructorParameters<typeof QiitaItem>[0]> = {},
+) =>
+  new QiitaItem({
+    id: null,
+    title: "Title",
+    tags: ["qiita"],
+    secret: false,
+    updatedAt: "",
+    organizationUrlName: null,
+    rawBody: "# Title",
+    name: "article",
+    modified: true,
+    isOlderThanRemote: false,
+    itemsShowPath: "/items/show?basename=article",
+    published: false,
+    itemPath: `${rootPath}/article.md`,
+    slide: false,
+    ignorePublish: false,
+    postingCampaignUuid: null,
+    agreedPostingCampaignTerm: false,
+    ...overrides,
+  });
+
+const buildResponseItem = (overrides: Partial<Item> = {}): Item => ({
+  id: "new-item-id",
+  title: "Title",
+  body: "# Title",
+  tags: [{ name: "qiita" }],
+  private: false,
+  organization_url_name: null,
+  coediting: false,
+  created_at: "2026-09-01T00:00:00+09:00",
+  updated_at: "2026-09-01T00:00:00+09:00",
+  slide: false,
+  posting_campaign_uuid: null,
+  ...overrides,
+});
+
+const mockFileSystem = (files: Record<string, string>) => {
+  const mockFs = fs as jest.Mocked<typeof fs>;
+  mockFs.readdir.mockImplementation(async (dirPath) => {
+    const prefix = `${dirPath}/`;
+    return Object.keys(files)
+      .filter((filePath) => filePath.startsWith(prefix))
+      .map((filePath) => filePath.slice(prefix.length)) as any[];
+  });
+  mockFs.readFile.mockImplementation(async (filePath) => {
+    const content = files[filePath as string];
+    if (content === undefined) {
+      throw new Error(`ENOENT: ${filePath}`);
+    }
+    return content;
+  });
+  mockFs.writeFile.mockImplementation(async (filePath, data) => {
+    files[filePath as string] = data as string;
+  });
+  return files;
+};
+
+const writtenPaths = () =>
+  (fs as jest.Mocked<typeof fs>).writeFile.mock.calls.map((call) =>
+    String(call[0]),
+  );
+
+const buildQiitaApi = () =>
+  ({
+    postItem: jest.fn(),
+    patchItem: jest.fn(),
+  }) as unknown as jest.Mocked<QiitaApi>;
+
 describe("FileSystemRepo", () => {
   describe("constructor", () => {
     it("creates", () => {
@@ -552,100 +645,54 @@ updated
     });
   });
 
-  describe("publishItem()", () => {
-    const dataRootDir = "data_root_dir";
-    const rootPath = `${dataRootDir}/public`;
-    const remotePath = `${rootPath}/.remote`;
-
-    const localFile = (id: string | null) => `---
-title: Title
-tags:
-  - qiita
-private: false
-updated_at: ''
-id: ${id === null ? "null" : id}
-organization_url_name: null
-slide: false
-ignorePublish: false
----
-# Title
-`;
-
-    const buildItem = (
-      overrides: Partial<ConstructorParameters<typeof QiitaItem>[0]> = {},
-    ) =>
-      new QiitaItem({
-        id: null,
-        title: "Title",
-        tags: ["qiita"],
-        secret: false,
-        updatedAt: "",
-        organizationUrlName: null,
-        rawBody: "# Title",
-        name: "article",
-        modified: true,
-        isOlderThanRemote: false,
-        itemsShowPath: "/items/show?basename=article",
-        published: false,
-        itemPath: `${rootPath}/article.md`,
-        slide: false,
-        ignorePublish: false,
-        postingCampaignUuid: null,
-        agreedPostingCampaignTerm: false,
-        ...overrides,
+  describe("loadPublishTargets()", () => {
+    it("returns the unpublished articles and the ones that differ from the mirror", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: articleFile(),
+        [`${rootPath}/edited.md`]: articleFile({
+          id: "edited-id",
+          body: "# Edited",
+        }),
+        [`${remotePath}/edited-id.md`]: articleFile({ id: "edited-id" }),
+        [`${rootPath}/synced.md`]: articleFile({ id: "synced-id" }),
+        [`${remotePath}/synced-id.md`]: articleFile({ id: "synced-id" }),
       });
+      const instance = new FileSystemRepo({ dataRootDir });
 
-    const buildResponseItem = (overrides: Partial<Item> = {}): Item => ({
-      id: "new-item-id",
-      title: "Title",
-      body: "# Title",
-      tags: [{ name: "qiita" }],
-      private: false,
-      organization_url_name: null,
-      coediting: false,
-      created_at: "2026-09-01T00:00:00+09:00",
-      updated_at: "2026-09-01T00:00:00+09:00",
-      slide: false,
-      posting_campaign_uuid: null,
-      ...overrides,
+      const targets = await instance.loadPublishTargets();
+
+      expect(targets.map((item) => item.name).sort()).toStrictEqual([
+        "draft",
+        "edited",
+      ]);
     });
 
-    const mockFileSystem = (files: Record<string, string>) => {
-      const mockFs = fs as jest.Mocked<typeof fs>;
-      mockFs.readdir.mockImplementation(async (dirPath) => {
-        const prefix = `${dirPath}/`;
-        return Object.keys(files)
-          .filter((filePath) => filePath.startsWith(prefix))
-          .map((filePath) => filePath.slice(prefix.length)) as any[];
+    it("skips an article whose ignorePublish is exactly true", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: articleFile({ ignorePublish: "true" }),
       });
-      mockFs.readFile.mockImplementation(async (filePath) => {
-        const content = files[filePath as string];
-        if (content === undefined) {
-          throw new Error(`ENOENT: ${filePath}`);
-        }
-        return content;
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadPublishTargets()).toStrictEqual([]);
+    });
+
+    it("does not skip an article whose ignorePublish is a truthy non-boolean", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: articleFile({ ignorePublish: "'yes'" }),
       });
-      mockFs.writeFile.mockImplementation(async (filePath, data) => {
-        files[filePath as string] = data as string;
-      });
-      return files;
-    };
+      const instance = new FileSystemRepo({ dataRootDir });
 
-    const writtenPaths = () =>
-      (fs as jest.Mocked<typeof fs>).writeFile.mock.calls.map((call) =>
-        String(call[0]),
-      );
+      const targets = await instance.loadPublishTargets();
 
-    const buildQiitaApi = () =>
-      ({
-        postItem: jest.fn(),
-        patchItem: jest.fn(),
-      }) as unknown as jest.Mocked<QiitaApi>;
+      expect(targets.map((item) => item.name)).toStrictEqual(["draft"]);
+    });
+  });
 
+  describe("publishItem()", () => {
     describe("when the item has no id yet", () => {
       it("posts it, writes the uuid back and then refreshes the mirror", async () => {
         const files = mockFileSystem({
-          [`${rootPath}/article.md`]: localFile(null),
+          [`${rootPath}/article.md`]: articleFile(),
         });
         const qiitaApi = buildQiitaApi();
         const responseItem = buildResponseItem();
@@ -682,8 +729,10 @@ ignorePublish: false
     describe("when the item already has an id", () => {
       it("patches it and refreshes the mirror without rewriting the uuid", async () => {
         mockFileSystem({
-          [`${rootPath}/article.md`]: localFile("existing-item-id"),
-          [`${remotePath}/existing-item-id.md`]: localFile("existing-item-id"),
+          [`${rootPath}/article.md`]: articleFile({ id: "existing-item-id" }),
+          [`${remotePath}/existing-item-id.md`]: articleFile({
+            id: "existing-item-id",
+          }),
         });
         const qiitaApi = buildQiitaApi();
         const responseItem = buildResponseItem({ id: "existing-item-id" });
