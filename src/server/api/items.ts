@@ -9,7 +9,7 @@ import type {
   ItemsIndexViewModel,
   ItemsShowViewModel,
 } from "../../lib/view-models/items";
-import { Item, PostingCampaign, QiitaApi } from "../../qiita-api";
+import { PostingCampaign, QiitaApi } from "../../qiita-api";
 import { getCurrentUser } from "../lib/get-current-user";
 import { itemUrl } from "../lib/qiita-url";
 
@@ -152,12 +152,12 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
   const basename: string | null = req.body.basename;
 
   const fileSystemRepo = await getFileSystemRepo();
-  const result =
+  const item =
     itemId === "post" && basename
       ? await fileSystemRepo.loadItemByBasename(basename)
       : await fileSystemRepo.loadItemByItemId(itemId);
 
-  if (!result) {
+  if (!item) {
     res.status(404).json({
       message: "Not found",
     });
@@ -165,47 +165,13 @@ const itemsUpdate = async (req: Express.Request, res: Express.Response) => {
   }
 
   const qiitaApi = await getQiitaApiInstance();
-  const output: { [key: string]: string | boolean } = {
-    success: true,
-    uuid: result.id || "",
-  };
-  let item: Item;
   try {
-    if (!result.id && itemId === "post") {
-      if (!basename) throw new Error("basename is undefined");
+    const { item: responseItem } = await fileSystemRepo.publishItem(
+      item,
+      qiitaApi,
+    );
 
-      item = await qiitaApi.postItem({
-        rawBody: result.rawBody,
-        tags: result.tags,
-        title: result.title,
-        isPrivate: result.secret,
-        organizationUrlName: result.organizationUrlName,
-        slide: result.slide,
-        postingCampaignUuid: result.postingCampaignUuid,
-        agreedPostingCampaignTerm: result.agreedPostingCampaignTerm,
-      });
-      if (item) {
-        fileSystemRepo.updateItemUuid(basename, item.id);
-        output.uuid = item.id;
-      }
-    } else if (result.id) {
-      item = await qiitaApi.patchItem({
-        rawBody: result.rawBody,
-        tags: result.tags,
-        title: result.title,
-        uuid: result.id,
-        isPrivate: result.secret,
-        organizationUrlName: result.organizationUrlName,
-        slide: result.slide,
-        postingCampaignUuid: result.postingCampaignUuid,
-        agreedPostingCampaignTerm: result.agreedPostingCampaignTerm,
-      });
-    } else {
-      throw new Error("Unknown Error");
-    }
-
-    await fileSystemRepo.saveItem(item, false, true);
-    res.json(output);
+    res.json({ success: true, uuid: responseItem.id });
   } catch {
     res.json({
       success: false,
