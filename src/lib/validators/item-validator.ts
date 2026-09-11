@@ -1,3 +1,5 @@
+import { checkFrontmatterType } from "../check-frontmatter-type";
+
 interface Item {
   title: string | null;
   rawBody: string | null;
@@ -6,6 +8,13 @@ interface Item {
   organizationUrlName: string | null;
   postingCampaignUuid: string | null | undefined;
   agreedPostingCampaignTerm: boolean | undefined;
+}
+
+interface PublishItem extends Item {
+  updatedAt: string | null;
+  id: string | null;
+  slide: boolean;
+  isOlderThanRemote: boolean;
 }
 
 interface Validator {
@@ -24,6 +33,26 @@ export const validateItem = (item: Item): string[] => {
     validatePostingCampaignSecretItem,
   ];
   return getValidationErrorMessages(item, validators);
+};
+
+// The frontmatter type check, the value validation and the staleness check are
+// reported one tier at a time: a type error makes the value errors meaningless,
+// and both make the staleness warning noise.
+export const validatePublishItem = (
+  item: PublishItem,
+  { force }: { force: boolean },
+): string[] => {
+  const frontmatterErrors = checkFrontmatterType(item);
+  if (frontmatterErrors.length > 0) return frontmatterErrors;
+
+  const validationErrors = validateItem(item);
+  if (validationErrors.length > 0) return validationErrors;
+
+  if (!force && item.isOlderThanRemote) {
+    return ["内容がQiita上の記事より古い可能性があります"];
+  }
+
+  return [];
 };
 
 const validateItemTitle: Validator = {

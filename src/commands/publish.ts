@@ -1,11 +1,10 @@
 import arg from "arg";
 import process from "node:process";
-import { checkFrontmatterType } from "../lib/check-frontmatter-type";
 import { QiitaItem } from "../lib/entities/qiita-item";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
-import { validateItem } from "../lib/validators/item-validator";
+import { validatePublishItem } from "../lib/validators/item-validator";
 import {
   QiitaForbiddenError,
   QiitaForbiddenOrBadRequestError,
@@ -43,28 +42,11 @@ export const publish = async (argv: string[]) => {
   }
 
   // Validate
-  const enableForcePublish = args["--force"];
+  const force = args["--force"] ?? false;
   const invalidItemMessages = targetItems.reduce(
     (acc, item) => {
-      const frontmatterErrors = checkFrontmatterType(item);
-      if (frontmatterErrors.length > 0)
-        return [...acc, { name: item.name, errors: frontmatterErrors }];
-
-      const validationErrors = validateItem(item);
-      if (validationErrors.length > 0)
-        return [...acc, { name: item.name, errors: validationErrors }];
-
-      if (!enableForcePublish && item.isOlderThanRemote) {
-        return [
-          ...acc,
-          {
-            name: item.name,
-            errors: ["内容がQiita上の記事より古い可能性があります"],
-          },
-        ];
-      }
-
-      return acc;
+      const errors = validatePublishItem(item, { force });
+      return errors.length > 0 ? [...acc, { name: item.name, errors }] : acc;
     },
     [] as { name: string; errors: string[] }[],
   );

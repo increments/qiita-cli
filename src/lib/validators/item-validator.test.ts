@@ -1,4 +1,4 @@
-import { validateItem } from "./item-validator";
+import { validateItem, validatePublishItem } from "./item-validator";
 
 describe("validateItem", () => {
   const item = {
@@ -226,6 +226,70 @@ describe("validateItem", () => {
       it("returns no validation error message", () => {
         expect(errorMessages).toEqual([]);
       });
+    });
+  });
+});
+
+describe("validatePublishItem", () => {
+  const publishItem = {
+    title: "Title",
+    rawBody: "# Title",
+    tags: ["qiita"],
+    secret: false,
+    organizationUrlName: null,
+    postingCampaignUuid: null,
+    agreedPostingCampaignTerm: false,
+    updatedAt: "",
+    id: null,
+    slide: false,
+    isOlderThanRemote: false,
+  };
+
+  it("returns no errors for a publishable item", () => {
+    expect(validatePublishItem(publishItem, { force: false })).toEqual([]);
+  });
+
+  describe("when the frontmatter type is wrong and the value is also invalid", () => {
+    it("reports only the frontmatter error", () => {
+      const errorMessages = validatePublishItem(
+        { ...publishItem, tags: "qiita" as unknown as string[] },
+        { force: false },
+      );
+
+      expect(errorMessages).toEqual(["tagsは配列で入力してください"]);
+    });
+  });
+
+  describe("when the item is invalid and older than the remote", () => {
+    it("reports only the validation error", () => {
+      const errorMessages = validatePublishItem(
+        { ...publishItem, tags: [], isOlderThanRemote: true },
+        { force: false },
+      );
+
+      expect(errorMessages).toEqual([
+        "タグは1つ以上、5つ以内で指定してください",
+      ]);
+    });
+  });
+
+  describe("when the item is only older than the remote", () => {
+    it("reports it", () => {
+      expect(
+        validatePublishItem(
+          { ...publishItem, isOlderThanRemote: true },
+          { force: false },
+        ),
+      ).toEqual(["内容がQiita上の記事より古い可能性があります"]);
+    });
+
+    it("reports nothing when force is given", () => {
+      expect(
+        validatePublishItem(
+          { ...publishItem, isOlderThanRemote: true },
+          { force: true },
+        ),
+      ).toEqual([]);
     });
   });
 });
