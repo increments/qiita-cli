@@ -7,7 +7,7 @@ import { FileSystemRepo } from "./file-system-repo";
 jest.mock("node:fs/promises");
 
 afterEach(() => {
-  jest.clearAllMocks();
+  jest.resetAllMocks();
 });
 
 const dataRootDir = "data_root_dir";
@@ -472,7 +472,9 @@ slide: false
     describe("when basename is not given", () => {
       it("saves item", () => {
         const mockFs = fs as jest.Mocked<typeof fs>;
-        mockFs.readdir.mockResolvedValueOnce([]);
+        // createItem() reads the directory twice: once to pick a free
+        // basename and once to check the basename is not taken.
+        mockFs.readdir.mockResolvedValue([]);
         mockFs.writeFile.mockResolvedValueOnce();
 
         const dataRootDir = "data_root_dir";
