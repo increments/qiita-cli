@@ -1,9 +1,6 @@
 import { config } from "../lib/config";
 
-export const buildHelpText = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  experimentalSlideFeatureEnabled,
-}: {
+export const buildHelpText = (_options: {
   experimentalSlideFeatureEnabled: boolean;
 }) => {
   return `USAGE:
