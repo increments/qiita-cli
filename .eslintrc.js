@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     // See https://github.com/emotion-js/emotion/issues/2878
     "react/no-unknown-property": ["error", { ignore: ["css"] }],
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
   },
   settings: {
     react: {
