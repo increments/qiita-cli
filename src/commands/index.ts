@@ -32,7 +32,11 @@ export const exec = async (commandName: string, commandArgs: string[]) => {
   if (!isCommand(commandName)) {
     console.error(`Unknown command '${commandName}'`);
     console.error();
-    console.error(await getHelpText());
+    try {
+      console.error(await getHelpText());
+    } catch (err) {
+      await handleError(err as Error);
+    }
     process.exit(1);
   }
 
