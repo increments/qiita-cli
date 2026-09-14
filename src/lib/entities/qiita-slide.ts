@@ -1,5 +1,15 @@
 import matter from "gray-matter";
 
+// The markdown Qiita stores for a slide, used for the preview API, for
+// publishing and for comparing a local slide with its mirror. Only the Marp
+// directives (theme, paginate, ...) belong in the frontmatter — qiita-cli's own
+// bookkeeping fields (id/updated_at/title/description) are not Marp directives,
+// so they are deliberately left out.
+export const buildSlideMarkdown = (
+  rawBody: string,
+  marpFrontmatter: Record<string, unknown>,
+): string => matter.stringify(rawBody, marpFrontmatter);
+
 export class QiitaSlide {
   public readonly id: string | null;
   public readonly title: string;
@@ -9,6 +19,8 @@ export class QiitaSlide {
   public readonly name: string;
   public readonly slidesShowPath: string;
   public readonly published: boolean;
+  public readonly modified: boolean;
+  public readonly isOlderThanRemote: boolean;
   public readonly slidePath: string;
   public readonly marpFrontmatter: Record<string, unknown>;
 
@@ -21,6 +33,8 @@ export class QiitaSlide {
     name,
     slidesShowPath,
     published,
+    modified,
+    isOlderThanRemote,
     slidePath,
     marpFrontmatter,
   }: {
@@ -32,6 +46,8 @@ export class QiitaSlide {
     name: string;
     slidesShowPath: string;
     published: boolean;
+    modified: boolean;
+    isOlderThanRemote: boolean;
     slidePath: string;
     marpFrontmatter: Record<string, unknown>;
   }) {
@@ -43,15 +59,13 @@ export class QiitaSlide {
     this.name = name;
     this.slidesShowPath = slidesShowPath;
     this.published = published;
+    this.modified = modified;
+    this.isOlderThanRemote = isOlderThanRemote;
     this.slidePath = slidePath;
     this.marpFrontmatter = marpFrontmatter;
   }
 
-  // The markdown handed to Qiita's slide preview API. Only the Marp
-  // directives (theme, paginate, ...) belong here — qiita-cli's own
-  // bookkeeping fields (id/updated_at/title/description) are not Marp
-  // directives, so they're deliberately left out.
-  toPreviewMarkdown(): string {
-    return matter.stringify(this.rawBody, this.marpFrontmatter);
+  toMarkdown(): string {
+    return buildSlideMarkdown(this.rawBody, this.marpFrontmatter);
   }
 }

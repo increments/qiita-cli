@@ -30,6 +30,16 @@ export interface Item {
   posting_campaign_uuid: string | null;
 }
 
+export interface Slide {
+  uuid: string;
+  title: string;
+  markdown: string;
+  description_markdown: string;
+  created_at: string;
+  updated_at: string;
+  url: string;
+}
+
 export interface SlidePreview {
   pages: { html: string; speaker_note: string[] }[];
   css: string;
@@ -174,7 +184,7 @@ export class QiitaApi {
     return await this.get<{ id: string }>("/api/v2/authenticated_user");
   }
 
-  async authenticatedUserItems(page?: number, per?: number) {
+  private static paginationParams(page?: number, per?: number) {
     const params = new URLSearchParams();
     if (page !== undefined) {
       params.set("page", page.toString());
@@ -183,9 +193,21 @@ export class QiitaApi {
       params.set("per_page", per.toString());
     }
 
+    return params;
+  }
+
+  async authenticatedUserItems(page?: number, per?: number) {
+    const params = QiitaApi.paginationParams(page, per);
     const path = `/api/v2/authenticated_user/items?${params}`;
 
     return await this.get<Item[]>(path);
+  }
+
+  async authenticatedUserSlides(page?: number, per?: number) {
+    const params = QiitaApi.paginationParams(page, per);
+    const path = `/api/v2/authenticated_user/slides?${params}`;
+
+    return await this.get<Slide[]>(path);
   }
 
   async preview(rawBody: string) {
