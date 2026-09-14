@@ -1,4 +1,9 @@
-export const helpText = `USAGE:
+import { config } from "../lib/config";
+
+export const buildHelpText = (_options: {
+  experimentalSlideFeatureEnabled: boolean;
+}) => {
+  return `USAGE:
 qiita <COMMAND> [<OPTIONS>]
 
 COMMAND:
@@ -31,7 +36,16 @@ OPTIONS:
 
 詳細についてはReadme(https://github.com/increments/qiita-cli)をご覧ください
 `;
+};
 
-export const help = () => {
-  console.log(helpText);
+export const getHelpText = async () => {
+  const userConfig = await config.getUserConfig();
+
+  return buildHelpText({
+    experimentalSlideFeatureEnabled: userConfig.experimentalSlideFeatureEnabled,
+  });
+};
+
+export const help = async () => {
+  console.log(await getHelpText());
 };

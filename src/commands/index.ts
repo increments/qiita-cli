@@ -1,6 +1,6 @@
 import { handleError } from "../lib/error-handler";
 import { packageUpdateNotice } from "../lib/package-update-notice";
-import { help, helpText } from "./help";
+import { getHelpText, help } from "./help";
 import { init } from "./init";
 import { login } from "./login";
 import { newArticles } from "./newArticles";
@@ -32,7 +32,11 @@ export const exec = async (commandName: string, commandArgs: string[]) => {
   if (!isCommand(commandName)) {
     console.error(`Unknown command '${commandName}'`);
     console.error();
-    console.error(helpText);
+    try {
+      console.error(await getHelpText());
+    } catch (err) {
+      await handleError(err as Error);
+    }
     process.exit(1);
   }
 
