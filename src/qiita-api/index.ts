@@ -324,6 +324,50 @@ export class QiitaApi {
     });
   }
 
+  // `description` is intentionally typed as `string`: the API rejects a
+  // present-but-null `description` with 400, so callers must normalize it.
+  async postSlide({
+    title,
+    markdown,
+    description,
+  }: {
+    title: string;
+    markdown: string;
+    description: string;
+  }) {
+    const data = JSON.stringify({
+      title,
+      body: markdown,
+      description,
+    });
+
+    return await this.post<Slide>(`/api/v2/slides`, {
+      body: data,
+    });
+  }
+
+  async patchSlide({
+    uuid,
+    title,
+    markdown,
+    description,
+  }: {
+    uuid: string;
+    title: string;
+    markdown: string;
+    description: string;
+  }) {
+    const data = JSON.stringify({
+      title,
+      body: markdown,
+      description,
+    });
+
+    return await this.patch<Slide>(`/api/v2/slides/${uuid}`, {
+      body: data,
+    });
+  }
+
   async previewSlide(rawBody: string) {
     const data = JSON.stringify({
       body: rawBody,

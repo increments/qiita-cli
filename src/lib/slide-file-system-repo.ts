@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { Slide } from "../qiita-api";
+import { QiitaApi, Slide } from "../qiita-api";
 import { slidesShowPath } from "./qiita-cli-url";
 import { buildSlideMarkdown, QiitaSlide } from "./entities/qiita-slide";
 
@@ -95,6 +95,23 @@ class SlideFileContent {
       updatedAt: slide.updatedAt,
       description: slide.description,
       marpFrontmatter: slide.marpFrontmatter,
+    });
+  }
+
+  clone({
+    id,
+    updatedAt,
+  }: {
+    id: string;
+    updatedAt: string;
+  }): SlideFileContent {
+    return new SlideFileContent({
+      title: this.title,
+      id,
+      updatedAt,
+      description: this.description,
+      rawBody: this.rawBody,
+      marpFrontmatter: this.marpFrontmatter,
     });
   }
 
@@ -285,6 +302,47 @@ export class SlideFileSystemRepo {
     await this.syncSlide(slide, forceUpdate);
   }
 
+  async loadPublishTargets(): Promise<QiitaSlide[]> {
+    const slides = await this.loadSlides();
+
+    return slides.filter((slide) => slide.modified || slide.id === null);
+  }
+
+  async publishSlide(
+    slide: QiitaSlide,
+    qiitaApi: QiitaApi,
+  ): Promise<{ slide: Slide; posted: boolean }> {
+    // The API rejects a null description with 400, and omitting the key on
+    // PATCH would keep the remote value, leaving a permanent diff.
+    const params = {
+      title: slide.title,
+      markdown: slide.toMarkdown(),
+      description: slide.description ?? "",
+    };
+
+    if (slide.id) {
+      const responseSlide = await qiitaApi.patchSlide({
+        ...params,
+        uuid: slide.id,
+      });
+      await this.saveSlide(responseSlide, true);
+
+      return { slide: responseSlide, posted: false };
+    }
+
+    const responseSlide = await qiitaApi.postSlide(params);
+    // The uuid has to reach the local file before the mirror is refreshed,
+    // otherwise the sync cannot tell which file the returned slide belongs to
+    // and would create a second one.
+    await this.updateSlideFrontmatter(slide.name, {
+      id: responseSlide.uuid,
+      updatedAt: responseSlide.updated_at,
+    });
+    await this.saveSlide(responseSlide, true);
+
+    return { slide: responseSlide, posted: true };
+  }
+
   async loadSlides(): Promise<QiitaSlide[]> {
     const filenames = await this.getSlideFilenames();
 
@@ -336,6 +394,22 @@ export class SlideFileSystemRepo {
     const data = newFileContent.toSaveFormat();
     await fs.writeFile(filepath, data, SlideFileSystemRepo.fileSystemOptions());
     return basename;
+  }
+
+  async updateSlideFrontmatter(
+    basename: string,
+    { id, updatedAt }: { id: string; updatedAt: string },
+  ) {
+    const fileContent = await this.getSlideData(this.getFilename(basename));
+    if (!fileContent) {
+      return;
+    }
+
+    await fs.writeFile(
+      this.getFilePath(basename),
+      fileContent.clone({ id, updatedAt }).toSaveFormat(),
+      SlideFileSystemRepo.fileSystemOptions(),
+    );
   }
 
   private async buildSlide(
