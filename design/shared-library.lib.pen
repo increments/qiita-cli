@@ -27,6 +27,7 @@
           "type": "frame",
           "id": "omQtk",
           "name": "Button",
+          "context": "qiita-cli の実装に共通の Button コンポーネントは無く、`<button css={...}>` が Header / CopyButton / SidebarContents で個別に組まれている。プレゼンテーションモードのボタンもこのコンポーネントを ref していない（ライブラリの Button にアイコンのスロットが無く、descendants では実装にある slideshow を足せないため）。Qiita 共通のコンポーネントとして持っているだけ。",
           "reusable": true,
           "fill": "$green-container",
           "cornerRadius": 8,
@@ -48,8 +49,7 @@
               "fontSize": "$text-body2",
               "fontWeight": "$fontWeight-bold"
             }
-          ],
-          "context": "qiita-cli の実装に共通の Button コンポーネントは無く、`<button css={...}>` が Header / CopyButton / SidebarContents で個別に組まれている。プレゼンテーションモードのボタンもこのコンポーネントを ref していない（ライブラリの Button にアイコンのスロットが無く、descendants では実装にある slideshow を足せないため）。Qiita 共通のコンポーネントとして持っているだけ。"
+          ]
         },
         {
           "type": "frame",
@@ -2885,6 +2885,7 @@
           "type": "frame",
           "id": "Z2gAoT",
           "name": "Divider",
+          "context": "qiita-cli の区切り線は Divider 要素ではなく CSS の border（`Header.tsx:188` の `borderBottom: 1px solid Colors.divider` / `SidebarContents.tsx:766` の `borderTop: solid 1px Colors.divider`）。そのためページ側の Toolbar Rule / Footer Rule はこのコンポーネントを ref せず、`$divider` トークンを塗った 1px の rectangle で表している。この Divider は Qiita 共通のコンポーネントとして持っているだけで、qiita-cli には使い先が無い。",
           "reusable": true,
           "width": 300,
           "height": 1,
@@ -2900,8 +2901,7 @@
               "width": "fill_container",
               "height": "fill_container"
             }
-          ],
-          "context": "qiita-cli の区切り線は Divider 要素ではなく CSS の border（`Header.tsx:188` の `borderBottom: 1px solid Colors.divider` / `SidebarContents.tsx:766` の `borderTop: solid 1px Colors.divider`）。そのためページ側の Toolbar Rule / Footer Rule はこのコンポーネントを ref せず、`$divider` トークンを塗った 1px の rectangle で表している。この Divider は Qiita 共通のコンポーネントとして持っているだけで、qiita-cli には使い先が無い。"
+          ]
         }
       ]
     },
@@ -3519,11 +3519,11 @@
                                           "fill": "$high-emphasis-text"
                                         },
                                         {
-                                          "id": "T6TqFB",
                                           "type": "text",
+                                          "id": "T6TqFB",
                                           "name": "Sort Label",
-                                          "content": "新着順",
                                           "fill": "$high-emphasis-text",
+                                          "content": "新着順",
                                           "lineHeight": "$text-body2-line-height",
                                           "fontFamily": "$font-sans",
                                           "fontSize": "$text-body2",
@@ -4200,8 +4200,8 @@
                                       "alignItems": "center",
                                       "children": [
                                         {
-                                          "id": "SbIc01",
                                           "type": "icon",
+                                          "id": "SbIc01",
                                           "name": "Leading Icon",
                                           "width": 16,
                                           "height": 16,
@@ -4238,8 +4238,8 @@
                                       "alignItems": "center",
                                       "children": [
                                         {
-                                          "id": "SbIc02",
                                           "type": "icon",
+                                          "id": "SbIc02",
                                           "name": "Leading Icon",
                                           "width": 16,
                                           "height": 16,
@@ -4276,8 +4276,8 @@
                                       "alignItems": "center",
                                       "children": [
                                         {
-                                          "id": "SbIc03",
                                           "type": "icon",
+                                          "id": "SbIc03",
                                           "name": "Leading Icon",
                                           "width": 16,
                                           "height": 16,
@@ -4307,6 +4307,10 @@
                                   "name": "Footer Legal Links",
                                   "width": "fill_container",
                                   "layout": "vertical",
+                                  "padding": [
+                                    0,
+                                    "$getSpace(2)"
+                                  ],
                                   "children": [
                                     {
                                       "type": "frame",
@@ -4404,10 +4408,6 @@
                                         }
                                       ]
                                     }
-                                  ],
-                                  "padding": [
-                                    0,
-                                    "$getSpace(2)"
                                   ]
                                 }
                               ]
@@ -4469,6 +4469,9 @@
                               "width": 36,
                               "height": 36,
                               "cornerRadius": 4,
+                              "stroke": "$gray-30",
+                              "strokeWidth": 2,
+                              "strokeAlignment": "inner",
                               "justifyContent": "center",
                               "alignItems": "center",
                               "children": [
@@ -4483,10 +4486,7 @@
                                   "weight": 500,
                                   "fill": "$high-emphasis-text"
                                 }
-                              ],
-                              "stroke": "$gray-30",
-                              "strokeWidth": 2,
-                              "strokeAlignment": "inner"
+                              ]
                             },
                             {
                               "type": "frame",
@@ -5185,11 +5185,11 @@
                                           "fill": "$high-emphasis-text"
                                         },
                                         {
-                                          "id": "t4BOew",
                                           "type": "text",
+                                          "id": "t4BOew",
                                           "name": "Sort Label",
-                                          "content": "新着順",
                                           "fill": "$high-emphasis-text",
+                                          "content": "新着順",
                                           "lineHeight": "$text-body2-line-height",
                                           "fontFamily": "$font-sans",
                                           "fontSize": "$text-body2",
@@ -5866,8 +5866,8 @@
                                       "alignItems": "center",
                                       "children": [
                                         {
-                                          "id": "SbIc04",
                                           "type": "icon",
+                                          "id": "SbIc04",
                                           "name": "Leading Icon",
                                           "width": 16,
                                           "height": 16,
@@ -5904,8 +5904,8 @@
                                       "alignItems": "center",
                                       "children": [
                                         {
-                                          "id": "SbIc05",
                                           "type": "icon",
+                                          "id": "SbIc05",
                                           "name": "Leading Icon",
                                           "width": 16,
                                           "height": 16,
@@ -5942,8 +5942,8 @@
                                       "alignItems": "center",
                                       "children": [
                                         {
-                                          "id": "SbIc06",
                                           "type": "icon",
+                                          "id": "SbIc06",
                                           "name": "Leading Icon",
                                           "width": 16,
                                           "height": 16,
@@ -5973,6 +5973,10 @@
                                   "name": "Footer Legal Links",
                                   "width": "fill_container",
                                   "layout": "vertical",
+                                  "padding": [
+                                    0,
+                                    "$getSpace(2)"
+                                  ],
                                   "children": [
                                     {
                                       "type": "frame",
@@ -6070,10 +6074,6 @@
                                         }
                                       ]
                                     }
-                                  ],
-                                  "padding": [
-                                    0,
-                                    "$getSpace(2)"
                                   ]
                                 }
                               ]
@@ -6087,6 +6087,124 @@
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "E9u4G",
+      "x": 0,
+      "y": 0,
+      "name": "Checkbox",
+      "reusable": true,
+      "gap": "$getSpace(1/4)",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "jXche",
+          "name": "Icon Frame",
+          "width": 20,
+          "height": 20,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "xXopq",
+              "x": 0,
+              "y": 0,
+              "name": "Bounding box",
+              "width": 20,
+              "height": 20
+            },
+            {
+              "type": "path",
+              "id": "HRbeQ",
+              "x": 2.333,
+              "y": 2.333,
+              "name": "Icon",
+              "geometry": "M2.275 18.4c-0.63333 0-1.17067-0.22067-1.612-0.662-0.442-0.442-0.663-0.97967-0.663-1.613l0-13.85c0-0.63333 0.221-1.171 0.663-1.613 0.44133-0.44133 0.97867-0.662 1.612-0.662l13.85 0c0.63333 0 1.171 0.22067 1.613 0.662 0.44133 0.442 0.662 0.97967 0.662 1.613l0 13.85c0 0.63333-0.22067 1.171-0.662 1.613-0.442 0.44133-0.97967 0.662-1.613 0.662l-13.85 0z m0-2.275l13.85 0 0-13.85-13.85 0 0 13.85z",
+              "viewBox": [
+                0,
+                0,
+                18.4,
+                18.4
+              ],
+              "fill": "$medium-emphasis-text",
+              "width": 15.333,
+              "height": 15.333
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "gh1Nh",
+          "name": "Label",
+          "fill": "$high-emphasis-text",
+          "content": "ラベルテキスト",
+          "lineHeight": "$text-body1-line-height",
+          "fontFamily": "$font-sans",
+          "fontSize": "$text-body1",
+          "fontWeight": "$fontWeight-normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "lKaRH",
+      "x": 0,
+      "y": 0,
+      "name": "RadioButton",
+      "reusable": true,
+      "gap": "$getSpace(1/4)",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "q1xulF",
+          "name": "Icon Frame",
+          "width": 20,
+          "height": 20,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "HxKCD",
+              "x": 0,
+              "y": 0,
+              "name": "Bounding box",
+              "width": 20,
+              "height": 20
+            },
+            {
+              "type": "path",
+              "id": "HpumF",
+              "x": 1.5,
+              "y": 1.5,
+              "name": "Icon",
+              "geometry": "M10.2 20.4c-1.41667 0-2.746-0.26667-3.988-0.8-1.24133-0.53333-2.32033-1.25833-3.237-2.175-0.91667-0.91667-1.64167-1.99567-2.175-3.237-0.53333-1.242-0.8-2.57133-0.8-3.988 0-1.41667 0.26667-2.746 0.8-3.988 0.53333-1.24133 1.25833-2.32033 2.175-3.237 0.91667-0.91667 1.99567-1.64167 3.237-2.175 1.242-0.53333 2.57133-0.8 3.988-0.8 1.41667 0 2.746 0.26667 3.988 0.8 1.24133 0.53333 2.32033 1.25833 3.237 2.175 0.91667 0.91667 1.64167 1.99567 2.175 3.237 0.53333 1.242 0.8 2.57133 0.8 3.988 0 1.41667-0.26667 2.746-0.8 3.988-0.53333 1.24133-1.25833 2.32033-2.175 3.237-0.91667 0.91667-1.99567 1.64167-3.237 2.175-1.242 0.53333-2.57133 0.8-3.988 0.8z m0-2.275c2.21667 0 4.09167-0.76667 5.625-2.3 1.53333-1.53333 2.3-3.40833 2.3-5.625 0-2.21667-0.76667-4.09167-2.3-5.625-1.53333-1.53333-3.40833-2.3-5.625-2.3-2.21667 0-4.09167 0.76667-5.625 2.3-1.53333 1.53333-2.3 3.40833-2.3 5.625 0 2.21667 0.76667 4.09167 2.3 5.625 1.53333 1.53333 3.40833 2.3 5.625 2.3z",
+              "viewBox": [
+                0,
+                0,
+                20.4,
+                20.4
+              ],
+              "fill": "$medium-emphasis-text",
+              "width": 17,
+              "height": 17
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "k5IwD",
+          "name": "Label",
+          "fill": "$high-emphasis-text",
+          "content": "ラベルテキスト",
+          "lineHeight": "$text-body1-line-height",
+          "fontFamily": "$font-sans",
+          "fontSize": "$text-body1",
+          "fontWeight": "$fontWeight-normal"
         }
       ]
     }

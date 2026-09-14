@@ -1,0 +1,3928 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "C5fAd",
+      "x": 0,
+      "y": 0,
+      "name": "MarpSlideFrame",
+      "fill": "$lib:surface",
+      "cornerRadius": 12,
+      "layout": "vertical",
+      "gap": "$lib:getSpace(2)",
+      "padding": "$lib:getSpace(3)",
+      "children": [
+        {
+          "type": "text",
+          "id": "S709zu",
+          "name": "Title",
+          "fill": "$lib:high-emphasis-text",
+          "content": "MarpSlideFrame",
+          "fontFamily": "$lib:font-sans",
+          "fontSize": "$lib:text-body1",
+          "fontWeight": "$lib:fontWeight-semibold"
+        },
+        {
+          "type": "frame",
+          "id": "MsQiL",
+          "name": "Size",
+          "layout": "vertical",
+          "gap": "$lib:getSpace(1/2)",
+          "children": [
+            {
+              "type": "text",
+              "id": "exeuG",
+              "name": "Group Label",
+              "fill": "$lib:high-emphasis-text",
+              "content": "Size",
+              "fontFamily": "$lib:font-sans",
+              "fontSize": "$lib:text-body1",
+              "fontWeight": "$lib:fontWeight-semibold"
+            },
+            {
+              "type": "frame",
+              "id": "YnRSP",
+              "name": "Size Row",
+              "gap": "$lib:getSpace(3)",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "EnCOw",
+                  "name": "Item / 480",
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(1/2)",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QxFKL",
+                      "name": "Item Label",
+                      "fill": "$lib:high-emphasis-text",
+                      "content": "480x270 (16:9)",
+                      "fontFamily": "$lib:font-sans",
+                      "fontSize": 10,
+                      "fontWeight": "$lib:fontWeight-normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "N3tg9B",
+                      "name": "MarpSlideFrame",
+                      "context": "qiita-cli の Preview では src/client/components/MarpSlideViewer/index.tsx が aspect-ratio 16/9 の Shadow DOM に Marp の CSS と SVG をそのまま流し込む。中身は SVG ごと等比スケールされるので、375px では文字も比例して小さくなる。ここに置いてあるのは寸法と代表的な中身で、フォントサイズはトークンの下限に丸めてある スライドの中身（タイトル・本文）のフォントサイズと太さは代表値。Marp のテーマ CSS は Shadow DOM に流し込まれるので qiita-cli のトークン（`Weight.bold` = 600）とは無関係で、リポジトリに `*.css` が無いため実際の値は確認できない。 行送り（lineHeight）も同じく代表値で、実装側は `LineHeight.subhead` を1箇所も使っていないので不一致ではないが、Marp のテーマ CSS が読めないので裏付けは取れない。 プレビュー側のスライドは各 Page の ref に 1px の枠（$lib:divider）を付けている。実装 MarpSlideViewer/index.tsx の pageStyle は boxShadow だが、影を止めて枠にしたいという指摘を受けて差し替えた提案。プレゼンモード（?present=1）は全画面なので枠を付けていない。",
+                      "reusable": true,
+                      "clip": true,
+                      "width": 480,
+                      "height": 270,
+                      "fill": "$lib:gray-0",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(2)",
+                      "padding": [
+                        "$lib:getSpace(4)",
+                        "$lib:getSpace(5)"
+                      ],
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZZdKa",
+                          "name": "Slide Title",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "Qiita のスライド機能",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-headline1",
+                          "fontWeight": "$lib:fontWeight-semibold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "D6HOm",
+                          "name": "Slide Body",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "Markdown で書いて、そのまま発表する",
+                          "lineHeight": "$lib:text-subhead1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-subhead1",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "XECFK",
+      "x": 1028,
+      "y": 0,
+      "name": "/slides/[id] - ideal state(1920px)",
+      "clip": true,
+      "width": 1920,
+      "height": 1867,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "BpwuB",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1867
+        },
+        {
+          "type": "frame",
+          "id": "nU3yX",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "W416dg",
+              "name": "Toolbar",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "TGzjQ",
+                  "name": "Toolbar Bar",
+                  "width": "fill_container",
+                  "padding": [
+                    "$lib:getSpace(1)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "AFSPz",
+                      "name": "File Path",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "G5kkq",
+                          "name": "Path",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "slides/my-slide.md",
+                          "lineHeight": "$lib:text-body2-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Q78F7n",
+                          "name": "Copy Button",
+                          "width": 24,
+                          "height": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "YnsjL",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "content_copy",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TVgZDC",
+                      "name": "Actions",
+                      "gap": "$lib:getSpace(1)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "UyQWJI",
+                          "name": "スライドショーを開始 Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:gray-border",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "aFX8ch",
+                              "name": "Label",
+                              "fill": "$lib:gray-text",
+                              "content": "スライドショーを開始",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "hXV5P1",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "slideshow",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:gray-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "4Pm7xE",
+                          "name": "スライドを投稿する Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:green-60",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "iu4k3T",
+                              "name": "Label",
+                              "fill": "$lib:green-text",
+                              "content": "スライドを投稿する",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "2zcaWY",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "publish",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:green-text"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "xsRky",
+                  "name": "Toolbar Rule",
+                  "fill": "$lib:divider",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "sIsXi",
+              "name": "Contents Wrapper",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "e3HFWB",
+                  "name": "Card",
+                  "width": 820,
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3)",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "NCe61",
+                      "name": "SlideInfo (collapsed)",
+                      "width": "fill_container",
+                      "fill": "$lib:background",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "padding": [
+                        "$lib:getSpace(3/2)",
+                        "$lib:getSpace(2)"
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "a0zKq",
+                          "name": "Summary (実装 SlideInfo.tsx:83-91 は justify-content も gap も無く、::after のシェブロンがラベル直後に付く)",
+                          "width": "fill_container",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "gVtlP",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スライド情報",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "YzMtw",
+                              "name": "Toggle Icon (実装は expand_less / pen に字形が無く keyboard_arrow_up で代用)",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "keyboard_arrow_up",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "R9FOhu",
+                      "name": "Viewer",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(3)",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "npOX3",
+                          "name": "Page 1",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "l2nYS3",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 1",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "SwY1by",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "3rWuWi",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "NTtt38",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Marp のスライドを Qiita CLI からそのまま投稿できることを話す",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bhbiC",
+                          "name": "Page 2",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "ucgDx",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 2",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "スライドの作り方"
+                                },
+                                "D6HOm": {
+                                  "content": "--- で区切るだけ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "qSFzXg",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "QRck6H",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "mvgA4d",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "--- の区切りだけでページが増えることをデモする",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "AVNDQw",
+                          "name": "Page 3",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "KV1aVw",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 3",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "投稿する"
+                                },
+                                "D6HOm": {
+                                  "content": "qiita publish で Qiita へ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Chgrwj",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "v0cqTy",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "tWScSe",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "qiita publish の実演。投稿後の URL を見せる",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "v1QXI",
+      "x": 5622,
+      "y": 0,
+      "name": "/slides/[id]?present=1 - ideal state(1920px)",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Ne879",
+          "name": "Stage",
+          "width": "fill_container",
+          "height": "fill_container",
+          "children": [
+            {
+              "id": "QLe2m",
+              "type": "ref",
+              "ref": "N3tg9B",
+              "name": "Slide（実装は 1920×1080 を左上基準で描き、下端 42px がフッターの外へはみ出して隠れる）",
+              "width": 1920,
+              "height": 1080
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "MEmND",
+      "x": 1028,
+      "y": 7238,
+      "name": "/slides/[id] - frontmatter error state(1920px)",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "ltb0n",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1080
+        },
+        {
+          "type": "frame",
+          "id": "zqO65",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "v2Ct5",
+              "name": "Contents Wrapper",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(3)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "K6HKJn",
+                  "name": "Frontmatter Error Panel (実装は show.tsx:126-139 / ツールバーも白カードも出ない)",
+                  "fill": "$lib:red-10",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3/2)",
+                  "padding": [
+                    "$lib:getSpace(2)",
+                    "$lib:getSpace(3)"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "BIXcE",
+                      "name": "Error Title",
+                      "fill": "$lib:high-emphasis-text",
+                      "content": "スライドの設定の入力内容に誤りがあるため、プレビューが表示できません",
+                      "lineHeight": "$lib:text-body2-dense-line-height",
+                      "fontFamily": "$lib:font-sans",
+                      "fontSize": "$lib:text-body2",
+                      "fontWeight": "$lib:fontWeight-semibold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "O2tek",
+                      "name": "Error Row 1",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "KbIfp",
+                          "name": "Error Icon (実装は MaterialSymbol fill=true / pen は Outlined のみ)",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "error",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:red-60"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DBime",
+                          "name": "Error Message 1",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "theme に指定できない値が入っています",
+                          "lineHeight": "$lib:text-body2-dense-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rcga9",
+                      "name": "Error Row 2",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "RaDDV",
+                          "name": "Error Icon (実装は MaterialSymbol fill=true / pen は Outlined のみ)",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "error",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:red-60"
+                        },
+                        {
+                          "type": "text",
+                          "id": "pWSyO",
+                          "name": "Error Message 2",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "title は必須です",
+                          "lineHeight": "$lib:text-body2-dense-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ZE6Nn",
+      "x": 1028,
+      "y": 1967,
+      "name": "/slides/[id] - slide info open state(1920px)",
+      "clip": true,
+      "width": 1920,
+      "height": 1979,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "rdiqm",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1979
+        },
+        {
+          "type": "frame",
+          "id": "T5FjG",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "mNpfe",
+              "name": "Toolbar",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "kkzak",
+                  "name": "Toolbar Bar",
+                  "width": "fill_container",
+                  "padding": [
+                    "$lib:getSpace(1)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "MMUjD",
+                      "name": "File Path",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "qkuH7",
+                          "name": "Path",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "slides/my-slide.md",
+                          "lineHeight": "$lib:text-body2-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Xivmd",
+                          "name": "Copy Button",
+                          "width": 24,
+                          "height": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "DSYSF",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "content_copy",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PwWh1j",
+                      "name": "Actions",
+                      "gap": "$lib:getSpace(1)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "KGAhU9",
+                          "name": "スライドショーを開始 Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:gray-border",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "qjzgfQ",
+                              "name": "Label",
+                              "fill": "$lib:gray-text",
+                              "content": "スライドショーを開始",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "DO2cIV",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "slideshow",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:gray-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "KTx3UZ",
+                          "name": "スライドを投稿する Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:green-60",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "s6QbfX",
+                              "name": "Label",
+                              "fill": "$lib:green-text",
+                              "content": "スライドを投稿する",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "Xy80uO",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "publish",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:green-text"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "nV23B",
+                  "name": "Toolbar Rule",
+                  "fill": "$lib:divider",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GsxNH",
+              "name": "Contents Wrapper",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "KW1HN",
+                  "name": "Card",
+                  "width": 820,
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3)",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "FK8Rw",
+                      "name": "SlideInfo (open)",
+                      "width": "fill_container",
+                      "fill": "$lib:background",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "padding": [
+                        "$lib:getSpace(3/2)",
+                        "$lib:getSpace(2)"
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "WfPys",
+                          "name": "Summary (実装 SlideInfo.tsx:83-91 は justify-content も gap も無く、::after のシェブロンがラベル直後に付く)",
+                          "width": "fill_container",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "D4n6L",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スライド情報",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "LU7Y8",
+                              "name": "Toggle Icon (実装は expand_more / pen に字形が無く keyboard_arrow_down で代用)",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "keyboard_arrow_down",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "EhmFo",
+                          "name": "Info Row / タイトル",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "K57JIE",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "タイトル",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "c3Zrrm",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Qiita のスライド機能",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "T5raEP",
+                          "name": "Info Row / テーマ",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "padding": [
+                            "$lib:getSpace(1/2)",
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "eH86T",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "テーマ",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Mhorh",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "未設定",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GqE4g",
+                          "name": "Info Row / スライドの状態",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "padding": [
+                            "$lib:getSpace(1/2)",
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "uTxct",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "スライドの状態",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "lnilS",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "未投稿",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UNCLW",
+                          "name": "Info Row / ページ数",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "padding": [
+                            "$lib:getSpace(1/2)",
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Y7PwcZ",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "ページ数",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "lTlv8",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "3",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KL73q",
+                      "name": "Viewer",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(3)",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "MPydS",
+                          "name": "Page 1",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "ILu2B",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 1",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "S1uW3K",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "o0BM55",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "rE2ysS",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Marp のスライドを Qiita CLI からそのまま投稿できることを話す",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZIggFv",
+                          "name": "Page 2",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "6C82sw",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 2",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "スライドの作り方"
+                                },
+                                "D6HOm": {
+                                  "content": "--- で区切るだけ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bOOds1",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "GMJDLY",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "noLzNY",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "--- の区切りだけでページが増えることをデモする",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RNXIaS",
+                          "name": "Page 3",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "7rYErx",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 3",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "投稿する"
+                                },
+                                "D6HOm": {
+                                  "content": "qiita publish で Qiita へ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ylXsmh",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "6fxWmG",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "2UjXp7",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "qiita publish の実演。投稿後の URL を見せる",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "FxcUM",
+      "x": 4747,
+      "y": 0,
+      "name": "/slides/[id] - ideal state(375px)",
+      "clip": true,
+      "width": 375,
+      "height": 1157,
+      "fill": "$lib:background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "cAmuC",
+          "name": "Toolbar",
+          "width": "fill_container",
+          "fill": "$lib:surface",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "khsXg",
+              "name": "Toolbar Bar",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(1)",
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RUaYR",
+                  "name": "Mobile Left",
+                  "width": "fill_container",
+                  "gap": "$lib:getSpace(1/2)",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "O2SBxM",
+                      "name": "Menu Button",
+                      "width": 40,
+                      "height": 40,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "EWPZr",
+                          "name": "Icon",
+                          "width": 24,
+                          "height": 24,
+                          "icon": "menu",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:high-emphasis-text"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "mhInX",
+                      "name": "Copy Label + Button (実装は grid 1fr 16px)",
+                      "width": "fill_container",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JX2yh",
+                          "name": "Label",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "ファイルパスをコピー",
+                          "lineHeight": "$lib:text-body2-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "s3aW6I",
+                          "name": "Copy Button（実装は grid の 16px 列。デスクトップの CopyButton は padding 4 + icon 16 = 24 だが、モバイルは 16px 列に入る）",
+                          "width": 16,
+                          "height": 16,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "fn0im",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "content_copy",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MinK7h",
+                  "name": "Actions",
+                  "gap": "$lib:getSpace(1)",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "7M9BEE",
+                      "name": "スライドショーを開始 Icon Button",
+                      "context": "375px（breakpoint.S = 769 以下）ではラベルを畳んでアイコンだけにする提案。実装は現状ラベルを短く差し替えるだけ（Header.tsx:157）で、アイコンボタンは無い。タップ領域を 44×44 以上にするため padding を getSpace(2) にして 48×48 にしてある。",
+                      "fill": "$lib:surface",
+                      "cornerRadius": 8,
+                      "stroke": "$lib:gray-border",
+                      "strokeWidth": 2,
+                      "strokeAlignment": "inner",
+                      "padding": "$lib:getSpace(2)",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "rWSFUl",
+                          "name": "Icon",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "slideshow",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:gray-text"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "iYL04L",
+                      "name": "スライドを投稿する Icon Button",
+                      "context": "375px（breakpoint.S = 769 以下）ではラベルを畳んでアイコンだけにする提案。実装は現状ラベルを短く差し替えるだけ（Header.tsx:157）で、アイコンボタンは無い。タップ領域を 44×44 以上にするため padding を getSpace(2) にして 48×48 にしてある。",
+                      "fill": "$lib:surface",
+                      "cornerRadius": 8,
+                      "stroke": "$lib:green-60",
+                      "strokeWidth": 2,
+                      "strokeAlignment": "inner",
+                      "padding": "$lib:getSpace(2)",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "zrbNaN",
+                          "name": "Icon",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "publish",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:green-text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "WtZfc",
+              "name": "Toolbar Rule",
+              "fill": "$lib:divider",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lMmKR",
+          "name": "Contents Wrapper",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            "$lib:getSpace(2)",
+            "$lib:getSpace(2)",
+            0,
+            "$lib:getSpace(2)"
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "XiBQt",
+              "name": "Card",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "cornerRadius": 8,
+              "layout": "vertical",
+              "gap": "$lib:getSpace(3)",
+              "padding": "$lib:getSpace(3)",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "b3PEAl",
+                  "name": "SlideInfo (collapsed)",
+                  "width": "fill_container",
+                  "fill": "$lib:background",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "padding": [
+                    "$lib:getSpace(3/2)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "IIhqq",
+                      "name": "Summary (実装 SlideInfo.tsx:83-91 は justify-content も gap も無く、::after のシェブロンがラベル直後に付く)",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "aytcM",
+                          "name": "Label",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "スライド情報",
+                          "lineHeight": "$lib:text-body1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body1",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "QG9Hr",
+                          "name": "Toggle Icon (実装は expand_less / pen に字形が無く keyboard_arrow_up で代用)",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "keyboard_arrow_up",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:high-emphasis-text"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "DXSYi",
+                  "name": "Viewer",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t69Ev",
+                      "name": "Page 1",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(2)",
+                      "children": [
+                        {
+                          "id": "UINzS",
+                          "type": "ref",
+                          "ref": "N3tg9B",
+                          "name": "Slide 1 (実装は Marp の SVG ごと等比縮小されるので中身の余白も縮むが、pen の ref は padding をスケールしないため 375px 用に上書きしている)",
+                          "width": 295,
+                          "height": 166,
+                          "padding": [
+                            "$lib:getSpace(1)",
+                            "$lib:getSpace(3/2)"
+                          ],
+                          "stroke": "$lib:divider",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "ZZdKa": {
+                              "content": "Qiita のスライド機能",
+                              "fontSize": "$lib:text-body1",
+                              "lineHeight": "$lib:text-body1-dense-line-height"
+                            },
+                            "D6HOm": {
+                              "content": "Markdown で書いて、そのまま発表する",
+                              "fontSize": "$lib:text-body3",
+                              "lineHeight": "$lib:text-body3-line-height"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Yz4zUi",
+                          "name": "Speaker Note",
+                          "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                          "width": "fill_container",
+                          "fill": "$lib:surface-variant",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(1)",
+                          "padding": [
+                            "$lib:getSpace(3/2)",
+                            "$lib:getSpace(2)"
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "PS4fis",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スピーカーノート",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "a8qaTc",
+                              "name": "Body",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Marp のスライドを Qiita CLI からそのまま投稿できることを話す",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZNzcO",
+                      "name": "Page 2",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(2)",
+                      "children": [
+                        {
+                          "id": "aTLdJ",
+                          "type": "ref",
+                          "ref": "N3tg9B",
+                          "name": "Slide 2 (実装は Marp の SVG ごと等比縮小されるので中身の余白も縮むが、pen の ref は padding をスケールしないため 375px 用に上書きしている)",
+                          "width": 295,
+                          "height": 166,
+                          "padding": [
+                            "$lib:getSpace(1)",
+                            "$lib:getSpace(3/2)"
+                          ],
+                          "stroke": "$lib:divider",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "ZZdKa": {
+                              "content": "スライドの作り方",
+                              "fontSize": "$lib:text-body1",
+                              "lineHeight": "$lib:text-body1-dense-line-height"
+                            },
+                            "D6HOm": {
+                              "content": "--- で区切るだけ",
+                              "fontSize": "$lib:text-body3",
+                              "lineHeight": "$lib:text-body3-line-height"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "KmKlAj",
+                          "name": "Speaker Note",
+                          "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                          "width": "fill_container",
+                          "fill": "$lib:surface-variant",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(1)",
+                          "padding": [
+                            "$lib:getSpace(3/2)",
+                            "$lib:getSpace(2)"
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "cXGrUN",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スピーカーノート",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "rSCpxz",
+                              "name": "Body",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "--- の区切りだけでページが増えることをデモする",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Nu4JX",
+                      "name": "Page 3",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(2)",
+                      "children": [
+                        {
+                          "id": "EAt5w",
+                          "type": "ref",
+                          "ref": "N3tg9B",
+                          "name": "Slide 3 (実装は Marp の SVG ごと等比縮小されるので中身の余白も縮むが、pen の ref は padding をスケールしないため 375px 用に上書きしている)",
+                          "width": 295,
+                          "height": 166,
+                          "padding": [
+                            "$lib:getSpace(1)",
+                            "$lib:getSpace(3/2)"
+                          ],
+                          "stroke": "$lib:divider",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "ZZdKa": {
+                              "content": "投稿する",
+                              "fontSize": "$lib:text-body1",
+                              "lineHeight": "$lib:text-body1-dense-line-height"
+                            },
+                            "D6HOm": {
+                              "content": "qiita publish で Qiita へ",
+                              "fontSize": "$lib:text-body3",
+                              "lineHeight": "$lib:text-body3-line-height"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RJln34",
+                          "name": "Speaker Note",
+                          "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                          "width": "fill_container",
+                          "fill": "$lib:surface-variant",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(1)",
+                          "padding": [
+                            "$lib:getSpace(3/2)",
+                            "$lib:getSpace(2)"
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ICnuo5",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スピーカーノート",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "EEWnyT",
+                              "name": "Body",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "qiita publish の実演。投稿後の URL を見せる",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "NYISF",
+      "x": 1028,
+      "y": 4046,
+      "name": "/slides/[id] - validation warning state(1920px)",
+      "clip": true,
+      "width": 1920,
+      "height": 1912,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "cWhks",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1912
+        },
+        {
+          "type": "frame",
+          "id": "phjyh",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "c2WjhT",
+              "name": "Toolbar",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "CuGJZ",
+                  "name": "Toolbar Bar",
+                  "width": "fill_container",
+                  "padding": [
+                    "$lib:getSpace(1)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RMBbD",
+                      "name": "File Path",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vmtj0",
+                          "name": "Path",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "slides/my-slide.md",
+                          "lineHeight": "$lib:text-body2-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "U53xW",
+                          "name": "Copy Button",
+                          "width": 24,
+                          "height": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "sTzqx",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "content_copy",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "6NNCJF",
+                      "name": "Actions",
+                      "gap": "$lib:getSpace(1)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "10Lo38",
+                          "name": "スライドショーを開始 Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:gray-border",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "SoKWG1",
+                              "name": "Label",
+                              "fill": "$lib:gray-text",
+                              "content": "スライドショーを開始",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "vV3Uw1",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "slideshow",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:gray-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "QY3CcM",
+                          "name": "スライドを投稿する Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:green-60",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "7uDBpw",
+                              "name": "Label",
+                              "fill": "$lib:green-text",
+                              "content": "スライドを投稿する",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "AE9NSe",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "publish",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:green-text"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "HIeQp",
+                  "name": "Toolbar Rule",
+                  "fill": "$lib:divider",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cfMlc",
+              "name": "Contents Wrapper",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "HSNY1",
+                  "name": "Card",
+                  "width": 820,
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3)",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "gjvjY",
+                      "name": "SlideInfo (collapsed)",
+                      "width": "fill_container",
+                      "fill": "$lib:background",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "padding": [
+                        "$lib:getSpace(3/2)",
+                        "$lib:getSpace(2)"
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "vklHV",
+                          "name": "Summary (実装 SlideInfo.tsx:83-91 は justify-content も gap も無く、::after のシェブロンがラベル直後に付く)",
+                          "width": "fill_container",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "L0vGm",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スライド情報",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "fnYJk",
+                              "name": "Toggle Icon (実装は expand_less / pen に字形が無く keyboard_arrow_up で代用)",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "keyboard_arrow_up",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pgvUz",
+                      "name": "Validation Warning (実装は SlideInfo.tsx:137-155 / details の外・背景も枠も無い)",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(3/2)",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "KbVRV",
+                          "name": "Warning Row 1",
+                          "gap": "$lib:getSpace(1/2)",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "uZiDs",
+                              "name": "Warning Icon (実装は MaterialSymbol fill=true / pen は Outlined のみ)",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "error",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:yellow-60"
+                            },
+                            {
+                              "type": "text",
+                              "id": "U9fgTE",
+                              "name": "Warning Message 1",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "theme が未設定のため既定のテーマで表示しています",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BRmGn",
+                      "name": "Viewer",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(3)",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Q5O1yv",
+                          "name": "Page 1",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "COqR4",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 1",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "zVV4H8",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "0tdH48",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "B5FOSp",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Marp のスライドを Qiita CLI からそのまま投稿できることを話す",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "o1GVh",
+                          "name": "Page 2",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "JtEOo",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 2",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "スライドの作り方"
+                                },
+                                "D6HOm": {
+                                  "content": "--- で区切るだけ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d1FVkf",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "xFkMdj",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "4Olan0",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "--- の区切りだけでページが増えることをデモする",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "dxUYkv",
+                          "name": "Page 3",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "ogYXgG",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 3",
+                              "width": 772,
+                              "height": 434,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "投稿する"
+                                },
+                                "D6HOm": {
+                                  "content": "qiita publish で Qiita へ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ZJi0Ss",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ESBwwo",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "OKgVE8",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "qiita publish の実演。投稿後の URL を見せる",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "FJc81",
+      "x": 1028,
+      "y": 6058,
+      "name": "/slides/[id] - not found state(1920px)",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "h0U6j",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1080
+        },
+        {
+          "type": "frame",
+          "id": "veBRQ",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "DK9QP",
+              "name": "Error Message Wrapper (実装 show.tsx:117 は <p css={errorMessageStyle}> だけ。ツールバーも白カードも出ない)",
+              "width": "fill_container",
+              "layout": "vertical",
+              "padding": "$lib:getSpace(2)",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "NBzsW",
+                  "name": "Message（実装の errorMessageStyle は lineHeight 未指定で、継承値 1.8 が効く。subhead2 のトークン 1.6 ではなく body の 1.8 を当てている）",
+                  "fill": "$lib:high-emphasis-text",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "ファイルが見つかりません",
+                  "lineHeight": "$lib:text-body1-line-height",
+                  "textAlign": "center",
+                  "fontFamily": "$lib:font-sans",
+                  "fontSize": "$lib:text-subhead2",
+                  "fontWeight": "$lib:fontWeight-normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "REGq9",
+      "x": 3248,
+      "y": 0,
+      "name": "/slides/[id] - ideal state(1199px)",
+      "clip": true,
+      "width": 1199,
+      "height": 1846,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "NB8cE",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1846
+        },
+        {
+          "type": "frame",
+          "id": "afT7Q",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "p9XcA",
+              "name": "Toolbar",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "gqrxQ",
+                  "name": "Toolbar Bar",
+                  "width": "fill_container",
+                  "padding": [
+                    "$lib:getSpace(1)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ILPVJ",
+                      "name": "File Path",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UUQdh",
+                          "name": "Path",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "slides/my-slide.md",
+                          "lineHeight": "$lib:text-body2-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "J3N3M",
+                          "name": "Copy Button",
+                          "width": 24,
+                          "height": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ReWFR",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "content_copy",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fDMK6I",
+                      "name": "Actions",
+                      "gap": "$lib:getSpace(1)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "yu9km6",
+                          "name": "スライドショーを開始 Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:gray-border",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "pWClup",
+                              "name": "Label",
+                              "fill": "$lib:gray-text",
+                              "content": "スライドショーを開始",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "vxHBxT",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "slideshow",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:gray-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "wFMOCx",
+                          "name": "スライドを投稿する Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:green-60",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "gaqLkK",
+                              "name": "Label",
+                              "fill": "$lib:green-text",
+                              "content": "スライドを投稿する",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "jwGz4U",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "publish",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:green-text"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "lPhNI",
+                  "name": "Toolbar Rule",
+                  "fill": "$lib:divider",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "t9JoC",
+              "name": "Contents Wrapper",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "suFBI",
+                  "name": "Card",
+                  "width": 807,
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3)",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "I1z3q",
+                      "name": "SlideInfo (collapsed)",
+                      "width": "fill_container",
+                      "fill": "$lib:background",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "padding": [
+                        "$lib:getSpace(3/2)",
+                        "$lib:getSpace(2)"
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "l6GmH5",
+                          "name": "Summary (実装 SlideInfo.tsx:83-91 は justify-content も gap も無く、::after のシェブロンがラベル直後に付く)",
+                          "width": "fill_container",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "G8sltP",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スライド情報",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "r28nt",
+                              "name": "Toggle Icon (実装は expand_less / pen に字形が無く keyboard_arrow_up で代用)",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "keyboard_arrow_up",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "J9lW8X",
+                      "name": "Viewer",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(3)",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "iW14L",
+                          "name": "Page 1",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "OOFLF",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 1",
+                              "width": 759,
+                              "height": 427,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "o6so6J",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "2uioto",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Tz3M3f",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Marp のスライドを Qiita CLI からそのまま投稿できることを話す",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "b6tH2",
+                          "name": "Page 2",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "z0s3D",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 2",
+                              "width": 759,
+                              "height": 427,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "スライドの作り方"
+                                },
+                                "D6HOm": {
+                                  "content": "--- で区切るだけ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lrHVc8",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "94IKt2",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "FkJqhs",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "--- の区切りだけでページが増えることをデモする",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fmG4up",
+                          "name": "Page 3",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "Iz5l37",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 3",
+                              "width": 759,
+                              "height": 427,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "投稿する"
+                                },
+                                "D6HOm": {
+                                  "content": "qiita publish で Qiita へ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "8pRfGl",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "F5otgX",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "oVPExq",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "qiita publish の実演。投稿後の URL を見せる",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "z9MwTG",
+      "x": 3248,
+      "y": 1946,
+      "name": "/slides/[id] - slide info open state(1199px)",
+      "clip": true,
+      "width": 1199,
+      "height": 1958,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "WGMOL",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1958
+        },
+        {
+          "type": "frame",
+          "id": "oaQvZ",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "TY6bo",
+              "name": "Toolbar",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "H9kByQ",
+                  "name": "Toolbar Bar",
+                  "width": "fill_container",
+                  "padding": [
+                    "$lib:getSpace(1)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "uMzqu",
+                      "name": "File Path",
+                      "gap": "$lib:getSpace(1/2)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "MsPUP",
+                          "name": "Path",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "slides/my-slide.md",
+                          "lineHeight": "$lib:text-body2-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body2",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hqw4m",
+                          "name": "Copy Button",
+                          "width": 24,
+                          "height": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "lgwOM",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "content_copy",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NdDPwD",
+                      "name": "Actions",
+                      "gap": "$lib:getSpace(1)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "iR2nhE",
+                          "name": "スライドショーを開始 Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:gray-border",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "7JKciS",
+                              "name": "Label",
+                              "fill": "$lib:gray-text",
+                              "content": "スライドショーを開始",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "2OqKcd",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "slideshow",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:gray-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "D9Ivvq",
+                          "name": "スライドを投稿する Button（実装 Header.tsx:146-156 は padding 4/16 + border 2px が padding の外に付いて高さ 41px になる。pen の stroke は strokeAlignment inner でレイアウトに寄与しないため padding を 6/18 にして寸法を合わせた）",
+                          "fill": "$lib:surface",
+                          "cornerRadius": 8,
+                          "stroke": "$lib:green-60",
+                          "strokeWidth": 2,
+                          "strokeAlignment": "inner",
+                          "gap": "$lib:getSpace(1/2)",
+                          "padding": [
+                            6,
+                            18
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "XDsjPW",
+                              "name": "Label",
+                              "fill": "$lib:green-text",
+                              "content": "スライドを投稿する",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "vWAfHo",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "publish",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:green-text"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "ktj0v",
+                  "name": "Toolbar Rule",
+                  "fill": "$lib:divider",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UHXqI",
+              "name": "Contents Wrapper",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "CA9Fr",
+                  "name": "Card",
+                  "width": 807,
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(3)",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "jvS24",
+                      "name": "SlideInfo (open)",
+                      "width": "fill_container",
+                      "fill": "$lib:background",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "padding": [
+                        "$lib:getSpace(3/2)",
+                        "$lib:getSpace(2)"
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Zjxcp",
+                          "name": "Summary (実装 SlideInfo.tsx:83-91 は justify-content も gap も無く、::after のシェブロンがラベル直後に付く)",
+                          "width": "fill_container",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "fqP5h",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "スライド情報",
+                              "lineHeight": "$lib:text-body1-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body1",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "hlLow",
+                              "name": "Toggle Icon (実装は expand_more / pen に字形が無く keyboard_arrow_down で代用)",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "keyboard_arrow_down",
+                              "library": "Material Symbols Outlined",
+                              "weight": 500,
+                              "fill": "$lib:high-emphasis-text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pkkdp",
+                          "name": "Info Row / タイトル",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "RQR8c",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "タイトル",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "aIBdx",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Qiita のスライド機能",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xFWfM",
+                          "name": "Info Row / テーマ",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "padding": [
+                            "$lib:getSpace(1/2)",
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "OZczz",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "テーマ",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "E5cCeD",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "未設定",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "gC9VO",
+                          "name": "Info Row / スライドの状態",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "padding": [
+                            "$lib:getSpace(1/2)",
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ECkg6",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "スライドの状態",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Oc4YN",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "未投稿",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lYdgr",
+                          "name": "Info Row / ページ数",
+                          "width": "fill_container",
+                          "gap": "$lib:getSpace(3/2)",
+                          "padding": [
+                            "$lib:getSpace(1/2)",
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Lm3lZ",
+                              "name": "Label",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": 100,
+                              "content": "ページ数",
+                              "lineHeight": "$lib:text-body2-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-semibold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "SBWB6",
+                              "name": "Value",
+                              "fill": "$lib:high-emphasis-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "3",
+                              "lineHeight": "$lib:text-body2-dense-line-height",
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": "$lib:text-body2",
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "G8qytK",
+                      "name": "Viewer",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(3)",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "AcXf2",
+                          "name": "Page 1",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "T135y",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 1",
+                              "width": 759,
+                              "height": 427,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "7WQLIj",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "RB6R7J",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Am7Ugw",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Marp のスライドを Qiita CLI からそのまま投稿できることを話す",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "jOcx3p",
+                          "name": "Page 2",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "qBAVPY",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 2",
+                              "width": 759,
+                              "height": 427,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "スライドの作り方"
+                                },
+                                "D6HOm": {
+                                  "content": "--- で区切るだけ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "TxS5v6",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "71b54H",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "cSkdm8",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "--- の区切りだけでページが増えることをデモする",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ziihD9",
+                          "name": "Page 3",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": "$lib:getSpace(2)",
+                          "children": [
+                            {
+                              "id": "J6vhIQ",
+                              "type": "ref",
+                              "ref": "N3tg9B",
+                              "name": "Slide 3",
+                              "width": 759,
+                              "height": 427,
+                              "stroke": "$lib:divider",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
+                              "descendants": {
+                                "ZZdKa": {
+                                  "content": "投稿する"
+                                },
+                                "D6HOm": {
+                                  "content": "qiita publish で Qiita へ"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "pU90d9",
+                              "name": "Speaker Note",
+                              "context": "speaker_note は src/lib/view-models/slides.ts:3 でページごとの string[] として API から渡っているが、MarpSlideViewer/index.tsx は現状これを描画していない。ここは「追加したい」という指摘を受けて描いた提案で、本文はリポジトリから読めないため代表値。",
+                              "width": "fill_container",
+                              "fill": "$lib:surface-variant",
+                              "cornerRadius": 8,
+                              "layout": "vertical",
+                              "gap": "$lib:getSpace(1)",
+                              "padding": [
+                                "$lib:getSpace(3/2)",
+                                "$lib:getSpace(2)"
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "GAF2Qi",
+                                  "name": "Label",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スピーカーノート",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-bold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "P1okEA",
+                                  "name": "Body",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "qiita publish の実演。投稿後の URL を見せる",
+                                  "lineHeight": "$lib:text-body1-line-height",
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": "$lib:text-body1",
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "h3hn1",
+      "x": 5622,
+      "y": 1180,
+      "name": "/slides/[id]?present=1 - start slideshow modal state(1920px)",
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:scrim",
+      "layout": "vertical",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "d6S8j",
+          "name": "Modal",
+          "width": 760,
+          "fill": "$lib:surface",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "iQfv7",
+              "name": "Container",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": "$lib:getSpace(2)",
+              "padding": "$lib:getSpace(4)",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "M0q9bT",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "An3pS",
+                      "name": "Title",
+                      "fill": "$lib:high-emphasis-text",
+                      "content": "スライドショーを開始する",
+                      "lineHeight": "$lib:text-subhead2-line-height",
+                      "fontFamily": "$lib:font-sans",
+                      "fontSize": "$lib:text-subhead2",
+                      "fontWeight": "$lib:fontWeight-bold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bU134",
+                      "name": "Help Link",
+                      "gap": "$lib:getSpace(1/4)",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "w1HlmT",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "help",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:blue-text"
+                        },
+                        {
+                          "type": "text",
+                          "id": "bJexB",
+                          "name": "Label",
+                          "fill": "$lib:blue-text",
+                          "content": "ヘルプ",
+                          "lineHeight": "$lib:text-body1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body1",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "h3C2A",
+                  "name": "Body",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$lib:getSpace(2)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "O7UtQ",
+                      "name": "Fieldset / Presentation Options",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(1)",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cSx8V",
+                          "name": "Legend",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "スライドショーの表示オプション",
+                          "lineHeight": "$lib:text-body1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body1",
+                          "fontWeight": "$lib:fontWeight-bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "x3vWB",
+                          "name": "Checkbox Row",
+                          "gap": "$lib:getSpace(1)",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "IEkx6",
+                              "type": "ref",
+                              "ref": "lib:E9u4G",
+                              "name": "Checkbox / Checked",
+                              "descendants": {
+                                "lib:HRbeQ": {
+                                  "geometry": "M7.775 13.55l7.15-7.15-1.575-1.55-5.575 5.575-2.775-2.775-1.55 1.55 4.325 4.35z m-5.5 4.85c-0.63333 0-1.17067-0.22067-1.612-0.662-0.442-0.442-0.663-0.97967-0.663-1.613l0-13.85c0-0.63333 0.221-1.171 0.663-1.613 0.44133-0.44133 0.97867-0.662 1.612-0.662l13.85 0c0.63333 0 1.171 0.22067 1.613 0.662 0.44133 0.442 0.662 0.97967 0.662 1.613l0 13.85c0 0.63333-0.22067 1.171-0.662 1.613-0.442 0.44133-0.97967 0.662-1.613 0.662l-13.85 0z m0-2.275l13.85 0 0-13.85-13.85 0 0 13.85z",
+                                  "fill": "$lib:blue-text-dim"
+                                },
+                                "lib:gh1Nh": {
+                                  "content": "スライドショーを全画面に表示する"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NaAwt",
+                      "name": "Fieldset / Slideshow Display",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(1)",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "voquT",
+                          "name": "Legend",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "スライドショー",
+                          "lineHeight": "$lib:text-body1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body1",
+                          "fontWeight": "$lib:fontWeight-bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "E3ComZ",
+                          "name": "Radio Row / Current",
+                          "gap": "$lib:getSpace(1)",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "bpahL",
+                              "type": "ref",
+                              "ref": "lib:lKaRH",
+                              "name": "Radio / Checked",
+                              "descendants": {
+                                "lib:HpumF": {
+                                  "geometry": "M10.2 15.2c1.38333 0 2.56267-0.48767 3.538-1.463 0.97467-0.97467 1.462-2.15367 1.462-3.537 0-1.38333-0.48733-2.56267-1.462-3.538-0.97533-0.97467-2.15467-1.462-3.538-1.462-1.38333 0-2.56233 0.48733-3.537 1.462-0.97533 0.97533-1.463 2.15467-1.463 3.538 0 1.38333 0.48767 2.56233 1.463 3.537 0.97467 0.97533 2.15367 1.463 3.537 1.463z m0 5.2c-1.41667 0-2.746-0.26667-3.988-0.8-1.24133-0.53333-2.32033-1.25833-3.237-2.175-0.91667-0.91667-1.64167-1.99567-2.175-3.237-0.53333-1.242-0.8-2.57133-0.8-3.988 0-1.41667 0.26667-2.746 0.8-3.988 0.53333-1.24133 1.25833-2.32033 2.175-3.237 0.91667-0.91667 1.99567-1.64167 3.237-2.175 1.242-0.53333 2.57133-0.8 3.988-0.8 1.41667 0 2.746 0.26667 3.988 0.8 1.24133 0.53333 2.32033 1.25833 3.237 2.175 0.91667 0.91667 1.64167 1.99567 2.175 3.237 0.53333 1.242 0.8 2.57133 0.8 3.988 0 1.41667-0.26667 2.746-0.8 3.988-0.53333 1.24133-1.25833 2.32033-2.175 3.237-0.91667 0.91667-1.99567 1.64167-3.237 2.175-1.242 0.53333-2.57133 0.8-3.988 0.8z m0-2.275c2.21667 0 4.09167-0.76667 5.625-2.3 1.53333-1.53333 2.3-3.40833 2.3-5.625 0-2.21667-0.76667-4.09167-2.3-5.625-1.53333-1.53333-3.40833-2.3-5.625-2.3-2.21667 0-4.09167 0.76667-5.625 2.3-1.53333 1.53333-2.3 3.40833-2.3 5.625 0 2.21667 0.76667 4.09167 2.3 5.625 1.53333 1.53333 3.40833 2.3 5.625 2.3z",
+                                  "fill": "$lib:blue-text-dim"
+                                },
+                                "lib:k5IwD": {
+                                  "content": "DELL P2417H（現在）"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "X5X516",
+                          "name": "Radio Row / External",
+                          "gap": "$lib:getSpace(1)",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "i8Njd2",
+                              "type": "ref",
+                              "ref": "lib:lKaRH",
+                              "name": "Radio / Default",
+                              "descendants": {
+                                "lib:k5IwD": {
+                                  "content": "内蔵Retinaディスプレイ"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aGnYE",
+                      "name": "Fieldset / Presenter View Display",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$lib:getSpace(1)",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JcWWy",
+                          "name": "Legend",
+                          "fill": "$lib:high-emphasis-text",
+                          "content": "プレゼンタービュー",
+                          "lineHeight": "$lib:text-body1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body1",
+                          "fontWeight": "$lib:fontWeight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "EYYQh",
+                          "name": "Note",
+                          "fill": "$lib:medium-emphasis-text",
+                          "content": "スライドショーを全画面表示する場合、プレゼンタービューは別のディスプレイが必要です。",
+                          "lineHeight": "$lib:text-body1-line-height",
+                          "fontFamily": "$lib:font-sans",
+                          "fontSize": "$lib:text-body1",
+                          "fontWeight": "$lib:fontWeight-normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "tvYFH",
+                          "name": "Radio Row / None",
+                          "gap": "$lib:getSpace(1)",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "VUDAn",
+                              "type": "ref",
+                              "ref": "lib:lKaRH",
+                              "name": "Radio / Checked",
+                              "descendants": {
+                                "lib:HpumF": {
+                                  "geometry": "M10.2 15.2c1.38333 0 2.56267-0.48767 3.538-1.463 0.97467-0.97467 1.462-2.15367 1.462-3.537 0-1.38333-0.48733-2.56267-1.462-3.538-0.97533-0.97467-2.15467-1.462-3.538-1.462-1.38333 0-2.56233 0.48733-3.537 1.462-0.97533 0.97533-1.463 2.15467-1.463 3.538 0 1.38333 0.48767 2.56233 1.463 3.537 0.97467 0.97533 2.15367 1.463 3.537 1.463z m0 5.2c-1.41667 0-2.746-0.26667-3.988-0.8-1.24133-0.53333-2.32033-1.25833-3.237-2.175-0.91667-0.91667-1.64167-1.99567-2.175-3.237-0.53333-1.242-0.8-2.57133-0.8-3.988 0-1.41667 0.26667-2.746 0.8-3.988 0.53333-1.24133 1.25833-2.32033 2.175-3.237 0.91667-0.91667 1.99567-1.64167 3.237-2.175 1.242-0.53333 2.57133-0.8 3.988-0.8 1.41667 0 2.746 0.26667 3.988 0.8 1.24133 0.53333 2.32033 1.25833 3.237 2.175 0.91667 0.91667 1.64167 1.99567 2.175 3.237 0.53333 1.242 0.8 2.57133 0.8 3.988 0 1.41667-0.26667 2.746-0.8 3.988-0.53333 1.24133-1.25833 2.32033-2.175 3.237-0.91667 0.91667-1.99567 1.64167-3.237 2.175-1.242 0.53333-2.57133 0.8-3.988 0.8z m0-2.275c2.21667 0 4.09167-0.76667 5.625-2.3 1.53333-1.53333 2.3-3.40833 2.3-5.625 0-2.21667-0.76667-4.09167-2.3-5.625-1.53333-1.53333-3.40833-2.3-5.625-2.3-2.21667 0-4.09167 0.76667-5.625 2.3-1.53333 1.53333-2.3 3.40833-2.3 5.625 0 2.21667 0.76667 4.09167 2.3 5.625 1.53333 1.53333 3.40833 2.3 5.625 2.3z",
+                                  "fill": "$lib:blue-text-dim"
+                                },
+                                "lib:k5IwD": {
+                                  "content": "表示しない"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Xf7tN",
+                          "name": "Radio Row / Current (disabled)",
+                          "gap": "$lib:getSpace(1)",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "fnTlL",
+                              "type": "ref",
+                              "ref": "lib:lKaRH",
+                              "name": "Radio / Disabled",
+                              "descendants": {
+                                "lib:HpumF": {
+                                  "fill": "$lib:disabled-text"
+                                },
+                                "lib:k5IwD": {
+                                  "content": "DELL P2417H（現在）",
+                                  "fill": "$lib:disabled-text"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "e9Xv7B",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "gap": "$lib:getSpace(2)",
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "id": "MZBWe",
+                      "type": "ref",
+                      "ref": "lib:rRXOh",
+                      "name": "Cancel Button",
+                      "padding": [
+                        "$lib:getSpace(1/2)",
+                        "$lib:getSpace(2)"
+                      ],
+                      "height": 34,
+                      "descendants": {
+                        "lib:N87bo": {
+                          "content": "キャンセル"
+                        }
+                      }
+                    },
+                    {
+                      "id": "s5LTY",
+                      "type": "ref",
+                      "ref": "lib:aAXqR",
+                      "name": "Start Button",
+                      "height": 34,
+                      "descendants": {
+                        "lib:J2Bdc": {
+                          "content": "スライドショーを開始"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "imports": {
+    "lib": "../../shared-library.lib.pen"
+  },
+  "fileToken": "be3519eb-0383-428c-a582-2c0f7135ba15"
+}
