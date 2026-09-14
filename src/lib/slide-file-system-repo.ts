@@ -1,13 +1,21 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { Slide } from "../qiita-api";
 import { slidesShowPath } from "./qiita-cli-url";
-import { QiitaSlide } from "./entities/qiita-slide";
+import { buildSlideMarkdown, QiitaSlide } from "./entities/qiita-slide";
 
 // Fields qiita-cli itself manages in the frontmatter. Everything else is an
 // arbitrary Marp directive (theme, paginate, header, class, ...) that we don't
 // need to know the shape of — it's just carried through to the slide preview.
 const RESERVED_FRONTMATTER_KEYS = ["title", "id", "updated_at", "description"];
+
+const extractMarpFrontmatter = (data: { [key: string]: unknown }) =>
+  Object.fromEntries(
+    Object.entries(data).filter(
+      ([key]) => !RESERVED_FRONTMATTER_KEYS.includes(key),
+    ),
+  );
 
 class SlideFileContent {
   public readonly title: string;
@@ -42,11 +50,6 @@ class SlideFileContent {
 
   static read(fileContent: string): SlideFileContent {
     const { data, content } = matter(fileContent);
-    const marpFrontmatter = Object.fromEntries(
-      Object.entries(data).filter(
-        ([key]) => !RESERVED_FRONTMATTER_KEYS.includes(key),
-      ),
-    );
 
     return new SlideFileContent({
       rawBody: content,
@@ -54,7 +57,7 @@ class SlideFileContent {
       id: data.id,
       updatedAt: data.updated_at,
       description: data.description,
-      marpFrontmatter,
+      marpFrontmatter: extractMarpFrontmatter(data),
     });
   }
 
@@ -69,6 +72,32 @@ class SlideFileContent {
     });
   }
 
+  static fromSlide(slide: Slide): SlideFileContent {
+    // Qiita stores the markdown we posted verbatim, so splitting it back into
+    // the body and the Marp directives is the exact inverse of toMarkdown().
+    const { data, content } = matter(slide.markdown);
+
+    return new SlideFileContent({
+      rawBody: content,
+      title: slide.title,
+      id: slide.uuid,
+      updatedAt: slide.updated_at,
+      description: slide.description_markdown,
+      marpFrontmatter: extractMarpFrontmatter(data),
+    });
+  }
+
+  static fromQiitaSlide(slide: QiitaSlide): SlideFileContent {
+    return new SlideFileContent({
+      rawBody: slide.rawBody,
+      title: slide.title,
+      id: slide.id,
+      updatedAt: slide.updatedAt,
+      description: slide.description,
+      marpFrontmatter: slide.marpFrontmatter,
+    });
+  }
+
   toSaveFormat(): string {
     return matter.stringify(this.rawBody, {
       title: this.title,
@@ -77,6 +106,33 @@ class SlideFileContent {
       description: this.description,
       ...this.marpFrontmatter,
     });
+  }
+
+  toMarkdown(): string {
+    return buildSlideMarkdown(this.rawBody, this.marpFrontmatter);
+  }
+
+  equals(aFileContent: SlideFileContent | null): boolean {
+    if (aFileContent === null) {
+      return false;
+    }
+
+    // Compare the markdown Qiita stores instead of rawBody: gray-matter
+    // normalizes the trailing newline, so comparing rawBody byte-wise reports
+    // a diff right after a successful publish. `id` is not compared because
+    // it is transit, as with articles. A missing local `description` means the
+    // same as the empty string the API returns.
+    return (
+      this.title === aFileContent.title &&
+      (this.description ?? "") === (aFileContent.description ?? "") &&
+      this.toMarkdown() === aFileContent.toMarkdown()
+    );
+  }
+
+  isOlderThan(otherFileContent: SlideFileContent | null): boolean {
+    if (!this.updatedAt || !otherFileContent?.updatedAt) return false;
+
+    return new Date(this.updatedAt) < new Date(otherFileContent.updatedAt);
   }
 }
 
@@ -96,11 +152,21 @@ export class SlideFileSystemRepo {
 
   private async setUp() {
     await fs.mkdir(this.getRootPath(), { recursive: true });
+    await fs.mkdir(this.getRemotePath(), { recursive: true });
   }
 
   public getRootPath() {
     const subdir = "slides";
     return path.join(this.dataRootDir, subdir);
+  }
+
+  private getRemotePath() {
+    const subdir = ".remote";
+    return path.join(this.getRootPath(), subdir);
+  }
+
+  private getRootOrRemotePath(remote: boolean = false) {
+    return remote ? this.getRemotePath() : this.getRootPath();
   }
 
   private getFilename(basename: string) {
@@ -111,17 +177,22 @@ export class SlideFileSystemRepo {
     return filename.replace(/\.md$/, "");
   }
 
-  private getFilePath(basename: string) {
-    return path.join(this.getRootPath(), this.getFilename(basename));
+  private getFilePath(basename: string, remote: boolean = false) {
+    return path.join(
+      this.getRootOrRemotePath(remote),
+      this.getFilename(basename),
+    );
   }
 
-  private async getSlideFilenames() {
+  private async getSlideFilenames(remote: boolean = false) {
     return (
       await fs.readdir(
-        this.getRootPath(),
+        this.getRootOrRemotePath(remote),
         SlideFileSystemRepo.fileSystemOptions(),
       )
-    ).filter((filename) => /\.md$/.test(filename));
+    ).filter(
+      (filename) => /\.md$/.test(filename) && !filename.startsWith(".remote/"),
+    );
   }
 
   private async getNewBasename() {
@@ -152,16 +223,66 @@ export class SlideFileSystemRepo {
 
   private async getSlideData(
     filename: string,
+    remote: boolean = false,
   ): Promise<SlideFileContent | null> {
     try {
       const fileContent = await fs.readFile(
-        path.join(this.getRootPath(), filename),
+        path.join(this.getRootOrRemotePath(remote), filename),
         SlideFileSystemRepo.fileSystemOptions(),
       );
       return SlideFileContent.read(fileContent);
     } catch {
       return null;
     }
+  }
+
+  private async setSlideData(
+    fileContent: SlideFileContent,
+    remote: boolean = false,
+    basename: string | null = null,
+  ) {
+    if (!fileContent.id) {
+      return;
+    }
+    await fs.writeFile(
+      this.getFilePath(basename || fileContent.id, remote),
+      fileContent.toSaveFormat(),
+      SlideFileSystemRepo.fileSystemOptions(),
+    );
+  }
+
+  private async syncSlide(slide: Slide, forceUpdate: boolean) {
+    const fileContent = SlideFileContent.fromSlide(slide);
+
+    const localSlide = await this.loadSlideById(slide.uuid);
+    const localFileContent = localSlide
+      ? SlideFileContent.fromQiitaSlide(localSlide)
+      : null;
+    const remoteFileContent = await this.getSlideData(
+      this.getFilename(slide.uuid),
+      true,
+    );
+
+    await this.setSlideData(fileContent, true);
+    if (
+      localFileContent === null ||
+      remoteFileContent?.equals(localFileContent) ||
+      forceUpdate
+    ) {
+      await this.setSlideData(fileContent, false, localSlide?.name ?? null);
+    }
+  }
+
+  async saveSlides(slides: Slide[], forceUpdate: boolean = false) {
+    const promises = slides.map(async (slide) => {
+      await this.syncSlide(slide, forceUpdate);
+    });
+
+    await Promise.all(promises);
+  }
+
+  async saveSlide(slide: Slide, forceUpdate: boolean = false) {
+    await this.syncSlide(slide, forceUpdate);
   }
 
   async loadSlides(): Promise<QiitaSlide[]> {
@@ -183,24 +304,12 @@ export class SlideFileSystemRepo {
       return null;
     }
 
-    const slidePath = this.getFilePath(basename);
     const fileContent = await this.getSlideData(filename);
     if (!fileContent) {
       return null;
     }
 
-    return new QiitaSlide({
-      id: fileContent.id,
-      title: fileContent.title,
-      description: fileContent.description,
-      rawBody: fileContent.rawBody,
-      updatedAt: fileContent.updatedAt,
-      name: basename,
-      slidesShowPath: this.generateSlidesShowPath(fileContent.id, basename),
-      published: fileContent.id !== null,
-      slidePath,
-      marpFrontmatter: fileContent.marpFrontmatter,
-    });
+    return await this.buildSlide(fileContent, basename);
   }
 
   async loadSlideById(id: string): Promise<QiitaSlide | null> {
@@ -209,7 +318,7 @@ export class SlideFileSystemRepo {
     for (const filename of filenames) {
       const fileContent = await this.getSlideData(filename);
       if (fileContent?.id === id) {
-        return this.loadSlideByBasename(this.parseFilename(filename));
+        return await this.buildSlide(fileContent, this.parseFilename(filename));
       }
     }
 
@@ -227,6 +336,30 @@ export class SlideFileSystemRepo {
     const data = newFileContent.toSaveFormat();
     await fs.writeFile(filepath, data, SlideFileSystemRepo.fileSystemOptions());
     return basename;
+  }
+
+  private async buildSlide(
+    fileContent: SlideFileContent,
+    basename: string,
+  ): Promise<QiitaSlide> {
+    const remoteFileContent = fileContent.id
+      ? await this.getSlideData(this.getFilename(fileContent.id), true)
+      : null;
+
+    return new QiitaSlide({
+      id: fileContent.id,
+      title: fileContent.title,
+      description: fileContent.description,
+      rawBody: fileContent.rawBody,
+      updatedAt: fileContent.updatedAt,
+      name: basename,
+      slidesShowPath: this.generateSlidesShowPath(fileContent.id, basename),
+      published: fileContent.id !== null,
+      modified: !fileContent.equals(remoteFileContent),
+      isOlderThanRemote: fileContent.isOlderThan(remoteFileContent),
+      slidePath: this.getFilePath(basename),
+      marpFrontmatter: fileContent.marpFrontmatter,
+    });
   }
 
   // FIXME: Move outside of "repository"

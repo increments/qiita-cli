@@ -24,6 +24,7 @@ const slidesIndex = async (req: Express.Request, res: Express.Response) => {
         updated_at: slide.updatedAt,
         slides_show_path: slide.slidesShowPath,
         published: slide.published,
+        modified: slide.modified,
       };
 
       if (slide.published) {
@@ -77,7 +78,7 @@ const slidesShow = async (req: Express.Request, res: Express.Response) => {
   }
 
   const qiitaApi = await getQiitaApiInstance();
-  const { pages, css } = await qiitaApi.previewSlide(slide.toPreviewMarkdown());
+  const { pages, css } = await qiitaApi.previewSlide(slide.toMarkdown());
 
   const result: SlidesShowViewModel = {
     title: slide.title,

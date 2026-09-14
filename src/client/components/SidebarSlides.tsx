@@ -63,8 +63,13 @@ export const SidebarSlides = ({ slides, sortType, slideState }: Props) => {
         {[...slides].sort(compare[sortType]).map((slide) => (
           <li key={slide.slides_show_path}>
             <Link css={slidesListItemStyle} to={slide.slides_show_path}>
-              <MaterialSymbol>slideshow</MaterialSymbol>
-              <span css={slideListItemInnerStyle}>{slide.title}</span>
+              <MaterialSymbol fill={slide.modified && slideState !== "Draft"}>
+                slideshow
+              </MaterialSymbol>
+              <span css={slideListItemInnerStyle}>
+                {slide.modified && slideState !== "Draft" && "(差分あり) "}
+                {slide.title}
+              </span>
             </Link>
           </li>
         ))}

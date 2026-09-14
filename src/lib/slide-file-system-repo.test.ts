@@ -1,12 +1,76 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
+import type { Slide } from "../qiita-api";
 import { SlideFileSystemRepo } from "./slide-file-system-repo";
 
 jest.mock("node:fs/promises");
 
 afterEach(() => {
-  jest.clearAllMocks();
+  jest.resetAllMocks();
 });
+
+const dataRootDir = "data_root_dir";
+const rootPath = `${dataRootDir}/slides`;
+const remotePath = `${rootPath}/.remote`;
+
+// `description` is null and the body has no trailing newline: both are
+// normalized away when the markdown is rebuilt, so this file must still
+// count as identical to the mirror below.
+const localFile = `---
+title: Title
+id: slide-uuid
+updated_at: '2026-09-01T00:00:00+09:00'
+description: null
+marp: true
+---
+# Title`;
+
+const mirrorFile = `---
+title: Title
+id: slide-uuid
+updated_at: '2026-09-01T00:00:00+09:00'
+description: ''
+marp: true
+---
+# Title
+`;
+
+const buildRemoteSlide = (overrides: Partial<Slide> = {}): Slide => ({
+  uuid: "slide-uuid",
+  title: "Title",
+  markdown: "---\nmarp: true\n---\n# Title\n",
+  description_markdown: "",
+  created_at: "2026-09-01T00:00:00+09:00",
+  updated_at: "2026-09-01T00:00:00+09:00",
+  url: "https://qiita.com/Qiita/slides/slide-uuid",
+  ...overrides,
+});
+
+const mockFileSystem = (files: Record<string, string>) => {
+  const mockFs = fs as jest.Mocked<typeof fs>;
+  mockFs.readdir.mockImplementation(async (dirPath) => {
+    const prefix = `${dirPath}/`;
+    return Object.keys(files)
+      .filter((filePath) => filePath.startsWith(prefix))
+      .map((filePath) => filePath.slice(prefix.length)) as any[];
+  });
+  mockFs.readFile.mockImplementation(async (filePath) => {
+    const content = files[filePath as string];
+    if (content === undefined) {
+      throw new Error(`ENOENT: ${filePath}`);
+    }
+    return content;
+  });
+  mockFs.writeFile.mockImplementation(async (filePath, data) => {
+    files[filePath as string] = data as string;
+  });
+  return files;
+};
+
+const writtenPaths = () =>
+  (fs as jest.Mocked<typeof fs>).writeFile.mock.calls.map((call) =>
+    String(call[0]),
+  );
 
 describe("SlideFileSystemRepo", () => {
   describe("constructor", () => {
@@ -74,7 +138,7 @@ description: null
         });
       });
 
-      it("forwards arbitrary marp frontmatter (beyond theme) to the preview markdown", () => {
+      it("forwards arbitrary marp frontmatter (beyond theme) to the slide markdown", () => {
         const dataRootDir = "data_root_dir";
         const instance = new SlideFileSystemRepo({ dataRootDir });
         const basename = "abc";
@@ -91,7 +155,7 @@ paginate: true
 # Title`);
 
         return instance.loadSlideByBasename(basename).then((slide) => {
-          const { data, content } = matter(slide!.toPreviewMarkdown());
+          const { data, content } = matter(slide!.toMarkdown());
           expect(data).toStrictEqual({ theme: "gaia", paginate: true });
           expect(content.trim()).toBe("# Title");
         });
@@ -225,7 +289,9 @@ description: null
   describe("createSlide()", () => {
     it("saves slide with a default basename when basename is not given", () => {
       const mockFs = fs as jest.Mocked<typeof fs>;
-      mockFs.readdir.mockResolvedValueOnce([]);
+      // createSlide() reads the directory twice: once to pick a free
+      // basename and once to check the basename is not taken.
+      mockFs.readdir.mockResolvedValue([]);
       mockFs.writeFile.mockResolvedValueOnce();
 
       const dataRootDir = "data_root_dir";
@@ -254,6 +320,137 @@ description: null
         expect(mockFs.writeFile.mock.calls[0][0]).toBe(
           `${dataRootDir}/${subDir}/deck.md`,
         );
+      });
+    });
+  });
+
+  describe("with the .remote mirror", () => {
+    describe("loadSlides()", () => {
+      it("excludes the mirrored files from the slide list", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile,
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.loadSlides().then((slides) => {
+          expect(slides.map((slide) => slide.name)).toStrictEqual(["deck"]);
+        });
+      });
+    });
+
+    describe("loadSlideByBasename()", () => {
+      it("reports no diff when the local slide matches the mirror", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile,
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.loadSlideByBasename("deck").then((slide) => {
+          expect(slide?.modified).toBe(false);
+          expect(slide?.isOlderThanRemote).toBe(false);
+        });
+      });
+
+      it("reports a diff when the local body differs from the mirror", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile.replace("# Title", "# Edited"),
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.loadSlideByBasename("deck").then((slide) => {
+          expect(slide?.modified).toBe(true);
+        });
+      });
+
+      it("reports a diff when a marp directive differs from the mirror", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile.replace(
+            "marp: true",
+            "marp: true\ntheme: gaia",
+          ),
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.loadSlideByBasename("deck").then((slide) => {
+          expect(slide?.modified).toBe(true);
+        });
+      });
+
+      it("reports being older than the remote when the mirror is newer", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile,
+          [`${remotePath}/slide-uuid.md`]: mirrorFile.replace(
+            "2026-09-01",
+            "2026-09-02",
+          ),
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.loadSlideByBasename("deck").then((slide) => {
+          expect(slide?.isOlderThanRemote).toBe(true);
+        });
+      });
+    });
+
+    describe("saveSlides()", () => {
+      it("updates both the mirror and the local file when they match", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile,
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance
+          .saveSlides([buildRemoteSlide({ title: "Renamed" })])
+          .then(() => {
+            expect(writtenPaths()).toStrictEqual([
+              `${remotePath}/slide-uuid.md`,
+              `${rootPath}/deck.md`,
+            ]);
+          });
+      });
+
+      it("updates only the mirror when the local file has local edits", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile.replace("# Title", "# Edited"),
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.saveSlides([buildRemoteSlide()]).then(() => {
+          expect(writtenPaths()).toStrictEqual([`${remotePath}/slide-uuid.md`]);
+        });
+      });
+
+      it("overwrites the local edits when forceUpdate is given", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile.replace("# Title", "# Edited"),
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.saveSlides([buildRemoteSlide()], true).then(() => {
+          expect(writtenPaths()).toStrictEqual([
+            `${remotePath}/slide-uuid.md`,
+            `${rootPath}/deck.md`,
+          ]);
+        });
+      });
+
+      it("names a slide that has no local file after its uuid", () => {
+        mockFileSystem({});
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.saveSlides([buildRemoteSlide()]).then(() => {
+          expect(writtenPaths()).toStrictEqual([
+            `${remotePath}/slide-uuid.md`,
+            `${rootPath}/slide-uuid.md`,
+          ]);
+        });
       });
     });
   });
