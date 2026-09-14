@@ -1,13 +1,107 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
-import { Item } from "../qiita-api";
+import { Item, QiitaApi } from "../qiita-api";
+import { QiitaItem } from "./entities/qiita-item";
 import { FileSystemRepo } from "./file-system-repo";
 
 jest.mock("node:fs/promises");
 
 afterEach(() => {
-  jest.clearAllMocks();
+  jest.resetAllMocks();
 });
+
+const dataRootDir = "data_root_dir";
+const rootPath = `${dataRootDir}/public`;
+const remotePath = `${rootPath}/.remote`;
+
+const articleFile = ({
+  id = null,
+  body = "# Title",
+  ignorePublish = "false",
+}: { id?: string | null; body?: string; ignorePublish?: string } = {}) => `---
+title: Title
+tags:
+  - qiita
+private: false
+updated_at: ''
+id: ${id === null ? "null" : id}
+organization_url_name: null
+slide: false
+ignorePublish: ${ignorePublish}
+---
+${body}
+`;
+
+const buildItem = (
+  overrides: Partial<ConstructorParameters<typeof QiitaItem>[0]> = {},
+) =>
+  new QiitaItem({
+    id: null,
+    title: "Title",
+    tags: ["qiita"],
+    secret: false,
+    updatedAt: "",
+    organizationUrlName: null,
+    rawBody: "# Title",
+    name: "article",
+    modified: true,
+    isOlderThanRemote: false,
+    itemsShowPath: "/items/show?basename=article",
+    published: false,
+    itemPath: `${rootPath}/article.md`,
+    slide: false,
+    ignorePublish: false,
+    postingCampaignUuid: null,
+    agreedPostingCampaignTerm: false,
+    ...overrides,
+  });
+
+const buildResponseItem = (overrides: Partial<Item> = {}): Item => ({
+  id: "new-item-id",
+  title: "Title",
+  body: "# Title",
+  tags: [{ name: "qiita" }],
+  private: false,
+  organization_url_name: null,
+  coediting: false,
+  created_at: "2026-09-01T00:00:00+09:00",
+  updated_at: "2026-09-01T00:00:00+09:00",
+  slide: false,
+  posting_campaign_uuid: null,
+  ...overrides,
+});
+
+const mockFileSystem = (files: Record<string, string>) => {
+  const mockFs = fs as jest.Mocked<typeof fs>;
+  mockFs.readdir.mockImplementation(async (dirPath) => {
+    const prefix = `${dirPath}/`;
+    return Object.keys(files)
+      .filter((filePath) => filePath.startsWith(prefix))
+      .map((filePath) => filePath.slice(prefix.length)) as any[];
+  });
+  mockFs.readFile.mockImplementation(async (filePath) => {
+    const content = files[filePath as string];
+    if (content === undefined) {
+      throw new Error(`ENOENT: ${filePath}`);
+    }
+    return content;
+  });
+  mockFs.writeFile.mockImplementation(async (filePath, data) => {
+    files[filePath as string] = data as string;
+  });
+  return files;
+};
+
+const writtenPaths = () =>
+  (fs as jest.Mocked<typeof fs>).writeFile.mock.calls.map((call) =>
+    String(call[0]),
+  );
+
+const buildQiitaApi = () =>
+  ({
+    postItem: jest.fn(),
+    patchItem: jest.fn(),
+  }) as unknown as jest.Mocked<QiitaApi>;
 
 describe("FileSystemRepo", () => {
   describe("constructor", () => {
@@ -378,7 +472,9 @@ slide: false
     describe("when basename is not given", () => {
       it("saves item", () => {
         const mockFs = fs as jest.Mocked<typeof fs>;
-        mockFs.readdir.mockResolvedValueOnce([]);
+        // createItem() reads the directory twice: once to pick a free
+        // basename and once to check the basename is not taken.
+        mockFs.readdir.mockResolvedValue([]);
         mockFs.writeFile.mockResolvedValueOnce();
 
         const dataRootDir = "data_root_dir";
@@ -547,6 +643,126 @@ updated
             );
           });
         });
+      });
+    });
+  });
+
+  describe("loadPublishTargets()", () => {
+    it("returns the unpublished articles and the ones that differ from the mirror", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: articleFile(),
+        [`${rootPath}/edited.md`]: articleFile({
+          id: "edited-id",
+          body: "# Edited",
+        }),
+        [`${remotePath}/edited-id.md`]: articleFile({ id: "edited-id" }),
+        [`${rootPath}/synced.md`]: articleFile({ id: "synced-id" }),
+        [`${remotePath}/synced-id.md`]: articleFile({ id: "synced-id" }),
+      });
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      const targets = await instance.loadPublishTargets();
+
+      expect(targets.map((item) => item.name).sort()).toStrictEqual([
+        "draft",
+        "edited",
+      ]);
+    });
+
+    it("skips an article whose ignorePublish is exactly true", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: articleFile({ ignorePublish: "true" }),
+      });
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadPublishTargets()).toStrictEqual([]);
+    });
+
+    it("does not skip an article whose ignorePublish is a truthy non-boolean", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: articleFile({ ignorePublish: "'yes'" }),
+      });
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      const targets = await instance.loadPublishTargets();
+
+      expect(targets.map((item) => item.name)).toStrictEqual(["draft"]);
+    });
+  });
+
+  describe("publishItem()", () => {
+    describe("when the item has no id yet", () => {
+      it("posts it, writes the uuid back and then refreshes the mirror", async () => {
+        const files = mockFileSystem({
+          [`${rootPath}/article.md`]: articleFile(),
+        });
+        const qiitaApi = buildQiitaApi();
+        const responseItem = buildResponseItem();
+        qiitaApi.postItem.mockResolvedValue(responseItem);
+        const instance = new FileSystemRepo({ dataRootDir });
+
+        const result = await instance.publishItem(buildItem(), qiitaApi);
+
+        expect(qiitaApi.postItem).toHaveBeenCalledWith({
+          rawBody: "# Title",
+          tags: ["qiita"],
+          title: "Title",
+          isPrivate: false,
+          organizationUrlName: null,
+          slide: false,
+          postingCampaignUuid: null,
+          agreedPostingCampaignTerm: false,
+        });
+        expect(qiitaApi.patchItem).not.toHaveBeenCalled();
+        expect(result).toStrictEqual({ item: responseItem, posted: true });
+        // The uuid reaches the local file before the mirror is refreshed, so
+        // the mirror is written next to that basename instead of a new file.
+        expect(writtenPaths()).toStrictEqual([
+          `${rootPath}/article.md`,
+          `${remotePath}/new-item-id.md`,
+          `${rootPath}/article.md`,
+        ]);
+        expect(matter(files[`${rootPath}/article.md`]).data.id).toBe(
+          "new-item-id",
+        );
+      });
+    });
+
+    describe("when the item already has an id", () => {
+      it("patches it and refreshes the mirror without rewriting the uuid", async () => {
+        mockFileSystem({
+          [`${rootPath}/article.md`]: articleFile({ id: "existing-item-id" }),
+          [`${remotePath}/existing-item-id.md`]: articleFile({
+            id: "existing-item-id",
+          }),
+        });
+        const qiitaApi = buildQiitaApi();
+        const responseItem = buildResponseItem({ id: "existing-item-id" });
+        qiitaApi.patchItem.mockResolvedValue(responseItem);
+        const instance = new FileSystemRepo({ dataRootDir });
+
+        const result = await instance.publishItem(
+          buildItem({ id: "existing-item-id", published: true }),
+          qiitaApi,
+        );
+
+        expect(qiitaApi.patchItem).toHaveBeenCalledWith({
+          rawBody: "# Title",
+          tags: ["qiita"],
+          title: "Title",
+          uuid: "existing-item-id",
+          isPrivate: false,
+          organizationUrlName: null,
+          slide: false,
+          postingCampaignUuid: null,
+          agreedPostingCampaignTerm: false,
+        });
+        expect(qiitaApi.postItem).not.toHaveBeenCalled();
+        expect(result).toStrictEqual({ item: responseItem, posted: false });
+        expect(writtenPaths()).toStrictEqual([
+          `${remotePath}/existing-item-id.md`,
+          `${rootPath}/article.md`,
+        ]);
       });
     });
   });
