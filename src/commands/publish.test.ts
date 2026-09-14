@@ -1,9 +1,13 @@
 import type { FileSystemRepo } from "../lib/file-system-repo";
+import type { SlideFileSystemRepo } from "../lib/slide-file-system-repo";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
+import { getSlideFileSystemRepoIfEnabled } from "../lib/get-slide-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
+import { syncSlidesFromQiita } from "../lib/sync-slides-from-qiita";
 import { QiitaItem } from "../lib/entities/qiita-item";
-import type { QiitaApi, Item } from "../qiita-api";
+import { QiitaSlide } from "../lib/entities/qiita-slide";
+import type { QiitaApi, Item, Slide } from "../qiita-api";
 import {
   QiitaForbiddenError,
   QiitaForbiddenOrBadRequestError,
@@ -11,8 +15,10 @@ import {
 import { publish } from "./publish";
 
 jest.mock("../lib/get-file-system-repo");
+jest.mock("../lib/get-slide-file-system-repo");
 jest.mock("../lib/get-qiita-api-instance");
 jest.mock("../lib/sync-articles-from-qiita");
+jest.mock("../lib/sync-slides-from-qiita");
 // chalk is ESM-only; stub it so the dynamic import() in the error path
 // works under ts-jest's CommonJS transform.
 jest.mock(
@@ -27,8 +33,12 @@ jest.mock(
 );
 
 const mockGetFileSystemRepo = jest.mocked(getFileSystemRepo);
+const mockGetSlideFileSystemRepoIfEnabled = jest.mocked(
+  getSlideFileSystemRepoIfEnabled,
+);
 const mockGetQiitaApiInstance = jest.mocked(getQiitaApiInstance);
 const mockSyncArticlesFromQiita = jest.mocked(syncArticlesFromQiita);
+const mockSyncSlidesFromQiita = jest.mocked(syncSlidesFromQiita);
 
 describe("publish", () => {
   const fileSystemRepo = {
@@ -37,7 +47,13 @@ describe("publish", () => {
     publishItem: jest.fn(),
   } as unknown as jest.Mocked<FileSystemRepo>;
 
-  const qiitaApi = {} as unknown as jest.Mocked<QiitaApi>;
+  const slideFileSystemRepo = {
+    loadPublishTargets: jest.fn(),
+    loadSlideByBasename: jest.fn(),
+    publishSlide: jest.fn(),
+  } as unknown as jest.Mocked<SlideFileSystemRepo>;
+
+  const qiitaApi = {} as jest.Mocked<QiitaApi>;
 
   class ProcessExitError extends Error {
     constructor(public readonly code: string | number | null | undefined) {
@@ -88,15 +104,48 @@ describe("publish", () => {
     ...overrides,
   });
 
+  const buildSlide = (
+    overrides: Partial<ConstructorParameters<typeof QiitaSlide>[0]> = {},
+  ) =>
+    new QiitaSlide({
+      id: null,
+      title: "Title",
+      description: null,
+      rawBody: "# Title",
+      updatedAt: null,
+      name: "deck",
+      slidesShowPath: "/slides/show?basename=deck",
+      published: false,
+      modified: true,
+      isOlderThanRemote: false,
+      slidePath: "/data_root_dir/slides/deck.md",
+      marpFrontmatter: { marp: true, theme: "gaia" },
+      ...overrides,
+    });
+
+  const buildResponseSlide = (overrides: Partial<Slide> = {}): Slide => ({
+    uuid: "new-uuid",
+    title: "Title",
+    markdown: "---\nmarp: true\ntheme: gaia\n---\n# Title\n",
+    description_markdown: "",
+    created_at: "2026-09-01T00:00:00+09:00",
+    updated_at: "2026-09-01T00:00:00+09:00",
+    url: "https://qiita.com/Qiita/slides/new-uuid",
+    ...overrides,
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
 
     mockGetFileSystemRepo.mockResolvedValue(fileSystemRepo);
+    mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(slideFileSystemRepo);
     mockGetQiitaApiInstance.mockResolvedValue(qiitaApi);
     mockSyncArticlesFromQiita.mockResolvedValue();
-
+    mockSyncSlidesFromQiita.mockResolvedValue();
     fileSystemRepo.loadPublishTargets.mockResolvedValue([]);
     fileSystemRepo.loadItemByBasename.mockResolvedValue(null);
+    slideFileSystemRepo.loadPublishTargets.mockResolvedValue([]);
+    slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(null);
 
     exitSpy = jest
       .spyOn(process, "exit")
@@ -149,7 +198,32 @@ describe("publish", () => {
     });
   });
 
-  describe("with --all", () => {
+  describe("when both an article and a slide are given by basename", () => {
+    it("publishes both", async () => {
+      fileSystemRepo.loadItemByBasename.mockImplementation(async (basename) =>
+        basename === "article" ? buildItem() : null,
+      );
+      slideFileSystemRepo.loadSlideByBasename.mockImplementation(
+        async (basename) => (basename === "deck" ? buildSlide() : null),
+      );
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem(),
+        posted: true,
+      });
+      slideFileSystemRepo.publishSlide.mockResolvedValue({
+        slide: buildResponseSlide(),
+        posted: true,
+      });
+
+      await publish(["article", "deck"]);
+
+      expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+      expect(slideFileSystemRepo.publishSlide).toHaveBeenCalledTimes(1);
+      expect(exitSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("with --all for articles", () => {
     it("publishes every target the repository reports", async () => {
       fileSystemRepo.loadPublishTargets.mockResolvedValue([
         buildItem({ name: "item-a", id: "id-a", published: true }),
@@ -165,13 +239,6 @@ describe("publish", () => {
       expect(
         fileSystemRepo.publishItem.mock.calls.map(([item]) => item.name),
       ).toStrictEqual(["item-a", "item-c"]);
-    });
-
-    it("logs and exits 0 when there is nothing to publish", async () => {
-      await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
-
-      expect(logSpy).toHaveBeenCalledWith("Nothing to publish");
-      expect(exitSpy).toHaveBeenCalledWith(0);
     });
   });
 
@@ -246,14 +313,155 @@ describe("publish", () => {
     });
   });
 
-  describe("when the basename is not found", () => {
-    it("reports it as not found and exits 1", async () => {
-      fileSystemRepo.loadItemByBasename.mockResolvedValue(null);
+  describe("when a new slide (id is null) is given by basename", () => {
+    it("publishes it through the repository and reports it as posted", async () => {
+      const slide = buildSlide();
+      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(slide);
+      slideFileSystemRepo.publishSlide.mockResolvedValue({
+        slide: buildResponseSlide(),
+        posted: true,
+      });
 
-      await expect(publish(["unknown"])).rejects.toThrow(ProcessExitError);
+      await publish(["deck"]);
 
-      expect(errorSpy).toHaveBeenCalledWith("Error: 'unknown' is not found");
+      expect(slideFileSystemRepo.publishSlide).toHaveBeenCalledWith(
+        slide,
+        qiitaApi,
+      );
+      expect(logSpy).toHaveBeenCalledWith("Posted (slide): deck -> new-uuid");
+      expect(exitSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when an already published slide (id is present) is given by basename", () => {
+    it("publishes it through the repository and reports it as updated", async () => {
+      const slide = buildSlide({ id: "existing-uuid", published: true });
+      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(slide);
+      slideFileSystemRepo.publishSlide.mockResolvedValue({
+        slide: buildResponseSlide({ uuid: "existing-uuid" }),
+        posted: false,
+      });
+
+      await publish(["deck"]);
+
+      expect(slideFileSystemRepo.publishSlide).toHaveBeenCalledWith(
+        slide,
+        qiitaApi,
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        "Updated (slide): deck -> existing-uuid",
+      );
+      expect(exitSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("with --all for slides", () => {
+    it("publishes every target the repository reports", async () => {
+      slideFileSystemRepo.loadPublishTargets.mockResolvedValue([
+        buildSlide({ name: "deck-a", id: "id-a", published: true }),
+        buildSlide({ name: "deck-c" }),
+      ]);
+      slideFileSystemRepo.publishSlide.mockResolvedValue({
+        slide: buildResponseSlide(),
+        posted: true,
+      });
+
+      await publish(["--all"]);
+
+      expect(
+        slideFileSystemRepo.publishSlide.mock.calls.map(
+          ([slide]) => slide.name,
+        ),
+      ).toStrictEqual(["deck-a", "deck-c"]);
+      expect(exitSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when the slide is older than the remote", () => {
+    it("exits with an error and does not call the API", async () => {
+      const slide = buildSlide({
+        id: "existing-uuid",
+        published: true,
+        isOlderThanRemote: true,
+      });
+      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(slide);
+
+      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
       expect(exitSpy).toHaveBeenCalledWith(1);
+      expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+    });
+
+    it("publishes anyway with --force", async () => {
+      const slide = buildSlide({
+        id: "existing-uuid",
+        published: true,
+        isOlderThanRemote: true,
+      });
+      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(slide);
+      slideFileSystemRepo.publishSlide.mockResolvedValue({
+        slide: buildResponseSlide({ uuid: "existing-uuid" }),
+        posted: false,
+      });
+
+      await publish(["deck", "--force"]);
+
+      expect(slideFileSystemRepo.publishSlide).toHaveBeenCalledTimes(1);
+      expect(exitSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when the same basename exists both as an article and a slide", () => {
+    it("exits with an error before publishing anything", async () => {
+      fileSystemRepo.loadItemByBasename.mockResolvedValue({
+        name: "deck",
+      } as never);
+      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(buildSlide());
+
+      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("deck"));
+      expect(exitSpy).toHaveBeenCalledWith(1);
+      expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when the slide has no title", () => {
+    it("exits with a validation error and does not call the API", async () => {
+      const slide = buildSlide({ title: "" });
+      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(slide);
+
+      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+      expect(exitSpy).toHaveBeenCalledWith(1);
+      expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when there is nothing to publish", () => {
+    it("logs and exits 0", async () => {
+      await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
+
+      expect(logSpy).toHaveBeenCalledWith("Nothing to publish");
+      expect(exitSpy).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe("when the slide repository is unavailable", () => {
+    beforeEach(() => {
+      mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(null);
+    });
+
+    it("does not sync slides", async () => {
+      await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
+
+      expect(mockSyncSlidesFromQiita).not.toHaveBeenCalled();
+    });
+
+    it("reports a slide basename as not found", async () => {
+      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+      expect(errorSpy).toHaveBeenCalledWith("Error: 'deck' is not found");
     });
   });
 });

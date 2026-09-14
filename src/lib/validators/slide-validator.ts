@@ -1,6 +1,15 @@
+import { checkSlideFrontmatterType } from "../check-slide-frontmatter-type";
+
 interface Slide {
   title: string | null;
   rawBody: string | null;
+}
+
+interface PublishSlide extends Slide {
+  id: string | null;
+  updatedAt: string | null;
+  description: string | null;
+  isOlderThanRemote: boolean;
 }
 
 interface Validator {
@@ -11,6 +20,25 @@ interface Validator {
 export const validateSlide = (slide: Slide): string[] => {
   const validators = [validateSlideTitle, validateSlideRawBody];
   return getValidationErrorMessages(slide, validators);
+};
+
+// The frontmatter type check, the value validation and the staleness check are
+// reported one tier at a time, as with articles.
+export const validatePublishSlide = (
+  slide: PublishSlide,
+  { force }: { force: boolean },
+): string[] => {
+  const frontmatterErrors = checkSlideFrontmatterType(slide);
+  if (frontmatterErrors.length > 0) return frontmatterErrors;
+
+  const validationErrors = validateSlide(slide);
+  if (validationErrors.length > 0) return validationErrors;
+
+  if (!force && slide.isOlderThanRemote) {
+    return ["内容がQiita上のスライドより古い可能性があります"];
+  }
+
+  return [];
 };
 
 const validateSlideTitle: Validator = {
