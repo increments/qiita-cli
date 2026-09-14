@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
-import type { Slide } from "../qiita-api";
+import type { QiitaApi, Slide } from "../qiita-api";
+import { QiitaSlide } from "./entities/qiita-slide";
 import { SlideFileSystemRepo } from "./slide-file-system-repo";
 
 jest.mock("node:fs/promises");
@@ -71,6 +72,31 @@ const writtenPaths = () =>
   (fs as jest.Mocked<typeof fs>).writeFile.mock.calls.map((call) =>
     String(call[0]),
   );
+
+const buildQiitaSlide = (
+  overrides: Partial<ConstructorParameters<typeof QiitaSlide>[0]> = {},
+) =>
+  new QiitaSlide({
+    id: null,
+    title: "Title",
+    description: null,
+    rawBody: "# Title",
+    updatedAt: null,
+    name: "deck",
+    slidesShowPath: "/slides/show?basename=deck",
+    published: false,
+    modified: true,
+    isOlderThanRemote: false,
+    slidePath: `${rootPath}/deck.md`,
+    marpFrontmatter: { marp: true },
+    ...overrides,
+  });
+
+const buildQiitaApi = () =>
+  ({
+    postSlide: jest.fn(),
+    patchSlide: jest.fn(),
+  }) as unknown as jest.Mocked<QiitaApi>;
 
 describe("SlideFileSystemRepo", () => {
   describe("constructor", () => {
@@ -320,6 +346,163 @@ description: null
         expect(mockFs.writeFile.mock.calls[0][0]).toBe(
           `${dataRootDir}/${subDir}/deck.md`,
         );
+      });
+    });
+  });
+
+  describe("updateSlideFrontmatter()", () => {
+    it("writes back id and updated_at while keeping the marp directives", () => {
+      const dataRootDir = "data_root_dir";
+      const subDir = "slides";
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+      const basename = "deck";
+
+      const mockFs = fs as jest.Mocked<typeof fs>;
+      mockFs.readdir.mockResolvedValue([`${basename}.md`] as any[]);
+      mockFs.readFile.mockResolvedValue(`---
+title: Title
+id: null
+description: null
+marp: true
+theme: gaia
+---
+body`);
+      mockFs.writeFile.mockResolvedValueOnce();
+
+      return instance
+        .updateSlideFrontmatter(basename, {
+          id: "new-id",
+          updatedAt: "2026-08-24T00:00:00+09:00",
+        })
+        .then(() => {
+          expect(mockFs.writeFile.mock.calls[0][0]).toBe(
+            `${dataRootDir}/${subDir}/${basename}.md`,
+          );
+          const { data, content } = matter(
+            mockFs.writeFile.mock.calls[0][1] as string,
+          );
+          expect(data.id).toBe("new-id");
+          expect(data.updated_at).toBe("2026-08-24T00:00:00+09:00");
+          expect(data.marp).toBe(true);
+          expect(data.theme).toBe("gaia");
+          expect(content.trim()).toBe("body");
+        });
+    });
+  });
+
+  describe("loadPublishTargets()", () => {
+    it("returns the unpublished slides and the ones that differ from the mirror", async () => {
+      mockFileSystem({
+        [`${rootPath}/draft.md`]: localFile.replace(
+          "id: slide-uuid",
+          "id: null",
+        ),
+        [`${rootPath}/edited.md`]: localFile.replace("# Title", "# Edited"),
+        [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        [`${rootPath}/synced.md`]: localFile,
+      });
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      const targets = await instance.loadPublishTargets();
+
+      expect(targets.map((slide) => slide.name).sort()).toStrictEqual([
+        "draft",
+        "edited",
+      ]);
+    });
+  });
+
+  describe("publishSlide()", () => {
+    describe("when the slide has no id yet", () => {
+      it("posts it, writes the uuid back and then refreshes the mirror", async () => {
+        const files = mockFileSystem({
+          [`${rootPath}/deck.md`]: `---
+title: Title
+id: null
+updated_at: null
+description: null
+marp: true
+---
+# Title
+`,
+        });
+        const qiitaApi = buildQiitaApi();
+        const responseSlide = buildRemoteSlide();
+        qiitaApi.postSlide.mockResolvedValue(responseSlide);
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        const result = await instance.publishSlide(buildQiitaSlide(), qiitaApi);
+
+        expect(qiitaApi.postSlide).toHaveBeenCalledWith({
+          title: "Title",
+          markdown: "---\nmarp: true\n---\n# Title\n",
+          description: "",
+        });
+        expect(qiitaApi.patchSlide).not.toHaveBeenCalled();
+        expect(result).toStrictEqual({ slide: responseSlide, posted: true });
+        // The uuid reaches the local file before the mirror is refreshed, so
+        // the sync updates deck.md instead of creating a second slide file.
+        expect(writtenPaths()).toStrictEqual([
+          `${rootPath}/deck.md`,
+          `${remotePath}/slide-uuid.md`,
+          `${rootPath}/deck.md`,
+        ]);
+        expect(Object.keys(files).sort()).toStrictEqual([
+          `${remotePath}/slide-uuid.md`,
+          `${rootPath}/deck.md`,
+        ]);
+        expect(matter(files[`${rootPath}/deck.md`]).data.id).toBe("slide-uuid");
+      });
+
+      it("normalizes a null description to an empty string", async () => {
+        mockFileSystem({ [`${rootPath}/deck.md`]: localFile });
+        const qiitaApi = buildQiitaApi();
+        qiitaApi.postSlide.mockResolvedValue(buildRemoteSlide());
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        await instance.publishSlide(
+          buildQiitaSlide({ description: null }),
+          qiitaApi,
+        );
+
+        expect(qiitaApi.postSlide).toHaveBeenCalledWith(
+          expect.objectContaining({ description: "" }),
+        );
+      });
+    });
+
+    describe("when the slide already has an id", () => {
+      it("patches it and refreshes the mirror without rewriting the uuid", async () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile,
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const qiitaApi = buildQiitaApi();
+        const responseSlide = buildRemoteSlide();
+        qiitaApi.patchSlide.mockResolvedValue(responseSlide);
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        const result = await instance.publishSlide(
+          buildQiitaSlide({
+            id: "slide-uuid",
+            published: true,
+            description: "An example description",
+          }),
+          qiitaApi,
+        );
+
+        expect(qiitaApi.patchSlide).toHaveBeenCalledWith({
+          uuid: "slide-uuid",
+          title: "Title",
+          markdown: "---\nmarp: true\n---\n# Title\n",
+          description: "An example description",
+        });
+        expect(qiitaApi.postSlide).not.toHaveBeenCalled();
+        expect(result).toStrictEqual({ slide: responseSlide, posted: false });
+        expect(writtenPaths()).toStrictEqual([
+          `${remotePath}/slide-uuid.md`,
+          `${rootPath}/deck.md`,
+        ]);
       });
     });
   });
