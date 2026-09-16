@@ -16,6 +16,7 @@ export type SlideViewModel = {
   updated_at: string | null;
   slides_show_path: string;
   published: boolean;
+  modified: boolean;
 };
 
 export type SlidesIndexViewModel = {
