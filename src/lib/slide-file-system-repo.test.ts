@@ -351,7 +351,7 @@ description: null
   });
 
   describe("updateSlideFrontmatter()", () => {
-    it("writes back id and updated_at while keeping the marp directives", () => {
+    it("writes back id and updated_at while keeping the marp directives", async () => {
       const dataRootDir = "data_root_dir";
       const subDir = "slides";
       const instance = new SlideFileSystemRepo({ dataRootDir });
@@ -369,24 +369,22 @@ theme: gaia
 body`);
       mockFs.writeFile.mockResolvedValueOnce();
 
-      return instance
-        .updateSlideFrontmatter(basename, {
-          id: "new-id",
-          updatedAt: "2026-08-24T00:00:00+09:00",
-        })
-        .then(() => {
-          expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-            `${dataRootDir}/${subDir}/${basename}.md`,
-          );
-          const { data, content } = matter(
-            mockFs.writeFile.mock.calls[0][1] as string,
-          );
-          expect(data.id).toBe("new-id");
-          expect(data.updated_at).toBe("2026-08-24T00:00:00+09:00");
-          expect(data.marp).toBe(true);
-          expect(data.theme).toBe("gaia");
-          expect(content.trim()).toBe("body");
-        });
+      await instance.updateSlideFrontmatter(basename, {
+        id: "new-id",
+        updatedAt: "2026-08-24T00:00:00+09:00",
+      });
+
+      expect(mockFs.writeFile.mock.calls[0][0]).toBe(
+        `${dataRootDir}/${subDir}/${basename}.md`,
+      );
+      const { data, content } = matter(
+        mockFs.writeFile.mock.calls[0][1] as string,
+      );
+      expect(data.id).toBe("new-id");
+      expect(data.updated_at).toBe("2026-08-24T00:00:00+09:00");
+      expect(data.marp).toBe(true);
+      expect(data.theme).toBe("gaia");
+      expect(content.trim()).toBe("body");
     });
   });
 
