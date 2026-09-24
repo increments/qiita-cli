@@ -35,6 +35,7 @@ describe("getHelpText", () => {
     it("tells how to enable the slide feature on the new --slide line", async () => {
       const helpText = await getHelpText();
 
+      expect(helpText).toContain("実験的機能");
       expect(helpText).toContain("experimentalSlideFeatureEnabled");
     });
   });
