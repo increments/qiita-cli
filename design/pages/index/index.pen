@@ -1,0 +1,2053 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "Ix014",
+      "name": "/ - ideal state(1920px)",
+      "x": 0,
+      "y": 0,
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "Ix012",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1080
+        },
+        {
+          "type": "frame",
+          "id": "Ix013",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ix011",
+              "name": "Contents Wrapper (実装 contentsWrapperStyle: margin 16/16/0。viewport.S では 0)",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ix010",
+                  "name": "Card (実装 contentsContainerStyle: maxWidth 820 / radius 8 / padding 24)",
+                  "width": 820,
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Mb315",
+                      "name": "MdContent（実装 .it-MdContent = Qiita の article.css。デスクトップの実値をそのまま写している。フォントサイズと行送りは em ベースで デザイントークンに受け口が無いため article.css の値（トークン外）をリテラルで置いている。CSS の margin は隣接で相殺されるので、ブロック間は max(前の margin-bottom, 次の margin-top) を上 padding にしてある）",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Mb269",
+                          "name": "img（article.css: bg gray0 / box-shadow 0 0 0 1px divider / max-width 100%）（README 先頭のバナー。中身は利用者のプロジェクトの README.md 次第）（`.it-MdContent > :first-child { margin-top: 0 }` は効かない。実装は `<div class=\"it-MdContent\"><div dangerouslySetInnerHTML>` と1枚挟むので、最初の `p` の margin-top 16 が内側の div に相殺されて残る — index.tsx:61-65）",
+                          "width": "fill_container",
+                          "height": 260,
+                          "fill": "$lib:gray-0",
+                          "stroke": "$lib:divider",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb268",
+                              "name": "Placeholder Label",
+                              "fill": "$lib:medium-emphasis-text",
+                              "content": "README の画像",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 14,
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb273",
+                          "name": "h2（article.css: 1.53em=26px / lh1.4 / margin 56-0-16 / padding-bottom 4 / border-bottom 1px divider）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb271",
+                              "name": "h2 Inner",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "padding": [
+                                0,
+                                0,
+                                4,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb270",
+                                  "name": "Heading Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "Qiita CLI、Qiita Preview へようこそ！",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 26,
+                                  "fontWeight": "$lib:fontWeight-bold",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "Mb272",
+                              "name": "Border Bottom",
+                              "fill": "$lib:divider",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ],
+                          "padding": [
+                            56,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb276",
+                          "name": "p（article.css: margin 16-0）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb274",
+                              "name": "Line",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。",
+                              "lineHeight": 1.7,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 17,
+                              "fontWeight": "$lib:fontWeight-normal",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Mb275",
+                              "name": "Line",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。",
+                              "lineHeight": 1.7,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 17,
+                              "fontWeight": "$lib:fontWeight-normal",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb289",
+                          "name": "ul（article.css: padding-left 1.5em / margin 16-0 / list-style disc）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb280",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb278",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb277",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb279",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "記事を Markdown で書いてそのままプレビューできる",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb284",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb282",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb281",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb283",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スライド（Marp）にも対応している",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb288",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb286",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb285",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb287",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "投稿・更新も CLI から行える",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb293",
+                          "name": "h2（article.css: 1.53em=26px / lh1.4 / margin 56-0-16 / padding-bottom 4 / border-bottom 1px divider）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb291",
+                              "name": "h2 Inner",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "padding": [
+                                0,
+                                0,
+                                4,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb290",
+                                  "name": "Heading Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "ご利用の前に",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 26,
+                                  "fontWeight": "$lib:fontWeight-bold",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "Mb292",
+                              "name": "Border Bottom",
+                              "fill": "$lib:divider",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ],
+                          "padding": [
+                            56,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb306",
+                          "name": "p（article.css: margin 16-0。pen に折り返しの指定が無いので、run 混在の行は幅の見積もりで割っている）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb303",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb294",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "Qiita CLI、Qiita Preview を利用されたら、",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mb297",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb295",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "利用規約",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb296",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb298",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "、",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mb301",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb299",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "プライバシーポリシー",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb300",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb302",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "に同意したもの",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb305",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb304",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "とみなします。",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb308",
+                          "name": "h3（article.css: 1.29em=22px / lh1.6 / margin 40-0-16。罫線なし）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb307",
+                              "name": "Heading Text",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "こちらの記事もご覧ください",
+                              "lineHeight": 1.6,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 22,
+                              "fontWeight": "$lib:fontWeight-bold",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            }
+                          ],
+                          "padding": [
+                            40,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb314",
+                          "name": "p（article.css: margin 16-0。pen に折り返しの指定が無いので、run 混在の行は幅の見積もりで割っている）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb313",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb311",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb309",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "Qiita CLI の使い方",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb310",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb312",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": " に基本的な流れをまとめています。",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Ix019",
+      "name": "/ - not found state(1920px)",
+      "x": 0,
+      "y": 1180,
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "Ix017",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1080
+        },
+        {
+          "type": "frame",
+          "id": "Ix018",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ix016",
+              "name": "Error Message Wrapper (実装 items/index.tsx:66 は <p css={errorMessageStyle}> だけ。白カードは出ない)",
+              "width": "fill_container",
+              "layout": "vertical",
+              "padding": "$lib:getSpace(2)",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Ix015",
+                  "name": "Message（errorMessageStyle は lineHeight 未指定で継承値 1.8）",
+                  "fill": "$lib:high-emphasis-text",
+                  "content": "ファイルが見つかりません",
+                  "lineHeight": "$lib:text-body1-line-height",
+                  "fontFamily": "$lib:font-sans",
+                  "fontSize": "$lib:text-subhead2",
+                  "fontWeight": "$lib:fontWeight-normal",
+                  "textAlign": "center",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Ix024",
+      "name": "/ - unknown error state(1920px)",
+      "x": 0,
+      "y": 2360,
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "Ix022",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 1080
+        },
+        {
+          "type": "frame",
+          "id": "Ix023",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ix021",
+              "name": "Error Message Wrapper (実装 items/index.tsx:66 は <p css={errorMessageStyle}> だけ。白カードは出ない)",
+              "width": "fill_container",
+              "layout": "vertical",
+              "padding": "$lib:getSpace(2)",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Ix020",
+                  "name": "Message（errorMessageStyle は lineHeight 未指定で継承値 1.8）",
+                  "fill": "$lib:high-emphasis-text",
+                  "content": "不明なエラーが発生しました",
+                  "lineHeight": "$lib:text-body1-line-height",
+                  "fontFamily": "$lib:font-sans",
+                  "fontSize": "$lib:text-subhead2",
+                  "fontWeight": "$lib:fontWeight-normal",
+                  "textAlign": "center",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Ix038",
+      "name": "/ - ideal state(1199px)",
+      "x": 2220,
+      "y": 0,
+      "clip": true,
+      "width": 1199,
+      "height": 920,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "id": "Ix036",
+          "type": "ref",
+          "ref": "lib:Z36Vk8",
+          "name": "Sidebar",
+          "height": 920
+        },
+        {
+          "type": "frame",
+          "id": "Ix037",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ix035",
+              "name": "Contents Wrapper (実装 contentsWrapperStyle: margin 16/16/0。viewport.S では 0)",
+              "width": "fill_container",
+              "padding": [
+                "$lib:getSpace(2)",
+                "$lib:getSpace(2)",
+                0,
+                "$lib:getSpace(2)"
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ix034",
+                  "name": "Card (実装 contentsContainerStyle: maxWidth 820（この幅では効かず fill） / radius 8 / padding 24)",
+                  "width": "fill_container",
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Mb363",
+                      "name": "MdContent（実装 .it-MdContent = Qiita の article.css。デスクトップの実値をそのまま写している。フォントサイズと行送りは em ベースで デザイントークンに受け口が無いため article.css の値（トークン外）をリテラルで置いている。CSS の margin は隣接で相殺されるので、ブロック間は max(前の margin-bottom, 次の margin-top) を上 padding にしてある）",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Mb317",
+                          "name": "img（article.css: bg gray0 / box-shadow 0 0 0 1px divider / max-width 100%）（README 先頭のバナー。中身は利用者のプロジェクトの README.md 次第）（`.it-MdContent > :first-child { margin-top: 0 }` は効かない。実装は `<div class=\"it-MdContent\"><div dangerouslySetInnerHTML>` と1枚挟むので、最初の `p` の margin-top 16 が内側の div に相殺されて残る — index.tsx:61-65）",
+                          "width": "fill_container",
+                          "height": 260,
+                          "fill": "$lib:gray-0",
+                          "stroke": "$lib:divider",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb316",
+                              "name": "Placeholder Label",
+                              "fill": "$lib:medium-emphasis-text",
+                              "content": "README の画像",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 14,
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb321",
+                          "name": "h2（article.css: 1.53em=26px / lh1.4 / margin 56-0-16 / padding-bottom 4 / border-bottom 1px divider）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb319",
+                              "name": "h2 Inner",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "padding": [
+                                0,
+                                0,
+                                4,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb318",
+                                  "name": "Heading Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "Qiita CLI、Qiita Preview へようこそ！",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 26,
+                                  "fontWeight": "$lib:fontWeight-bold",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "Mb320",
+                              "name": "Border Bottom",
+                              "fill": "$lib:divider",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ],
+                          "padding": [
+                            56,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb324",
+                          "name": "p（article.css: margin 16-0）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb322",
+                              "name": "Line",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。",
+                              "lineHeight": 1.7,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 17,
+                              "fontWeight": "$lib:fontWeight-normal",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Mb323",
+                              "name": "Line",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。",
+                              "lineHeight": 1.7,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 17,
+                              "fontWeight": "$lib:fontWeight-normal",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb337",
+                          "name": "ul（article.css: padding-left 1.5em / margin 16-0 / list-style disc）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb328",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb326",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb325",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb327",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "記事を Markdown で書いてそのままプレビューできる",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb332",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb330",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb329",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb331",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スライド（Marp）にも対応している",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb336",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb334",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb333",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb335",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "投稿・更新も CLI から行える",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb341",
+                          "name": "h2（article.css: 1.53em=26px / lh1.4 / margin 56-0-16 / padding-bottom 4 / border-bottom 1px divider）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb339",
+                              "name": "h2 Inner",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "padding": [
+                                0,
+                                0,
+                                4,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb338",
+                                  "name": "Heading Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "ご利用の前に",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 26,
+                                  "fontWeight": "$lib:fontWeight-bold",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "Mb340",
+                              "name": "Border Bottom",
+                              "fill": "$lib:divider",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ],
+                          "padding": [
+                            56,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb354",
+                          "name": "p（article.css: margin 16-0。pen に折り返しの指定が無いので、run 混在の行は幅の見積もりで割っている）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb351",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb342",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "Qiita CLI、Qiita Preview を利用されたら、",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mb345",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb343",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "利用規約",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb344",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb346",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "、",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mb349",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb347",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "プライバシーポリシー",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb348",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb350",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "に同意したも",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb353",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb352",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "のとみなします。",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb356",
+                          "name": "h3（article.css: 1.29em=22px / lh1.6 / margin 40-0-16。罫線なし）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb355",
+                              "name": "Heading Text",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "こちらの記事もご覧ください",
+                              "lineHeight": 1.6,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 22,
+                              "fontWeight": "$lib:fontWeight-bold",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            }
+                          ],
+                          "padding": [
+                            40,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb362",
+                          "name": "p（article.css: margin 16-0。pen に折り返しの指定が無いので、run 混在の行は幅の見積もりで割っている）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb361",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb359",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb357",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "Qiita CLI の使い方",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb358",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb360",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": " に基本的な流れをまとめています。",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Ix057",
+      "name": "/ - ideal state(375px)",
+      "x": 3719,
+      "y": 0,
+      "clip": true,
+      "width": 375,
+      "height": 1172,
+      "fill": "$lib:background",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Ix056",
+          "name": "Contents",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ix055",
+              "name": "Toolbar (実装 HeaderIndex。mobileSize = 幅 <= 769 のときだけ出る)",
+              "width": "fill_container",
+              "fill": "$lib:surface",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ix053",
+                  "name": "Toolbar Bar",
+                  "width": "fill_container",
+                  "padding": [
+                    "$lib:getSpace(1)",
+                    "$lib:getSpace(2)"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Ix051",
+                      "name": "Menu Button",
+                      "width": 40,
+                      "height": 40,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "Ix050",
+                          "name": "Icon",
+                          "width": 24,
+                          "height": 24,
+                          "icon": "menu",
+                          "library": "Material Symbols Outlined",
+                          "weight": 500,
+                          "fill": "$lib:high-emphasis-text"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Ix052",
+                      "name": "Logo",
+                      "width": 118,
+                      "height": 24,
+                      "fill": "$lib:surface-variant",
+                      "cornerRadius": 4,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "Ix054",
+                  "name": "Toolbar Rule",
+                  "fill": "$lib:divider",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Ix049",
+              "name": "Contents Wrapper (実装 contentsWrapperStyle: margin 16/16/0。viewport.S では 0)",
+              "width": "fill_container",
+              "padding": 0,
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ix048",
+                  "name": "Card (実装 contentsContainerStyle: maxWidth 820（この幅では効かず fill） / radius 8 / padding 24)",
+                  "width": "fill_container",
+                  "fill": "$lib:surface",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "padding": "$lib:getSpace(3)",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Mb419",
+                      "name": "MdContent（実装 .it-MdContent = Qiita の article.css。デスクトップの実値をそのまま写している。フォントサイズと行送りは em ベースで デザイントークンに受け口が無いため article.css の値（トークン外）をリテラルで置いている。CSS の margin は隣接で相殺されるので、ブロック間は max(前の margin-bottom, 次の margin-top) を上 padding にしてある）",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Mb365",
+                          "name": "img（article.css: bg gray0 / box-shadow 0 0 0 1px divider / max-width 100%）（README 先頭のバナー。中身は利用者のプロジェクトの README.md 次第）（`.it-MdContent > :first-child { margin-top: 0 }` は効かない。実装は `<div class=\"it-MdContent\"><div dangerouslySetInnerHTML>` と1枚挟むので、最初の `p` の margin-top 16 が内側の div に相殺されて残る — index.tsx:61-65）",
+                          "width": "fill_container",
+                          "height": 260,
+                          "fill": "$lib:gray-0",
+                          "stroke": "$lib:divider",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb364",
+                              "name": "Placeholder Label",
+                              "fill": "$lib:medium-emphasis-text",
+                              "content": "README の画像",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 14,
+                              "fontWeight": "$lib:fontWeight-normal"
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb369",
+                          "name": "h2（article.css: 1.53em=26px / lh1.4 / margin 56-0-16 / padding-bottom 4 / border-bottom 1px divider）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb367",
+                              "name": "h2 Inner",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "padding": [
+                                0,
+                                0,
+                                4,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb366",
+                                  "name": "Heading Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "Qiita CLI、Qiita Preview へようこそ！",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 26,
+                                  "fontWeight": "$lib:fontWeight-bold",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "Mb368",
+                              "name": "Border Bottom",
+                              "fill": "$lib:divider",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ],
+                          "padding": [
+                            56,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb372",
+                          "name": "p（article.css: margin 16-0）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb370",
+                              "name": "Line",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "Qiita CLI とは、手元の環境で記事の執筆・プレビュー・投稿ができるツールです。",
+                              "lineHeight": 1.7,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 17,
+                              "fontWeight": "$lib:fontWeight-normal",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Mb371",
+                              "name": "Line",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "Qiita CLI を使うことで、普段お使いのエディタなどを使って記事の執筆・投稿がしやすくなります。",
+                              "lineHeight": 1.7,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 17,
+                              "fontWeight": "$lib:fontWeight-normal",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb385",
+                          "name": "ul（article.css: padding-left 1.5em / margin 16-0 / list-style disc）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb376",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb374",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb373",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb375",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "記事を Markdown で書いてそのままプレビューできる",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb380",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb378",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb377",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb379",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "スライド（Marp）にも対応している",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb384",
+                              "name": "li",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb382",
+                                  "name": "Marker（article.css: ul の padding-left 1.5em = 25.5px の中に disc が入る）",
+                                  "width": 26,
+                                  "justifyContent": "center",
+                                  "alignItems": "start",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb381",
+                                      "name": "Bullet",
+                                      "fill": "$lib:high-emphasis-text",
+                                      "content": "•",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb383",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "投稿・更新も CLI から行える",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb389",
+                          "name": "h2（article.css: 1.53em=26px / lh1.4 / margin 56-0-16 / padding-bottom 4 / border-bottom 1px divider）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb387",
+                              "name": "h2 Inner",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "padding": [
+                                0,
+                                0,
+                                4,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb386",
+                                  "name": "Heading Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "ご利用の前に",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 26,
+                                  "fontWeight": "$lib:fontWeight-bold",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "Mb388",
+                              "name": "Border Bottom",
+                              "fill": "$lib:divider",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ],
+                          "padding": [
+                            56,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb408",
+                          "name": "p（article.css: margin 16-0。pen に折り返しの指定が無いので、run 混在の行は幅の見積もりで割っている）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb391",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb390",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "Qiita CLI、Qiita Preview を利用さ",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb400",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb392",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "れたら、",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mb395",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb393",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "利用規約",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb394",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb396",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "、",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mb399",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb397",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "プライバシーポ",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb398",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb405",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb403",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb401",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "リシー",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb402",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb404",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "に同意したものとみなします",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb407",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb406",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "。",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb410",
+                          "name": "h3（article.css: 1.29em=22px / lh1.6 / margin 40-0-16。罫線なし）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mb409",
+                              "name": "Heading Text",
+                              "fill": "$lib:high-emphasis-text",
+                              "content": "こちらの記事もご覧ください",
+                              "lineHeight": 1.6,
+                              "fontFamily": "$lib:font-sans",
+                              "fontSize": 22,
+                              "fontWeight": "$lib:fontWeight-bold",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container"
+                            }
+                          ],
+                          "padding": [
+                            40,
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Mb418",
+                          "name": "p（article.css: margin 16-0。pen に折り返しの指定が無いので、run 混在の行は幅の見積もりで割っている）",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Mb415",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Mb413",
+                                  "name": "Link",
+                                  "layout": "vertical",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Mb411",
+                                      "name": "Text",
+                                      "fill": "$lib:green-text",
+                                      "content": "Qiita CLI の使い方",
+                                      "lineHeight": 1.7,
+                                      "fontFamily": "$lib:font-sans",
+                                      "fontSize": 17,
+                                      "fontWeight": "$lib:fontWeight-normal"
+                                    },
+                                    {
+                                      "type": "rectangle",
+                                      "id": "Mb412",
+                                      "name": "Underline（article.css: text-decoration underline）",
+                                      "fill": "$lib:green-text",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Mb414",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": " に基本的な流れ",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mb417",
+                              "name": "Line",
+                              "width": "fill_container",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Mb416",
+                                  "name": "Text",
+                                  "fill": "$lib:high-emphasis-text",
+                                  "content": "をまとめています。",
+                                  "lineHeight": 1.7,
+                                  "fontFamily": "$lib:font-sans",
+                                  "fontSize": 17,
+                                  "fontWeight": "$lib:fontWeight-normal"
+                                }
+                              ]
+                            }
+                          ],
+                          "padding": [
+                            16,
+                            0,
+                            0,
+                            0
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "imports": {
+    "lib": "../../shared-library.lib.pen"
+  },
+  "fileToken": "0063e59a-bd40-4ae8-a056-160179d4755a"
+}
