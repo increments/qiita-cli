@@ -312,8 +312,6 @@ export class SlideFileSystemRepo {
     slide: QiitaSlide,
     qiitaApi: QiitaApi,
   ): Promise<{ slide: Slide; posted: boolean }> {
-    // The API rejects a null description with 400, and omitting the key on
-    // PATCH would keep the remote value, leaving a permanent diff.
     const params = {
       title: slide.title,
       markdown: slide.toMarkdown(),
