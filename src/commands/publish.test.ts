@@ -126,7 +126,12 @@ describe("publish", () => {
   const buildResponseSlide = (overrides: Partial<Slide> = {}): Slide => ({
     uuid: "new-uuid",
     title: "Title",
-    markdown: "---\nmarp: true\ntheme: gaia\n---\n# Title\n",
+    markdown: `---
+marp: true
+theme: gaia
+---
+# Title
+`,
     description_markdown: "",
     created_at: "2026-09-01T00:00:00+09:00",
     updated_at: "2026-09-01T00:00:00+09:00",
