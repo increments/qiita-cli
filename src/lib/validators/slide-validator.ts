@@ -9,6 +9,7 @@ interface PublishSlide extends Slide {
   id: string | null;
   updatedAt: string | null;
   description: string | null;
+  ignorePublish: boolean;
   isOlderThanRemote: boolean;
 }
 

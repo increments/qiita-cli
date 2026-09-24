@@ -120,6 +120,7 @@ describe("publish", () => {
       isOlderThanRemote: false,
       slidePath: "/data_root_dir/slides/deck.md",
       marpFrontmatter: { marp: true, theme: "gaia" },
+      ignorePublish: false,
       ...overrides,
     });
 

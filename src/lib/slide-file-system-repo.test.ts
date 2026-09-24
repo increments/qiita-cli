@@ -89,6 +89,7 @@ const buildQiitaSlide = (
     isOlderThanRemote: false,
     slidePath: `${rootPath}/deck.md`,
     marpFrontmatter: { marp: true },
+    ignorePublish: false,
     ...overrides,
   });
 
@@ -185,6 +186,25 @@ paginate: true
           expect(data).toStrictEqual({ theme: "gaia", paginate: true });
           expect(content.trim()).toBe("# Title");
         });
+      });
+
+      it("keeps ignorePublish out of the slide markdown", async () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: `---
+title: Title
+id: null
+description: null
+ignorePublish: true
+marp: true
+---
+# Title`,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        const slide = await instance.loadSlideByBasename("deck");
+
+        expect(slide?.ignorePublish).toBe(true);
+        expect(matter(slide!.toMarkdown()).data).toStrictEqual({ marp: true });
       });
 
       it("returns published slide when id is present", () => {
@@ -330,6 +350,7 @@ description: null
         );
         const { data } = matter(mockFs.writeFile.mock.calls[0][1] as string);
         expect(data.id).toBeNull();
+        expect(data.ignorePublish).toBe(false);
       });
     });
 
@@ -407,6 +428,20 @@ body`);
         "draft",
         "edited",
       ]);
+    });
+
+    it("excludes the slides with ignorePublish: true", async () => {
+      mockFileSystem({
+        [`${rootPath}/ignored.md`]: localFile.replace(
+          "id: slide-uuid",
+          "id: null\nignorePublish: true",
+        ),
+      });
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      const targets = await instance.loadPublishTargets();
+
+      expect(targets).toStrictEqual([]);
     });
   });
 
@@ -619,6 +654,30 @@ marp: true
             `${remotePath}/slide-uuid.md`,
             `${rootPath}/deck.md`,
           ]);
+        });
+      });
+
+      it("keeps ignorePublish of the local file in both the mirror and the local file", async () => {
+        const files = mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile.replace(
+            "marp: true",
+            "ignorePublish: true\nmarp: true",
+          ),
+          [`${remotePath}/slide-uuid.md`]: mirrorFile.replace(
+            "marp: true",
+            "ignorePublish: true\nmarp: true",
+          ),
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        await instance.saveSlides([buildRemoteSlide({ title: "Renamed" })]);
+
+        expect(
+          matter(files[`${remotePath}/slide-uuid.md`]).data.ignorePublish,
+        ).toBe(true);
+        expect(matter(files[`${rootPath}/deck.md`]).data).toMatchObject({
+          title: "Renamed",
+          ignorePublish: true,
         });
       });
 

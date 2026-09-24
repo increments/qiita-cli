@@ -8,7 +8,13 @@ import { buildSlideMarkdown, QiitaSlide } from "./entities/qiita-slide";
 // Fields qiita-cli itself manages in the frontmatter. Everything else is an
 // arbitrary Marp directive (theme, paginate, header, class, ...) that we don't
 // need to know the shape of — it's just carried through to the slide preview.
-const RESERVED_FRONTMATTER_KEYS = ["title", "id", "updated_at", "description"];
+const RESERVED_FRONTMATTER_KEYS = [
+  "title",
+  "id",
+  "updated_at",
+  "description",
+  "ignorePublish",
+];
 
 const extractMarpFrontmatter = (data: { [key: string]: unknown }) =>
   Object.fromEntries(
@@ -22,6 +28,7 @@ class SlideFileContent {
   public readonly id: string | null;
   public readonly updatedAt: string | null;
   public readonly description: string | null;
+  public readonly ignorePublish: boolean;
   public readonly rawBody: string;
   public readonly marpFrontmatter: Record<string, unknown>;
 
@@ -30,6 +37,7 @@ class SlideFileContent {
     id,
     updatedAt,
     description,
+    ignorePublish,
     rawBody,
     marpFrontmatter,
   }: {
@@ -37,6 +45,7 @@ class SlideFileContent {
     id: string | null;
     updatedAt: string | null;
     description: string | null;
+    ignorePublish: boolean;
     rawBody: string;
     marpFrontmatter: Record<string, unknown>;
   }) {
@@ -44,6 +53,7 @@ class SlideFileContent {
     this.id = id;
     this.updatedAt = updatedAt;
     this.description = description;
+    this.ignorePublish = ignorePublish;
     this.rawBody = rawBody;
     this.marpFrontmatter = marpFrontmatter;
   }
@@ -57,6 +67,7 @@ class SlideFileContent {
       id: data.id,
       updatedAt: data.updated_at,
       description: data.description,
+      ignorePublish: data.ignorePublish ?? false,
       marpFrontmatter: extractMarpFrontmatter(data),
     });
   }
@@ -68,11 +79,14 @@ class SlideFileContent {
       id: null,
       updatedAt: null,
       description: "",
+      ignorePublish: false,
       marpFrontmatter: { marp: true, theme: "default" },
     });
   }
 
-  static fromSlide(slide: Slide): SlideFileContent {
+  // ignorePublish is a local-only setting that Qiita does not store, so the
+  // caller passes the local value to keep it across a sync.
+  static fromSlide(slide: Slide, ignorePublish: boolean): SlideFileContent {
     // Qiita stores the markdown we posted verbatim, so splitting it back into
     // the body and the Marp directives is the exact inverse of toMarkdown().
     const { data, content } = matter(slide.markdown);
@@ -83,6 +97,7 @@ class SlideFileContent {
       id: slide.uuid,
       updatedAt: slide.updated_at,
       description: slide.description_markdown,
+      ignorePublish,
       marpFrontmatter: extractMarpFrontmatter(data),
     });
   }
@@ -94,6 +109,7 @@ class SlideFileContent {
       id: slide.id,
       updatedAt: slide.updatedAt,
       description: slide.description,
+      ignorePublish: slide.ignorePublish,
       marpFrontmatter: slide.marpFrontmatter,
     });
   }
@@ -110,6 +126,7 @@ class SlideFileContent {
       id,
       updatedAt,
       description: this.description,
+      ignorePublish: this.ignorePublish,
       rawBody: this.rawBody,
       marpFrontmatter: this.marpFrontmatter,
     });
@@ -121,6 +138,7 @@ class SlideFileContent {
       id: this.id,
       updated_at: this.updatedAt,
       description: this.description,
+      ignorePublish: this.ignorePublish,
       ...this.marpFrontmatter,
     });
   }
@@ -142,6 +160,7 @@ class SlideFileContent {
     return (
       this.title === aFileContent.title &&
       (this.description ?? "") === (aFileContent.description ?? "") &&
+      this.ignorePublish === aFileContent.ignorePublish &&
       this.toMarkdown() === aFileContent.toMarkdown()
     );
   }
@@ -269,9 +288,11 @@ export class SlideFileSystemRepo {
   }
 
   private async syncSlide(slide: Slide, forceUpdate: boolean) {
-    const fileContent = SlideFileContent.fromSlide(slide);
-
     const localSlide = await this.loadSlideById(slide.uuid);
+    const fileContent = SlideFileContent.fromSlide(
+      slide,
+      localSlide?.ignorePublish ?? false,
+    );
     const localFileContent = localSlide
       ? SlideFileContent.fromQiitaSlide(localSlide)
       : null;
@@ -305,7 +326,13 @@ export class SlideFileSystemRepo {
   async loadPublishTargets(): Promise<QiitaSlide[]> {
     const slides = await this.loadSlides();
 
-    return slides.filter((slide) => slide.modified || slide.id === null);
+    return slides.filter((slide) => {
+      // Compared strictly because this filter runs before
+      // checkSlideFrontmatterType validates ignorePublish.
+      if (slide.ignorePublish === true) return false;
+
+      return slide.modified || slide.id === null;
+    });
   }
 
   async publishSlide(
@@ -431,6 +458,7 @@ export class SlideFileSystemRepo {
       isOlderThanRemote: fileContent.isOlderThan(remoteFileContent),
       slidePath: this.getFilePath(basename),
       marpFrontmatter: fileContent.marpFrontmatter,
+      ignorePublish: fileContent.ignorePublish,
     });
   }
 

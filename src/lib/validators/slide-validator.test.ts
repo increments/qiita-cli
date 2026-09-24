@@ -59,6 +59,7 @@ describe("validatePublishSlide", () => {
     id: null,
     updatedAt: null,
     description: null,
+    ignorePublish: false,
     isOlderThanRemote: false,
   };
 
