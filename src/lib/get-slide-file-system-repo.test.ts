@@ -42,12 +42,12 @@ describe("getSlideFileSystemRepoIfEnabled", () => {
       });
     });
 
-    it("returns a repository rooted at the slide directory", async () => {
+    it("returns a repository rooted at public/ and creates public/slides/", async () => {
       const slideFileSystemRepo = await getSlideFileSystemRepoIfEnabled();
 
       expect(slideFileSystemRepo).toBeInstanceOf(SlideFileSystemRepo);
-      expect(slideFileSystemRepo?.getRootPath()).toBe("data_root_dir/slides");
-      expect(mockFs.mkdir).toHaveBeenCalledWith("data_root_dir/slides", {
+      expect(slideFileSystemRepo?.getRootPath()).toBe("data_root_dir/public");
+      expect(mockFs.mkdir).toHaveBeenCalledWith("data_root_dir/public/slides", {
         recursive: true,
       });
     });

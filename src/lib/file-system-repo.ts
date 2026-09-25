@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { Item, QiitaApi } from "../qiita-api";
 import { itemsShowPath } from "../lib/qiita-cli-url";
+import { isSlideMarkdown } from "./is-slide-markdown";
 import { QiitaItem } from "./entities/qiita-item";
 
 class FileContent {
@@ -310,6 +311,9 @@ export class FileSystemRepo {
         path.join(this.getRootOrRemotePath(remote), itemFilename),
         FileSystemRepo.fileSystemOptions(),
       );
+      if (isSlideMarkdown(fileContent)) {
+        return null;
+      }
       return FileContent.read(fileContent);
     } catch (err: any) {
       return null;
@@ -505,8 +509,8 @@ export class FileSystemRepo {
   async createItem(basename?: string) {
     basename = basename || (await this.getNewBasename());
     if (!basename) return;
-    const item = await this.loadItemByBasename(basename);
-    if (item) return;
+    const items = await this.getItemFilenames();
+    if (items.includes(this.getFilename(basename))) return;
 
     const filepath = this.getFilePath(basename);
     const newFileContent = FileContent.empty({ title: basename });

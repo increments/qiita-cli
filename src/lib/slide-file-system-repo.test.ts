@@ -11,7 +11,7 @@ afterEach(() => {
 });
 
 const dataRootDir = "data_root_dir";
-const rootPath = `${dataRootDir}/slides`;
+const rootPath = `${dataRootDir}/public`;
 const remotePath = `${rootPath}/.remote`;
 
 // `description` is null and the body has no trailing newline: both are
@@ -114,7 +114,7 @@ describe("SlideFileSystemRepo", () => {
     it("returns the root path", () => {
       const dataRootDir = "./tmp";
       const instance = new SlideFileSystemRepo({ dataRootDir });
-      expect(instance.getRootPath()).toBe(`tmp/slides`);
+      expect(instance.getRootPath()).toBe(`tmp/public`);
     });
   });
 
@@ -124,7 +124,7 @@ describe("SlideFileSystemRepo", () => {
       mockFs.readdir.mockResolvedValueOnce([]);
 
       const dataRootDir = "data_root_dir";
-      const subDir = "slides";
+      const subDir = "public";
       const instance = new SlideFileSystemRepo({ dataRootDir });
       const basename = "abc";
 
@@ -139,7 +139,7 @@ describe("SlideFileSystemRepo", () => {
     describe("when found slide", () => {
       it("returns unpublished slide when id is null", () => {
         const dataRootDir = "data_root_dir";
-        const subDir = "slides";
+        const subDir = "public";
         const instance = new SlideFileSystemRepo({ dataRootDir });
         const basename = "abc";
 
@@ -149,6 +149,7 @@ describe("SlideFileSystemRepo", () => {
 title: Title
 id: null
 description: null
+marp: true
 ---
 # Title`);
 
@@ -176,6 +177,7 @@ description: null
 title: Title
 id: null
 description: null
+marp: true
 theme: gaia
 paginate: true
 ---
@@ -183,7 +185,11 @@ paginate: true
 
         return instance.loadSlideByBasename(basename).then((slide) => {
           const { data, content } = matter(slide!.toMarkdown());
-          expect(data).toStrictEqual({ theme: "gaia", paginate: true });
+          expect(data).toStrictEqual({
+            marp: true,
+            theme: "gaia",
+            paginate: true,
+          });
           expect(content.trim()).toBe("# Title");
         });
       });
@@ -219,6 +225,7 @@ marp: true
 title: Title
 id: ${id}
 description: null
+marp: true
 ---
 # Title`);
 
@@ -248,7 +255,7 @@ description: null
     describe("when found slide", () => {
       it("returns the slide matching the id", () => {
         const dataRootDir = "data_root_dir";
-        const subDir = "slides";
+        const subDir = "public";
         const instance = new SlideFileSystemRepo({ dataRootDir });
         const id = "this_is_id";
 
@@ -264,9 +271,9 @@ description: null
         mockFs.readFile.mockImplementation(async (path) => {
           switch (path) {
             case `${dataRootDir}/${subDir}/deck-a.md`:
-              return `---\ntitle: A\nid: other-id\ndescription: null\n---\nbody a`;
+              return `---\ntitle: A\nid: other-id\ndescription: null\nmarp: true\n---\nbody a`;
             case `${dataRootDir}/${subDir}/deck-b.md`:
-              return `---\ntitle: B\nid: ${id}\ndescription: null\n---\nbody b`;
+              return `---\ntitle: B\nid: ${id}\ndescription: null\nmarp: true\n---\nbody b`;
             default:
               throw new Error(`Unexpected path: ${path}`);
           }
@@ -283,7 +290,7 @@ description: null
   describe("loadSlides()", () => {
     it("returns empty when no slides exist", () => {
       const dataRootDir = "data_root_dir";
-      const subDir = "slides";
+      const subDir = "public";
       const instance = new SlideFileSystemRepo({ dataRootDir });
 
       const mockFs = fs as jest.Mocked<typeof fs>;
@@ -303,7 +310,7 @@ description: null
 
     it("returns all slides", () => {
       const dataRootDir = "data_root_dir";
-      const subDir = "slides";
+      const subDir = "public";
       const instance = new SlideFileSystemRepo({ dataRootDir });
 
       const mockFs = fs as jest.Mocked<typeof fs>;
@@ -318,9 +325,9 @@ description: null
       mockFs.readFile.mockImplementation(async (path) => {
         switch (path) {
           case `${dataRootDir}/${subDir}/deck-a.md`:
-            return `---\ntitle: A\nid: id-a\ndescription: null\n---\nbody a`;
+            return `---\ntitle: A\nid: id-a\ndescription: null\nmarp: true\n---\nbody a`;
           case `${dataRootDir}/${subDir}/deck-b.md`:
-            return `---\ntitle: B\nid: id-b\ndescription: null\n---\nbody b`;
+            return `---\ntitle: B\nid: id-b\ndescription: null\nmarp: true\n---\nbody b`;
           default:
             throw new Error(`Unexpected path: ${path}`);
         }
@@ -341,14 +348,15 @@ description: null
       mockFs.writeFile.mockResolvedValueOnce();
 
       const dataRootDir = "data_root_dir";
-      const subDir = "slides";
+      const subDir = "public";
       const instance = new SlideFileSystemRepo({ dataRootDir });
 
       return instance.createSlide().then(() => {
         expect(mockFs.writeFile.mock.calls[0][0]).toBe(
-          `${dataRootDir}/${subDir}/newSlide001.md`,
+          `${dataRootDir}/${subDir}/slides/newSlide001.md`,
         );
         const { data } = matter(mockFs.writeFile.mock.calls[0][1] as string);
+        expect(data.title).toBe("newSlide001");
         expect(data.id).toBeNull();
         expect(data.ignorePublish).toBe(false);
       });
@@ -360,7 +368,7 @@ description: null
       mockFs.writeFile.mockResolvedValueOnce();
 
       const dataRootDir = "data_root_dir";
-      const subDir = "slides";
+      const subDir = "public";
       const instance = new SlideFileSystemRepo({ dataRootDir });
 
       return instance.createSlide("deck").then(() => {
@@ -374,7 +382,7 @@ description: null
   describe("updateSlideFrontmatter()", () => {
     it("writes back id and updated_at while keeping the marp directives", async () => {
       const dataRootDir = "data_root_dir";
-      const subDir = "slides";
+      const subDir = "public";
       const instance = new SlideFileSystemRepo({ dataRootDir });
       const basename = "deck";
 
@@ -540,6 +548,65 @@ marp: true
     });
   });
 
+  describe("with articles in the same directory", () => {
+    const articleFile = `---
+title: Article
+tags:
+  - qiita
+private: false
+updated_at: ''
+id: item-id
+organization_url_name: null
+slide: false
+ignorePublish: false
+---
+# Article
+`;
+
+    beforeEach(() => {
+      mockFileSystem({
+        [`${rootPath}/article.md`]: articleFile,
+        [`${rootPath}/deck.md`]: localFile,
+        [`${rootPath}/slides/nested-deck.md`]: localFile.replace(
+          "id: slide-uuid",
+          "id: nested-uuid",
+        ),
+        [`${remotePath}/item-id.md`]: articleFile,
+        [`${remotePath}/slide-uuid.md`]: mirrorFile,
+      });
+    });
+
+    it("lists only the slides wherever they are placed", async () => {
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      const slides = await instance.loadSlides();
+
+      expect(slides.map((slide) => slide.name).sort()).toStrictEqual([
+        "deck",
+        "slides/nested-deck",
+      ]);
+    });
+
+    it("does not load an article by its basename", async () => {
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadSlideByBasename("article")).toBeNull();
+    });
+
+    it("does not load an article by its id", async () => {
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadSlideById("item-id")).toBeNull();
+    });
+
+    it("does not overwrite an article with a new slide", async () => {
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      expect(await instance.createSlide("article")).toBeUndefined();
+      expect(fs.writeFile).not.toHaveBeenCalled();
+    });
+  });
+
   describe("with the .remote mirror", () => {
     describe("loadSlides()", () => {
       it("excludes the mirrored files from the slide list", () => {
@@ -681,16 +748,49 @@ marp: true
         });
       });
 
-      it("names a slide that has no local file after its uuid", () => {
+      it("names a slide that has no local file after its uuid under slides/", () => {
         mockFileSystem({});
         const instance = new SlideFileSystemRepo({ dataRootDir });
 
         return instance.saveSlides([buildRemoteSlide()]).then(() => {
           expect(writtenPaths()).toStrictEqual([
             `${remotePath}/slide-uuid.md`,
-            `${rootPath}/slide-uuid.md`,
+            `${rootPath}/slides/slide-uuid.md`,
           ]);
         });
+      });
+
+      it("adds marp: true when the remote markdown has no marp directive", async () => {
+        const files = mockFileSystem({});
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        await instance.saveSlides([
+          buildRemoteSlide({ markdown: "---\ntheme: gaia\n---\n# Title\n" }),
+        ]);
+
+        expect(matter(files[`${remotePath}/slide-uuid.md`]).data).toMatchObject(
+          { theme: "gaia", marp: true },
+        );
+        expect(
+          matter(files[`${rootPath}/slides/slide-uuid.md`]).data,
+        ).toMatchObject({ theme: "gaia", marp: true });
+      });
+
+      it("updates the local file placed outside slides/", () => {
+        mockFileSystem({
+          [`${rootPath}/talks/deck.md`]: localFile,
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance
+          .saveSlides([buildRemoteSlide({ title: "Renamed" })])
+          .then(() => {
+            expect(writtenPaths()).toStrictEqual([
+              `${remotePath}/slide-uuid.md`,
+              `${rootPath}/talks/deck.md`,
+            ]);
+          });
       });
     });
   });
