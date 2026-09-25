@@ -808,6 +808,13 @@ marp: true
 
       expect(await instance.loadItemByItemId("slide-uuid")).toBeNull();
     });
+
+    it("does not overwrite a slide with a new item", async () => {
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      expect(await instance.createItem("deck")).toBeUndefined();
+      expect(fs.writeFile).not.toHaveBeenCalled();
+    });
   });
 
   describe("getRootPath()", () => {

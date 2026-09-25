@@ -598,6 +598,13 @@ ignorePublish: false
 
       expect(await instance.loadSlideById("item-id")).toBeNull();
     });
+
+    it("does not overwrite an article with a new slide", async () => {
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      expect(await instance.createSlide("article")).toBeUndefined();
+      expect(fs.writeFile).not.toHaveBeenCalled();
+    });
   });
 
   describe("with the .remote mirror", () => {

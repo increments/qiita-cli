@@ -509,8 +509,8 @@ export class FileSystemRepo {
   async createItem(basename?: string) {
     basename = basename || (await this.getNewBasename());
     if (!basename) return;
-    const item = await this.loadItemByBasename(basename);
-    if (item) return;
+    const items = await this.getItemFilenames();
+    if (items.includes(this.getFilename(basename))) return;
 
     const filepath = this.getFilePath(basename);
     const newFileContent = FileContent.empty({ title: basename });

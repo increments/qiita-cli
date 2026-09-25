@@ -426,8 +426,8 @@ export class SlideFileSystemRepo {
   async createSlide(basename?: string) {
     basename = basename || (await this.getNewBasename());
     if (!basename) return;
-    const slide = await this.loadSlideByBasename(basename);
-    if (slide) return;
+    const filenames = await this.getSlideFilenames();
+    if (filenames.includes(this.getFilename(basename))) return;
 
     const filepath = this.getFilePath(basename);
     const newFileContent = SlideFileContent.empty({
