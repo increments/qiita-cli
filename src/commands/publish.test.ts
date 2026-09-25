@@ -442,6 +442,15 @@ theme: gaia
     });
   });
 
+  describe("when the basename matches neither an article nor a slide", () => {
+    it("exits with a not found error", async () => {
+      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+      expect(errorSpy).toHaveBeenCalledWith("Error: 'deck' is not found");
+      expect(exitSpy).toHaveBeenCalledWith(1);
+    });
+  });
+
   describe("when there is nothing to publish", () => {
     it("logs and exits 0", async () => {
       await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
