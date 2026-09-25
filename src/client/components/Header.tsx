@@ -291,6 +291,7 @@ const headerButtonStyle = css({
   borderRadius: 8,
   color: Colors.green80,
   display: "flex",
+  font: "inherit",
   fontWeight: Weight.bold,
   gap: `0 ${getSpace(1 / 2)}px`,
   padding: `${getSpace(1 / 2)}px ${getSpace(2)}px`,
