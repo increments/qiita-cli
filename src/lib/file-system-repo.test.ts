@@ -767,6 +767,49 @@ updated
     });
   });
 
+  describe("with slides in the same directory", () => {
+    const slideFile = `---
+title: Deck
+id: slide-uuid
+updated_at: null
+description: null
+marp: true
+---
+# Deck
+`;
+
+    beforeEach(() => {
+      mockFileSystem({
+        [`${rootPath}/article.md`]: articleFile({ id: "item-id" }),
+        [`${rootPath}/deck.md`]: slideFile,
+        [`${rootPath}/slides/nested-deck.md`]: slideFile,
+        [`${remotePath}/slide-uuid.md`]: slideFile,
+      });
+    });
+
+    it("excludes the slides from the item list", async () => {
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      const items = await instance.loadItems();
+
+      expect(items.map((item) => item.name)).toStrictEqual(["article"]);
+    });
+
+    it("does not load a slide by its basename", async () => {
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      expect(
+        await instance.loadItemByBasename("slides/nested-deck"),
+      ).toBeNull();
+    });
+
+    it("does not load a slide by its id", async () => {
+      const instance = new FileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadItemByItemId("slide-uuid")).toBeNull();
+    });
+  });
+
   describe("getRootPath()", () => {
     it("returns the root path", () => {
       const dataRootDir = "./tmp";
