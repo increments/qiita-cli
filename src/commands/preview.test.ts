@@ -31,7 +31,7 @@ describe("preview", () => {
   } as unknown as jest.Mocked<FileSystemRepo>;
 
   const slideFileSystemRepo = {
-    getRootPath: jest.fn().mockReturnValue("/data/slides"),
+    getRootPath: jest.fn().mockReturnValue("/data/public"),
   } as unknown as jest.Mocked<SlideFileSystemRepo>;
 
   const qiitaApi = {} as ReturnType<typeof getQiitaApiInstance>;
@@ -72,7 +72,7 @@ describe("preview", () => {
       );
     });
 
-    it("also watches the slide root and syncs slides", async () => {
+    it("syncs slides and watches the shared root once", async () => {
       await preview();
 
       expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
@@ -81,7 +81,7 @@ describe("preview", () => {
       });
       expect(mockStartLocalChangeWatcher).toHaveBeenCalledWith({
         server,
-        watchPaths: ["/data/public", "/data/slides"],
+        watchPaths: ["/data/public"],
       });
     });
   });
