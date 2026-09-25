@@ -6,6 +6,8 @@ export type SlidesShowViewModel = {
   slides_show_path: string;
   slide_path: string;
   published: boolean;
+  modified: boolean;
+  is_older_than_remote: boolean;
   theme: string | null;
 };
 
