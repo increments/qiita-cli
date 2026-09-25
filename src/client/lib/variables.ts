@@ -85,7 +85,7 @@ export const Colors = {
   // Base color
   background: "var(--color-background)",
   surface: "var(--color-surface)",
-  surfaceVariant: "var(--color-surface-variant)",
+  surfaceVariant: "var(--color-surfaceVariant)",
 
   // Divider
   divider: "var(--color-divider)",
