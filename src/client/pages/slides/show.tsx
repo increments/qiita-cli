@@ -71,11 +71,7 @@ export const SlidesShow = () => {
   if (isPresentationMode) {
     return slide ? (
       <div css={presentationScreenStyle}>
-        <MarpSlidePresenter
-          pages={slide.pages}
-          slideCss={slide.css}
-          title={slide.title}
-        />
+        <MarpSlidePresenter pages={slide.pages} slideCss={slide.css} />
       </div>
     ) : (
       <div css={messageContainerStyle}>
