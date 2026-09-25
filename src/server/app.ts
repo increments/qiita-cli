@@ -27,13 +27,7 @@ export async function startServer() {
   app.use(express.static(path.join(__dirname, "../public")));
 
   app.use("/api/items", ItemsRouter);
-  if (userConfig.experimentalSlideFeatureEnabled) {
-    app.use("/api/slides", SlidesRouter);
-  } else {
-    app.use("/api/slides", (req, res) => {
-      res.status(404).json({ message: "Not found" });
-    });
-  }
+  app.use("/api/slides", SlidesRouter);
   app.use("/api/readme", ReadmeRouter);
   app.use("/assets", AssetsRouter);
   app.use("/emoji", EmojiRouter);

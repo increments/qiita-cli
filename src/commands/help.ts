@@ -1,38 +1,16 @@
-import { config } from "../lib/config";
-
-const buildHelpText = ({
-  experimentalSlideFeatureEnabled,
-}: {
-  experimentalSlideFeatureEnabled: boolean;
-}) => {
-  const newSlide = experimentalSlideFeatureEnabled
-    ? `  new --slide [<basename>] ...
-                          新しいスライドを追加`
-    : `  new --slide [<basename>] ...
-                          新しいスライドを追加(実験的機能。qiita.config.jsonで
-                          experimentalSlideFeatureEnabledをtrueにすると使用可能)`;
-  const publish = experimentalSlideFeatureEnabled
-    ? "記事、スライドを投稿、更新"
-    : "記事を投稿、更新";
-  const publishAll = experimentalSlideFeatureEnabled
-    ? "全ての記事、スライドを投稿、更新"
-    : "全ての記事を投稿、更新";
-  const pull = experimentalSlideFeatureEnabled
-    ? "記事、スライドファイルをQiitaと同期"
-    : "記事ファイルをQiitaと同期";
-
-  return `USAGE:
+export const helpText = `USAGE:
 qiita <COMMAND> [<OPTIONS>]
 
 COMMAND:
   init                    記事をGitHubで管理するための初期設定
   login                   Qiita APIの認証認可
   new [<basename>] ...    新しい記事を追加
-${newSlide}
+  new --slide [<basename>] ...
+                          新しいスライドを追加
   preview                 コンテンツをブラウザでプレビュー
-  publish <basename> ...  ${publish}
-  publish --all           ${publishAll}
-  pull                    ${pull}
+  publish <basename> ...  記事、スライドを投稿、更新
+  publish --all           全ての記事、スライドを投稿、更新
+  pull                    記事、スライドファイルをQiitaと同期
   posting-campaigns       開催中の記事投稿キャンペーン一覧を表示（最大100件）
   version                 Qiita CLIのバージョンを表示
   help                    ヘルプを表示
@@ -52,16 +30,7 @@ OPTIONS:
 
 詳細についてはReadme(https://github.com/increments/qiita-cli)をご覧ください
 `;
-};
 
-export const getHelpText = async () => {
-  const userConfig = await config.getUserConfig();
-
-  return buildHelpText({
-    experimentalSlideFeatureEnabled: userConfig.experimentalSlideFeatureEnabled,
-  });
-};
-
-export const help = async () => {
-  console.log(await getHelpText());
+export const help = () => {
+  console.log(helpText);
 };
