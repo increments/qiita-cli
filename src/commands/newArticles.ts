@@ -1,6 +1,4 @@
 import arg from "arg";
-import process from "node:process";
-import { config } from "../lib/config";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
 import { getSlideFileSystemRepo } from "../lib/get-slide-file-system-repo";
 
@@ -37,15 +35,6 @@ export const newArticles = async (argv: string[]) => {
   );
 
   if (args["--slide"]) {
-    const userConfig = await config.getUserConfig();
-    if (!userConfig.experimentalSlideFeatureEnabled) {
-      console.error(
-        'Error: the slide feature is experimental and disabled by default. Set "experimentalSlideFeatureEnabled": true in qiita.config.json to enable it.',
-      );
-      process.exit(1);
-      return;
-    }
-
     const slideFileSystemRepo = await getSlideFileSystemRepo();
     await createWithBasenames(args._, (basename) =>
       slideFileSystemRepo.createSlide(basename),

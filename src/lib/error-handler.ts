@@ -10,12 +10,6 @@ import {
   QiitaUnknownError,
   QiitaUnprocessableEntityError,
 } from "../qiita-api";
-import { config } from "./config";
-
-const contentLabel = async () =>
-  (await config.getUserConfig()).experimentalSlideFeatureEnabled
-    ? "記事、スライド"
-    : "記事";
 
 export const handleError = async (error: Error) => {
   const chalk = (await import("chalk")).default;
@@ -35,9 +29,7 @@ export const handleError = async (error: Error) => {
     case QiitaBadRequestError.name:
       console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));
       console.error(
-        chalk.red(
-          `  ${await contentLabel()}ファイルに不備がないかご確認ください`,
-        ),
+        chalk.red("  記事、スライドファイルに不備がないかご確認ください"),
       );
       break;
     case QiitaUnauthorizedError.name:
@@ -59,23 +51,21 @@ export const handleError = async (error: Error) => {
     case QiitaForbiddenOrBadRequestError.name:
       console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));
       console.error(
-        chalk.red(
-          `  ${await contentLabel()}ファイルに不備がないかご確認ください`,
-        ),
+        chalk.red("  記事、スライドファイルに不備がないかご確認ください"),
       );
       console.error(
         chalk.red("  または、Qiitaのアクセストークンが正しいかご確認ください"),
       );
       console.error(chalk.red(""));
       break;
-    case QiitaNotFoundError.name: {
-      const label = await contentLabel();
-      console.error(chalk.red.bold(`${label}が見つかりませんでした`));
+    case QiitaNotFoundError.name:
+      console.error(chalk.red.bold("記事、スライドが見つかりませんでした"));
       console.error(
-        chalk.red(`  Qiita上で${label}が削除されていないかご確認ください`),
+        chalk.red(
+          "  Qiita上で記事、スライドが削除されていないかご確認ください",
+        ),
       );
       break;
-    }
     case QiitaUnprocessableEntityError.name:
       console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));
       console.error(chalk.red(`  ${error.message}`));
