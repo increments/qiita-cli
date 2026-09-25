@@ -1,7 +1,12 @@
 import { css } from "@emotion/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { apiItemsUpdatePath, itemsShowPath } from "../../lib/qiita-cli-url";
+import {
+  apiItemsUpdatePath,
+  apiSlidesUpdatePath,
+  itemsShowPath,
+  slidesShowPath,
+} from "../../lib/qiita-cli-url";
 import { breakpoint, pointerFine } from "../lib/mixins";
 import { Colors, Typography, Weight, getSpace } from "../lib/variables";
 import { useWindowSize } from "../lib/window-size";
@@ -115,16 +120,65 @@ export const Header = ({
 };
 
 export const HeaderSlide = ({
+  id,
+  basename,
+  isSlidePublishable,
+  isOlderThanRemote,
   slidePath,
   presentPath,
   handleMobileOpen,
 }: {
+  id: string;
+  basename: string | null;
+  isSlidePublishable: boolean;
+  isOlderThanRemote: boolean;
   slidePath: string;
   presentPath: string;
   handleMobileOpen: () => void;
 }) => {
+  const navigate = useNavigate();
+  const [snackbarMessage, setSnackbarMessage] =
+    useState<null | SnackbarMessage>(null);
   const { currentWidth } = useWindowSize();
   const mobileSize = currentWidth <= breakpoint.S;
+
+  const handlePublish = () => {
+    if (isOlderThanRemote) {
+      if (
+        !window.confirm(
+          "このスライドはQiita上のスライドより古い可能性があります。上書きしますか？",
+        )
+      ) {
+        return;
+      }
+    }
+
+    fetch(apiSlidesUpdatePath(id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ basename: basename }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.uuid) {
+          setSnackbarMessage({
+            type: "error",
+            message: "投稿に失敗しました",
+          });
+
+          return;
+        }
+
+        setSnackbarMessage({
+          type: "success",
+          message: "スライドが投稿されました",
+        });
+
+        navigate(slidesShowPath(data.uuid));
+      });
+  };
 
   return (
     <header css={headerStyle}>
@@ -148,15 +202,32 @@ export const HeaderSlide = ({
           <CopyButton text={slidePath} />
         </div>
       )}
-      <Link
-        css={headerButtonStyle}
-        to={presentPath}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {mobileSize ? "プレゼンモード" : "プレゼンテーションモードで開く"}
-        <MaterialSymbol>slideshow</MaterialSymbol>
-      </Link>
+      <div css={headerActionsStyle}>
+        <Link
+          aria-label={mobileSize ? "スライドショーを開始" : undefined}
+          css={[
+            headerButtonStyle,
+            headerGrayButtonStyle,
+            mobileSize && headerIconButtonStyle,
+          ]}
+          to={presentPath}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {!mobileSize && "スライドショーを開始"}
+          <MaterialSymbol>slideshow</MaterialSymbol>
+        </Link>
+        <button
+          aria-label={mobileSize ? "スライドを投稿する" : undefined}
+          css={[headerButtonStyle, mobileSize && headerIconButtonStyle]}
+          disabled={!isSlidePublishable}
+          onClick={handlePublish}
+        >
+          {!mobileSize && "スライドを投稿する"}
+          <MaterialSymbol>publish</MaterialSymbol>
+        </button>
+      </div>
+      <Snackbar message={snackbarMessage} setMessage={setSnackbarMessage} />
     </header>
   );
 };
@@ -220,6 +291,7 @@ const headerButtonStyle = css({
   borderRadius: 8,
   color: Colors.green80,
   display: "flex",
+  font: "inherit",
   fontWeight: Weight.bold,
   gap: `0 ${getSpace(1 / 2)}px`,
   padding: `${getSpace(1 / 2)}px ${getSpace(2)}px`,
@@ -237,6 +309,25 @@ const headerButtonStyle = css({
       backgroundColor: Colors.gray20,
     },
   }),
+});
+
+const headerActionsStyle = css({
+  alignItems: "center",
+  display: "flex",
+  gap: getSpace(1),
+});
+
+const headerGrayButtonStyle = css({
+  borderColor: Colors.gray80,
+  color: Colors.gray80,
+});
+
+const headerIconButtonStyle = css({
+  boxSizing: "border-box",
+  height: 48,
+  justifyContent: "center",
+  padding: 0,
+  width: 48,
 });
 
 const headerLogoWrapperStyle = css({

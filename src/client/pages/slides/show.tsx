@@ -71,11 +71,7 @@ export const SlidesShow = () => {
   if (isPresentationMode) {
     return slide ? (
       <div css={presentationScreenStyle}>
-        <MarpSlidePresenter
-          pages={slide.pages}
-          slideCss={slide.css}
-          title={slide.title}
-        />
+        <MarpSlidePresenter pages={slide.pages} slideCss={slide.css} />
       </div>
     ) : (
       <div css={messageContainerStyle}>
@@ -98,9 +94,15 @@ export const SlidesShow = () => {
       </Sidebar>
 
       <Contents>
-        {slide ? (
+        {id && slide ? (
           <>
             <HeaderSlide
+              id={id}
+              basename={basename}
+              isSlidePublishable={
+                slide.modified && slide.error_messages.length === 0
+              }
+              isOlderThanRemote={slide.is_older_than_remote}
               handleMobileOpen={handleMobileOpen}
               slidePath={slide.slide_path}
               presentPath={presentPath}

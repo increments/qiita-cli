@@ -1,5 +1,11 @@
 import { css } from "@emotion/react";
-import { Colors, Typography, getSpace } from "../../lib/variables";
+import {
+  Colors,
+  LineHeight,
+  Typography,
+  Weight,
+  getSpace,
+} from "../../lib/variables";
 import { MarpSlideShadowContent } from "../MarpSlideShadowContent";
 
 interface SlidePage {
@@ -15,8 +21,6 @@ interface Props {
 // `slideCss`, not `css`: the Emotion JSX pragma (jsxImportSource) intercepts
 // any prop literally named `css` on every element, including custom components.
 export const MarpSlideViewer = ({ pages, slideCss }: Props) => {
-  const totalPage = pages.length;
-
   return (
     <div css={listStyle}>
       {pages.map((page, index) => (
@@ -24,9 +28,16 @@ export const MarpSlideViewer = ({ pages, slideCss }: Props) => {
           <div css={pageStyle}>
             <MarpSlideShadowContent slideCss={slideCss} html={page.html} />
           </div>
-          <span css={pageNumberStyle}>
-            {index + 1} / {totalPage}
-          </span>
+          {page.speaker_note.length > 0 && (
+            <section css={speakerNoteStyle}>
+              <h2 css={speakerNoteLabelStyle}>スピーカーノート</h2>
+              {page.speaker_note.map((note, noteIndex) => (
+                <p key={noteIndex} css={speakerNoteBodyStyle}>
+                  {note}
+                </p>
+              ))}
+            </section>
+          )}
         </div>
       ))}
     </div>
@@ -43,19 +54,35 @@ const listStyle = css({
 const pageWrapperStyle = css({
   display: "flex",
   flexDirection: "column",
-  gap: getSpace(1 / 2),
+  gap: getSpace(2),
   width: "100%",
 });
 
 const pageStyle = css({
   aspectRatio: "16 / 9",
-  boxShadow: "0 1px 4px rgba(0, 0, 0, 0.2)",
+  border: `1px solid ${Colors.divider}`,
+  boxSizing: "border-box",
   overflow: "hidden",
   width: "100%",
 });
 
-const pageNumberStyle = css({
-  alignSelf: "flex-end",
-  color: Colors.mediumEmphasis,
-  fontSize: Typography.body2,
+const speakerNoteStyle = css({
+  backgroundColor: Colors.surfaceVariant,
+  borderRadius: 8,
+  display: "flex",
+  flexDirection: "column",
+  gap: getSpace(1),
+  padding: `${getSpace(3 / 2)}px ${getSpace(2)}px`,
+});
+
+const speakerNoteLabelStyle = css({
+  fontSize: Typography.body1,
+  fontWeight: Weight.bold,
+  lineHeight: LineHeight.body,
+});
+
+const speakerNoteBodyStyle = css({
+  fontSize: Typography.body1,
+  lineHeight: LineHeight.body,
+  whiteSpace: "pre-wrap",
 });
