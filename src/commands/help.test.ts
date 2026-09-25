@@ -1,29 +1,9 @@
 import { config } from "../lib/config";
-import { buildHelpText, getHelpText, help } from "./help";
+import { getHelpText, help } from "./help";
 
 jest.mock("../lib/config");
 
 const mockConfig = jest.mocked(config);
-
-describe("buildHelpText", () => {
-  it("returns the same help text regardless of experimentalSlideFeatureEnabled", () => {
-    expect(buildHelpText({ experimentalSlideFeatureEnabled: false })).toEqual(
-      buildHelpText({ experimentalSlideFeatureEnabled: true }),
-    );
-  });
-
-  it("does not change the currently visible help text", () => {
-    const helpText = buildHelpText({ experimentalSlideFeatureEnabled: false });
-
-    expect(helpText).toContain("publish <basename> ...  記事を投稿、更新\n");
-    expect(helpText).toContain(
-      "publish --all           全ての記事を投稿、更新\n",
-    );
-    expect(helpText).toContain(
-      "pull                    記事ファイルをQiitaと同期\n",
-    );
-  });
-});
 
 describe("getHelpText", () => {
   beforeEach(() => {
@@ -40,12 +20,23 @@ describe("getHelpText", () => {
       });
     });
 
-    it("returns the help text built from the user config", async () => {
+    it("does not mention slides on the publish and pull lines", async () => {
       const helpText = await getHelpText();
 
-      expect(helpText).toEqual(
-        buildHelpText({ experimentalSlideFeatureEnabled: false }),
+      expect(helpText).toContain("publish <basename> ...  記事を投稿、更新\n");
+      expect(helpText).toContain(
+        "publish --all           全ての記事を投稿、更新\n",
       );
+      expect(helpText).toContain(
+        "pull                    記事ファイルをQiitaと同期\n",
+      );
+    });
+
+    it("tells how to enable the slide feature on the new --slide line", async () => {
+      const helpText = await getHelpText();
+
+      expect(helpText).toContain("実験的機能");
+      expect(helpText).toContain("experimentalSlideFeatureEnabled");
     });
   });
 
@@ -59,12 +50,25 @@ describe("getHelpText", () => {
       });
     });
 
-    it("returns the help text built from the user config", async () => {
+    it("mentions slides on the publish and pull lines", async () => {
       const helpText = await getHelpText();
 
-      expect(helpText).toEqual(
-        buildHelpText({ experimentalSlideFeatureEnabled: true }),
+      expect(helpText).toContain(
+        "publish <basename> ...  記事、スライドを投稿、更新\n",
       );
+      expect(helpText).toContain(
+        "publish --all           全ての記事、スライドを投稿、更新\n",
+      );
+      expect(helpText).toContain(
+        "pull                    記事、スライドファイルをQiitaと同期\n",
+      );
+    });
+
+    it("does not explain how to enable the already enabled feature", async () => {
+      const helpText = await getHelpText();
+
+      expect(helpText).not.toContain("実験的機能");
+      expect(helpText).not.toContain("experimentalSlideFeatureEnabled");
     });
   });
 });

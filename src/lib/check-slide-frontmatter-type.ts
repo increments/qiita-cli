@@ -3,6 +3,7 @@ interface SlideFrontMatter {
   id: string | null;
   updatedAt: string | null;
   description: string | null;
+  ignorePublish: boolean;
 }
 
 interface CheckType {
@@ -18,6 +19,7 @@ export const checkSlideFrontmatterType = (
     checkId,
     checkUpdatedAt,
     checkDescription,
+    checkIgnorePublish,
   ];
   return getErrorMessages(frontMatter, checkFrontMatterTypes);
 };
@@ -47,6 +49,13 @@ const checkDescription: CheckType = {
   getMessage: () => "descriptionは文字列で入力してください",
   isValid: ({ description }) => {
     return description === null || typeof description === "string";
+  },
+};
+
+const checkIgnorePublish: CheckType = {
+  getMessage: () => "ignorePublishは真偽値で入力してください",
+  isValid: ({ ignorePublish }) => {
+    return typeof ignorePublish === "boolean";
   },
 };
 

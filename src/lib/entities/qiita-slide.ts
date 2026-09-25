@@ -3,8 +3,8 @@ import matter from "gray-matter";
 // The markdown Qiita stores for a slide, used for the preview API, for
 // publishing and for comparing a local slide with its mirror. Only the Marp
 // directives (theme, paginate, ...) belong in the frontmatter — qiita-cli's own
-// bookkeeping fields (id/updated_at/title/description) are not Marp directives,
-// so they are deliberately left out.
+// bookkeeping fields (id/updated_at/title/description/ignorePublish) are not
+// Marp directives, so they are deliberately left out.
 export const buildSlideMarkdown = (
   rawBody: string,
   marpFrontmatter: Record<string, unknown>,
@@ -23,6 +23,7 @@ export class QiitaSlide {
   public readonly isOlderThanRemote: boolean;
   public readonly slidePath: string;
   public readonly marpFrontmatter: Record<string, unknown>;
+  public readonly ignorePublish: boolean;
 
   constructor({
     id,
@@ -37,6 +38,7 @@ export class QiitaSlide {
     isOlderThanRemote,
     slidePath,
     marpFrontmatter,
+    ignorePublish,
   }: {
     id: string | null;
     title: string;
@@ -50,6 +52,7 @@ export class QiitaSlide {
     isOlderThanRemote: boolean;
     slidePath: string;
     marpFrontmatter: Record<string, unknown>;
+    ignorePublish: boolean;
   }) {
     this.id = id;
     this.title = title;
@@ -63,6 +66,7 @@ export class QiitaSlide {
     this.isOlderThanRemote = isOlderThanRemote;
     this.slidePath = slidePath;
     this.marpFrontmatter = marpFrontmatter;
+    this.ignorePublish = ignorePublish;
   }
 
   toMarkdown(): string {

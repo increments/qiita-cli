@@ -6,6 +6,7 @@ describe("checkSlideFrontmatterType", () => {
     id: null,
     updatedAt: null,
     description: null,
+    ignorePublish: false,
   };
 
   it("returns no errors", () => {
@@ -95,6 +96,28 @@ describe("checkSlideFrontmatterType", () => {
         const errorMessages = checkSlideFrontmatterType({
           ...frontMatter,
           description: 123 as unknown as string,
+        });
+        expect(errorMessages.length).toEqual(1);
+      });
+    });
+  });
+
+  describe("checkIgnorePublish", () => {
+    describe("when ignorePublish is true", () => {
+      it("returns no errors", () => {
+        const errorMessages = checkSlideFrontmatterType({
+          ...frontMatter,
+          ignorePublish: true,
+        });
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when ignorePublish is a string", () => {
+      it("returns errors", () => {
+        const errorMessages = checkSlideFrontmatterType({
+          ...frontMatter,
+          ignorePublish: "true" as unknown as boolean,
         });
         expect(errorMessages.length).toEqual(1);
       });
