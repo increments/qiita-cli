@@ -1,5 +1,5 @@
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
-import { getSlideFileSystemRepoIfEnabled } from "../lib/get-slide-file-system-repo";
+import { getSlideFileSystemRepo } from "../lib/get-slide-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { syncSlidesFromQiita } from "../lib/sync-slides-from-qiita";
@@ -12,17 +12,15 @@ jest.mock("../lib/sync-articles-from-qiita");
 jest.mock("../lib/sync-slides-from-qiita");
 const mockGetQiitaApiInstance = jest.mocked(getQiitaApiInstance);
 const mockGetFileSystemRepo = jest.mocked(getFileSystemRepo);
-const mockGetSlideFileSystemRepoIfEnabled = jest.mocked(
-  getSlideFileSystemRepoIfEnabled,
-);
+const mockGetSlideFileSystemRepo = jest.mocked(getSlideFileSystemRepo);
 const mockSyncArticlesFromQiita = jest.mocked(syncArticlesFromQiita);
 const mockSyncSlidesFromQiita = jest.mocked(syncSlidesFromQiita);
 
 describe("pull", () => {
   const qiitaApi = {} as ReturnType<typeof getQiitaApiInstance>;
   const fileSystemRepo = {} as ReturnType<typeof getFileSystemRepo>;
-  const slideFileSystemRepo = {} as NonNullable<
-    Awaited<ReturnType<typeof getSlideFileSystemRepoIfEnabled>>
+  const slideFileSystemRepo = {} as Awaited<
+    ReturnType<typeof getSlideFileSystemRepo>
   >;
 
   beforeEach(() => {
@@ -30,7 +28,7 @@ describe("pull", () => {
 
     mockGetQiitaApiInstance.mockReturnValue(qiitaApi);
     mockGetFileSystemRepo.mockReturnValue(fileSystemRepo);
-    mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(null);
+    mockGetSlideFileSystemRepo.mockResolvedValue(slideFileSystemRepo);
     mockSyncArticlesFromQiita.mockImplementation();
     mockSyncSlidesFromQiita.mockImplementation();
     jest.spyOn(console, "log").mockImplementation();
@@ -47,40 +45,24 @@ describe("pull", () => {
     expect(mockSyncArticlesFromQiita).toHaveBeenCalledTimes(1);
   });
 
-  describe("when the slide repository is unavailable", () => {
-    it("does not sync slides", async () => {
-      await pull([]);
+  it("pulls slides as well", async () => {
+    await pull([]);
 
-      expect(mockSyncSlidesFromQiita).not.toHaveBeenCalled();
+    expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
+      slideFileSystemRepo,
+      qiitaApi,
+      forceUpdate: undefined,
     });
+    expect(mockSyncSlidesFromQiita).toHaveBeenCalledTimes(1);
   });
 
-  describe("when the slide repository is available", () => {
-    beforeEach(() => {
-      mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(
-        slideFileSystemRepo,
-      );
-    });
+  it("pulls slides with forceUpdate", async () => {
+    await pull(["--force"]);
 
-    it("pulls slides as well", async () => {
-      await pull([]);
-
-      expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
-        slideFileSystemRepo,
-        qiitaApi,
-        forceUpdate: undefined,
-      });
-      expect(mockSyncSlidesFromQiita).toHaveBeenCalledTimes(1);
-    });
-
-    it("pulls slides with forceUpdate", async () => {
-      await pull(["--force"]);
-
-      expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
-        slideFileSystemRepo,
-        qiitaApi,
-        forceUpdate: true,
-      });
+    expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
+      slideFileSystemRepo,
+      qiitaApi,
+      forceUpdate: true,
     });
   });
 
