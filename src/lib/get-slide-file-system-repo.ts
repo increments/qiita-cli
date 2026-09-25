@@ -6,8 +6,6 @@ export const getSlideFileSystemRepo = async () =>
     dataRootDir: config.getItemsRootDir(),
   });
 
-// Building the repo creates public/slides/, so it must not happen while the
-// experimental feature is off.
 export const getSlideFileSystemRepoIfEnabled = async () => {
   const userConfig = await config.getUserConfig();
   if (!userConfig.experimentalSlideFeatureEnabled) return null;
