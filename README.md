@@ -201,6 +201,71 @@ Qiita CLI、Qiita Preview から記事の削除はできません。
 
 [Qiita](https://qiita.com)上で記事の削除を行なえます。
 
+## Qiita CLI でスライドを管理する
+
+Qiita CLI では、[Marp](https://marp.app/) 形式の markdown ファイルでスライドを作成し、Qiita に投稿できます。
+
+### スライドファイルの配置について
+
+1 つのスライドの内容は、1 つの markdown ファイル（◯◯.md）で管理します。  
+スライドファイルは`slides`ディレクトリ内に含める必要があります。
+
+```console
+.
+└─ slides
+   ├── newSlide001.md
+   └── newSlide002.md
+```
+
+`slides`ディレクトリは、スライドを作成したとき、または Qiita 上にスライドがあるときにだけ作成されます。
+
+### スライドの作成
+
+Qiita Preview 上の「新規スライド作成」ボタン、または以下のコマンドで新規スライドを作成できます。
+
+```console
+npx qiita new --slide スライドのファイルのベース名
+```
+
+作成されたスライドファイルの中身は次のようになっています。
+
+```markdown
+---
+title: newSlide001 # スライドのタイトル
+id: null # スライドを投稿した際に自動的にスライドのUUIDに変わります
+updated_at: null # スライドを投稿した際に自動的にスライドの更新日時に変わります
+description: "" # スライドの説明
+ignorePublish: false # true: `publish`コマンドにおいて無視されます（Qiitaに投稿されません） / false: `publish`コマンドで処理されます（Qiitaに投稿されます）
+marp: true
+theme: default # Marp のテーマ
+---
+
+# Title
+
+---
+
+# Page 2
+```
+
+`title`、`id`、`updated_at`、`description`、`ignorePublish`以外の項目（`theme`、`paginate`など）は、Marp のディレクティブとしてそのままスライドに反映されます。  
+本文は`---`でページを区切ります。
+
+### スライドの投稿・更新
+
+Qiita Preview 上の「スライドを投稿する」ボタン、または記事と同じ`publish`コマンドで投稿・更新ができます。
+
+```console
+npx qiita publish スライドのファイルのベース名
+```
+
+`npx qiita publish --all`を実行すると、記事とあわせて全てのスライドを反映させます。`ignorePublish: true`のスライドは対象外です。
+
+記事とスライドで同じベース名のファイルがある場合は、ベース名を指定した`publish`はエラーになります。どちらかのファイル名を変更してください。
+
+### スライドの同期
+
+`pull`、`preview`コマンドを実行すると、記事とあわせて Qiita 上のスライドも`slides`ディレクトリに同期されます。
+
 ## GitHub で記事を管理する
 
 ### GitHub の設定について
@@ -226,14 +291,14 @@ npx qiita help
 
 ### pull
 
-記事ファイルを Qiita と同期します。  
-Qiita 上で更新を行い、手元で変更を行っていない記事ファイルのみ同期されます。
+記事ファイル、スライドファイルを Qiita と同期します。  
+Qiita 上で更新を行い、手元で変更を行っていない記事ファイル、スライドファイルのみ同期されます。
 
 ```console
 npx qiita pull
 ```
 
-`--force`オプションを用いることで、強制的に Qiita 上の内容を記事ファイルに反映させます。
+`--force`オプションを用いることで、強制的に Qiita 上の内容を記事ファイル、スライドファイルに反映させます。
 
 ```console
 npx qiita pull --force

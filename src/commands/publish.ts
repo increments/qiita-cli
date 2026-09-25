@@ -5,7 +5,7 @@ import { QiitaSlide } from "../lib/entities/qiita-slide";
 import type { FileSystemRepo } from "../lib/file-system-repo";
 import type { SlideFileSystemRepo } from "../lib/slide-file-system-repo";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
-import { getSlideFileSystemRepoIfEnabled } from "../lib/get-slide-file-system-repo";
+import { getSlideFileSystemRepo } from "../lib/get-slide-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { syncSlidesFromQiita } from "../lib/sync-slides-from-qiita";
@@ -18,7 +18,7 @@ import {
 
 interface PublishRepos {
   fileSystemRepo: FileSystemRepo;
-  slideFileSystemRepo: SlideFileSystemRepo | null;
+  slideFileSystemRepo: SlideFileSystemRepo;
 }
 
 interface PublishTargets {
@@ -31,9 +31,7 @@ const loadAllPublishTargets = async ({
   slideFileSystemRepo,
 }: PublishRepos): Promise<PublishTargets> => ({
   items: await fileSystemRepo.loadPublishTargets(),
-  slides: slideFileSystemRepo
-    ? await slideFileSystemRepo.loadPublishTargets()
-    : [],
+  slides: await slideFileSystemRepo.loadPublishTargets(),
 });
 
 // Articles and slides share one basename namespace on the command line, so
@@ -47,8 +45,7 @@ const resolveTargetsByBasenames = async (
 
   for (const basename of basenames) {
     const item = await fileSystemRepo.loadItemByBasename(basename);
-    const slide =
-      (await slideFileSystemRepo?.loadSlideByBasename(basename)) ?? null;
+    const slide = await slideFileSystemRepo.loadSlideByBasename(basename);
 
     if (item !== null && slide !== null) {
       console.error(
@@ -93,12 +90,10 @@ export const publish = async (argv: string[]) => {
 
   const qiitaApi = await getQiitaApiInstance();
   const fileSystemRepo = await getFileSystemRepo();
-  const slideFileSystemRepo = await getSlideFileSystemRepoIfEnabled();
+  const slideFileSystemRepo = await getSlideFileSystemRepo();
 
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi });
-  if (slideFileSystemRepo) {
-    await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi });
-  }
+  await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi });
 
   const { items: targetItems, slides: targetSlides } = args["--all"]
     ? await loadAllPublishTargets({ fileSystemRepo, slideFileSystemRepo })
@@ -147,7 +142,7 @@ export const publish = async (argv: string[]) => {
 
   const slidePromises = targetSlides.map(async (slide) => {
     const { slide: responseSlide, posted } =
-      await slideFileSystemRepo!.publishSlide(slide, qiitaApi);
+      await slideFileSystemRepo.publishSlide(slide, qiitaApi);
 
     console.log(
       `${posted ? "Posted" : "Updated"} (slide): ${slide.name} -> ${responseSlide.uuid}`,

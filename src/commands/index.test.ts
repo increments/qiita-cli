@@ -1,5 +1,5 @@
 import { handleError } from "../lib/error-handler";
-import { getHelpText } from "./help";
+import { helpText } from "./help";
 import { exec } from "./index";
 
 jest.mock("../lib/error-handler");
@@ -14,7 +14,6 @@ jest.mock("./publish");
 jest.mock("./pull");
 jest.mock("./version");
 
-const mockGetHelpText = jest.mocked(getHelpText);
 const mockHandleError = jest.mocked(handleError);
 
 describe("exec", () => {
@@ -45,27 +44,13 @@ describe("exec", () => {
 
   describe("when the command is unknown", () => {
     it("prints the help text and exits with 1", async () => {
-      mockGetHelpText.mockResolvedValue("help text");
-
       await expect(exec("unknown-command", [])).rejects.toThrow(
         ProcessExitError,
       );
 
-      expect(errorSpy).toHaveBeenCalledWith("help text");
+      expect(errorSpy).toHaveBeenCalledWith(helpText);
       expect(exitSpy).toHaveBeenCalledWith(1);
       expect(mockHandleError).not.toHaveBeenCalled();
-    });
-
-    it("handles the error and still exits with 1 when getHelpText fails", async () => {
-      const error = new Error("config is broken");
-      mockGetHelpText.mockRejectedValue(error);
-
-      await expect(exec("unknown-command", [])).rejects.toThrow(
-        ProcessExitError,
-      );
-
-      expect(mockHandleError).toHaveBeenCalledWith(error);
-      expect(exitSpy).toHaveBeenCalledWith(1);
     });
   });
 });

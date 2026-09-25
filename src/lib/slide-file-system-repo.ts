@@ -180,15 +180,7 @@ export class SlideFileSystemRepo {
   }
 
   public static async build({ dataRootDir }: { dataRootDir: string }) {
-    const slideFileSystemRepo = new SlideFileSystemRepo({ dataRootDir });
-    await slideFileSystemRepo.setUp();
-
-    return slideFileSystemRepo;
-  }
-
-  private async setUp() {
-    await fs.mkdir(this.getRootPath(), { recursive: true });
-    await fs.mkdir(this.getRemotePath(), { recursive: true });
+    return new SlideFileSystemRepo({ dataRootDir });
   }
 
   public getRootPath() {
@@ -221,14 +213,25 @@ export class SlideFileSystemRepo {
   }
 
   private async getSlideFilenames(remote: boolean = false) {
-    return (
-      await fs.readdir(
+    let filenames: string[];
+    try {
+      filenames = await fs.readdir(
         this.getRootOrRemotePath(remote),
         SlideFileSystemRepo.fileSystemOptions(),
-      )
-    ).filter(
+      );
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === "ENOENT") return [];
+      throw err;
+    }
+
+    return filenames.filter(
       (filename) => /\.md$/.test(filename) && !filename.startsWith(".remote/"),
     );
+  }
+
+  private async writeSlideFile(filePath: string, data: string) {
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, data, SlideFileSystemRepo.fileSystemOptions());
   }
 
   private async getNewBasename() {
@@ -280,10 +283,9 @@ export class SlideFileSystemRepo {
     if (!fileContent.id) {
       return;
     }
-    await fs.writeFile(
+    await this.writeSlideFile(
       this.getFilePath(basename || fileContent.id, remote),
       fileContent.toSaveFormat(),
-      SlideFileSystemRepo.fileSystemOptions(),
     );
   }
 
@@ -414,10 +416,11 @@ export class SlideFileSystemRepo {
     const slide = await this.loadSlideByBasename(basename);
     if (slide) return;
 
-    const filepath = this.getFilePath(basename);
     const newFileContent = SlideFileContent.empty({ title: basename });
-    const data = newFileContent.toSaveFormat();
-    await fs.writeFile(filepath, data, SlideFileSystemRepo.fileSystemOptions());
+    await this.writeSlideFile(
+      this.getFilePath(basename),
+      newFileContent.toSaveFormat(),
+    );
     return basename;
   }
 
@@ -430,10 +433,9 @@ export class SlideFileSystemRepo {
       return;
     }
 
-    await fs.writeFile(
+    await this.writeSlideFile(
       this.getFilePath(basename),
       fileContent.clone({ id, updatedAt }).toSaveFormat(),
-      SlideFileSystemRepo.fileSystemOptions(),
     );
   }
 
