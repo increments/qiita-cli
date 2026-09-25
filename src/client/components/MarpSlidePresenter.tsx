@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Colors, Typography, getSpace } from "../lib/variables";
 import { MarpSlideShadowContent } from "./MarpSlideShadowContent";
 
 const LEFT_KEY = 37;
@@ -19,12 +18,11 @@ interface SlidePage {
 interface Props {
   pages: SlidePage[];
   slideCss: string;
-  title?: string;
 }
 
 // `slideCss`, not `css`: the Emotion JSX pragma (jsxImportSource) intercepts
 // any prop literally named `css` on every element, including custom components.
-export const MarpSlidePresenter = ({ pages, slideCss, title }: Props) => {
+export const MarpSlidePresenter = ({ pages, slideCss }: Props) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const totalPage = pages.length;
 
@@ -79,14 +77,6 @@ export const MarpSlidePresenter = ({ pages, slideCss, title }: Props) => {
       <div css={contentStyle} onClick={handleClickScreen}>
         <MarpSlideShadowContent slideCss={slideCss} html={page?.html ?? ""} />
       </div>
-      <div css={footerStyle}>
-        <span css={titleStyle}>{title}</span>
-        {totalPage > 0 && (
-          <span css={pageCounterStyle}>
-            {currentPageIndex + 1} / {totalPage}
-          </span>
-        )}
-      </div>
     </div>
   );
 };
@@ -101,26 +91,4 @@ const contentStyle = css({
   cursor: "pointer",
   flex: 1,
   overflow: "auto",
-});
-
-const footerStyle = css({
-  alignItems: "center",
-  backgroundColor: Colors.gray0,
-  borderTop: `1px solid ${Colors.divider}`,
-  display: "flex",
-  fontSize: Typography.body2,
-  justifyContent: "space-between",
-  padding: `${getSpace(1)}px ${getSpace(2)}px`,
-});
-
-const titleStyle = css({
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-});
-
-const pageCounterStyle = css({
-  color: Colors.mediumEmphasis,
-  flexShrink: 0,
-  marginLeft: getSpace(2),
 });
