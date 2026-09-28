@@ -307,6 +307,7 @@ const headerButtonStyle = css({
   ...pointerFine({
     "&:hover": {
       backgroundColor: Colors.gray20,
+      textDecoration: "none",
     },
   }),
 });
