@@ -69,6 +69,10 @@ export const apiItemsUpdatePath = (itemId: string): string => {
   return `/api/items/${itemId === "show" ? "post" : itemId}`;
 };
 
+export const apiSlidesUpdatePath = (slideId: string): string => {
+  return `/api/slides/${slideId === "show" ? "post" : slideId}`;
+};
+
 export const apiReadmeShowPath = () => {
   return "/api/readme";
 };

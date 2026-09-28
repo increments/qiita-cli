@@ -88,6 +88,8 @@ const slidesShow = async (req: Express.Request, res: Express.Response) => {
     slides_show_path: slide.slidesShowPath,
     slide_path: slide.slidePath,
     published: slide.published,
+    modified: slide.modified,
+    is_older_than_remote: slide.isOlderThanRemote,
     theme:
       typeof slide.marpFrontmatter.theme === "string"
         ? slide.marpFrontmatter.theme
@@ -96,7 +98,40 @@ const slidesShow = async (req: Express.Request, res: Express.Response) => {
   res.json(result);
 };
 
+const slidesUpdate = async (req: Express.Request, res: Express.Response) => {
+  const slideId = req.params.id;
+  const basename: string | null = req.body.basename;
+
+  const slideFileSystemRepo = await getSlideFileSystemRepo();
+  const slide =
+    slideId === "post" && basename
+      ? await slideFileSystemRepo.loadSlideByBasename(basename)
+      : await slideFileSystemRepo.loadSlideById(slideId);
+
+  if (!slide) {
+    res.status(404).json({
+      message: "Not found",
+    });
+    return;
+  }
+
+  const qiitaApi = await getQiitaApiInstance();
+  try {
+    const { slide: responseSlide } = await slideFileSystemRepo.publishSlide(
+      slide,
+      qiitaApi,
+    );
+
+    res.json({ success: true, uuid: responseSlide.uuid });
+  } catch {
+    res.json({
+      success: false,
+    });
+  }
+};
+
 export const SlidesRouter = Router()
   .get("/", slidesIndex)
   .post("/", slidesCreate)
-  .get("/:id", slidesShow);
+  .get("/:id", slidesShow)
+  .post("/:id", slidesUpdate);
