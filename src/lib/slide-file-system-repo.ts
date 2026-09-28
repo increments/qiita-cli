@@ -4,6 +4,7 @@ import path from "node:path";
 import { QiitaApi, Slide } from "../qiita-api";
 import { slidesShowPath } from "./qiita-cli-url";
 import { buildSlideMarkdown, QiitaSlide } from "./entities/qiita-slide";
+import { isSlideMarkdown } from "./is-slide-markdown";
 
 // Fields qiita-cli itself manages in the frontmatter. Everything else is an
 // arbitrary Marp directive (theme, paginate, header, class, ...) that we don't
@@ -98,7 +99,9 @@ class SlideFileContent {
       updatedAt: slide.updated_at,
       description: slide.description_markdown,
       ignorePublish,
-      marpFrontmatter: extractMarpFrontmatter(data),
+      // Slides are told apart from articles by `marp: true`, so a slide
+      // written on Qiita without it would be read back as an article.
+      marpFrontmatter: { ...extractMarpFrontmatter(data), marp: true },
     });
   }
 
@@ -172,6 +175,8 @@ class SlideFileContent {
   }
 }
 
+const DEFAULT_SUBDIR = "slides";
+
 export class SlideFileSystemRepo {
   private readonly dataRootDir: string;
 
@@ -189,10 +194,13 @@ export class SlideFileSystemRepo {
   private async setUp() {
     await fs.mkdir(this.getRootPath(), { recursive: true });
     await fs.mkdir(this.getRemotePath(), { recursive: true });
+    await fs.mkdir(path.join(this.getRootPath(), DEFAULT_SUBDIR), {
+      recursive: true,
+    });
   }
 
   public getRootPath() {
-    const subdir = "slides";
+    const subdir = "public";
     return path.join(this.dataRootDir, subdir);
   }
 
@@ -237,7 +245,7 @@ export class SlideFileSystemRepo {
     const limit = 999;
     for (let i = 1; i <= limit; ++i) {
       const suffix = i.toString().padStart(3, "0");
-      const basename = `${prefix}${suffix}`;
+      const basename = path.join(DEFAULT_SUBDIR, `${prefix}${suffix}`);
       const filenameCandidate = this.getFilename(basename);
       const found = filenames.find(
         (filename) => filename === filenameCandidate,
@@ -266,6 +274,9 @@ export class SlideFileSystemRepo {
         path.join(this.getRootOrRemotePath(remote), filename),
         SlideFileSystemRepo.fileSystemOptions(),
       );
+      if (!isSlideMarkdown(fileContent)) {
+        return null;
+      }
       return SlideFileContent.read(fileContent);
     } catch {
       return null;
@@ -307,7 +318,11 @@ export class SlideFileSystemRepo {
       remoteFileContent?.equals(localFileContent) ||
       forceUpdate
     ) {
-      await this.setSlideData(fileContent, false, localSlide?.name ?? null);
+      await this.setSlideData(
+        fileContent,
+        false,
+        localSlide?.name ?? path.join(DEFAULT_SUBDIR, slide.uuid),
+      );
     }
   }
 
@@ -411,11 +426,13 @@ export class SlideFileSystemRepo {
   async createSlide(basename?: string) {
     basename = basename || (await this.getNewBasename());
     if (!basename) return;
-    const slide = await this.loadSlideByBasename(basename);
-    if (slide) return;
+    const filenames = await this.getSlideFilenames();
+    if (filenames.includes(this.getFilename(basename))) return;
 
     const filepath = this.getFilePath(basename);
-    const newFileContent = SlideFileContent.empty({ title: basename });
+    const newFileContent = SlideFileContent.empty({
+      title: path.basename(basename),
+    });
     const data = newFileContent.toSaveFormat();
     await fs.writeFile(filepath, data, SlideFileSystemRepo.fileSystemOptions());
     return basename;

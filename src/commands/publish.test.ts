@@ -118,7 +118,7 @@ describe("publish", () => {
       published: false,
       modified: true,
       isOlderThanRemote: false,
-      slidePath: "/data_root_dir/slides/deck.md",
+      slidePath: "/data_root_dir/public/deck.md",
       marpFrontmatter: { marp: true, theme: "gaia" },
       ignorePublish: false,
       ...overrides,
@@ -414,21 +414,6 @@ theme: gaia
 
       expect(slideFileSystemRepo.publishSlide).toHaveBeenCalledTimes(1);
       expect(exitSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("when the same basename exists both as an article and a slide", () => {
-    it("exits with an error before publishing anything", async () => {
-      fileSystemRepo.loadItemByBasename.mockResolvedValue({
-        name: "deck",
-      } as never);
-      slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(buildSlide());
-
-      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
-
-      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("deck"));
-      expect(exitSpy).toHaveBeenCalledWith(1);
-      expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
     });
   });
 

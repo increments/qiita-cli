@@ -50,12 +50,7 @@ const resolveTargetsByBasenames = async (
     const slide =
       (await slideFileSystemRepo?.loadSlideByBasename(basename)) ?? null;
 
-    if (item !== null && slide !== null) {
-      console.error(
-        `Error: '${basename}' exists both in the articles and the slides. Please rename one of them.`,
-      );
-      process.exit(1);
-    } else if (item !== null) {
+    if (item !== null) {
       items.push(item);
     } else if (slide !== null) {
       slides.push(slide);

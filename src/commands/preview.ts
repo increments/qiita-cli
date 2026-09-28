@@ -10,12 +10,10 @@ export const preview = async () => {
   const qiitaApi = await getQiitaApiInstance();
   const fileSystemRepo = await getFileSystemRepo();
   const slideFileSystemRepo = await getSlideFileSystemRepoIfEnabled();
-  const watchPaths = [fileSystemRepo.getRootPath()];
 
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi });
 
   if (slideFileSystemRepo) {
-    watchPaths.push(slideFileSystemRepo.getRootPath());
     await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi });
   }
 
@@ -31,6 +29,6 @@ export const preview = async () => {
 
   startLocalChangeWatcher({
     server,
-    watchPaths,
+    watchPaths: [fileSystemRepo.getRootPath()],
   });
 };
