@@ -145,7 +145,7 @@ theme: gaia
     mockGetSlideFileSystemRepo.mockResolvedValue(slideFileSystemRepo);
     mockGetQiitaApiInstance.mockResolvedValue(qiitaApi);
     mockSyncArticlesFromQiita.mockResolvedValue();
-    mockSyncSlidesFromQiita.mockResolvedValue();
+    mockSyncSlidesFromQiita.mockResolvedValue(true);
     fileSystemRepo.loadPublishTargets.mockResolvedValue([]);
     fileSystemRepo.loadItemByBasename.mockResolvedValue(null);
     slideFileSystemRepo.loadPublishTargets.mockResolvedValue([]);
@@ -442,6 +442,71 @@ theme: gaia
 
       expect(logSpy).toHaveBeenCalledWith("Nothing to publish");
       expect(exitSpy).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe("when the user is not a Qiita beta user", () => {
+    const skipMessage =
+      "Skip publishing slides: the slide feature is only available to Qiita beta users";
+
+    beforeEach(() => {
+      mockSyncSlidesFromQiita.mockResolvedValue(false);
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem(),
+        posted: true,
+      });
+    });
+
+    describe("with --all and local slides to publish", () => {
+      it("publishes only the articles and reports that the slides were skipped", async () => {
+        fileSystemRepo.loadPublishTargets.mockResolvedValue([buildItem()]);
+        slideFileSystemRepo.loadPublishTargets.mockResolvedValue([
+          buildSlide(),
+        ]);
+
+        await publish(["--all"]);
+
+        expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+        expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+        expect(logSpy).toHaveBeenCalledWith(skipMessage);
+        expect(exitSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("with --all and no local slides to publish", () => {
+      it("does not report that the slides were skipped", async () => {
+        fileSystemRepo.loadPublishTargets.mockResolvedValue([buildItem()]);
+
+        await publish(["--all"]);
+
+        expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+        expect(logSpy).not.toHaveBeenCalledWith(skipMessage);
+      });
+    });
+
+    describe("when a slide is given by basename", () => {
+      it("exits with an error and does not call the API", async () => {
+        slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(buildSlide());
+
+        await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+        expect(errorSpy).toHaveBeenCalledWith(
+          "Error: 'deck' is a slide, but the slide feature is only available to Qiita beta users",
+        );
+        expect(exitSpy).toHaveBeenCalledWith(1);
+        expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("when an article is given by basename", () => {
+      it("publishes it", async () => {
+        fileSystemRepo.loadItemByBasename.mockResolvedValue(buildItem());
+
+        await publish(["article"]);
+
+        expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+        expect(exitSpy).not.toHaveBeenCalled();
+      });
     });
   });
 

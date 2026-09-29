@@ -1,5 +1,6 @@
 import {
   QiitaBadRequestError,
+  QiitaBetaFeatureRequiredError,
   QiitaFetchError,
   QiitaForbiddenError,
   QiitaForbiddenOrBadRequestError,
@@ -47,6 +48,13 @@ export const handleError = async (error: Error) => {
         chalk.red("  Qiitaのアクセストークンが正しいかご確認ください"),
       );
       console.error(chalk.red(""));
+      break;
+    case QiitaBetaFeatureRequiredError.name:
+      console.error(
+        chalk.red.bold(
+          "スライド機能はQiitaのベータ版を利用しているユーザーのみ利用できます",
+        ),
+      );
       break;
     case QiitaForbiddenOrBadRequestError.name:
       console.error(chalk.red.bold("Qiita APIへのリクエストに失敗しました"));

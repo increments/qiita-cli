@@ -3,7 +3,7 @@ import { help, helpText } from "./help";
 describe("helpText", () => {
   it("mentions slides on the new, publish and pull lines", () => {
     expect(helpText).toContain(
-      "new --slide [<basename>] ...\n                          新しいスライドを追加\n",
+      "new --slide [<basename>] ...\n                          新しいスライドを追加（Qiitaのベータ版を利用しているユーザーのみ）\n",
     );
     expect(helpText).toContain(
       "publish <basename> ...  記事、スライドを投稿、更新\n",

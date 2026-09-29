@@ -6,7 +6,7 @@ COMMAND:
   login                   Qiita APIの認証認可
   new [<basename>] ...    新しい記事を追加
   new --slide [<basename>] ...
-                          新しいスライドを追加
+                          新しいスライドを追加（Qiitaのベータ版を利用しているユーザーのみ）
   preview                 コンテンツをブラウザでプレビュー
   publish <basename> ...  記事、スライドを投稿、更新
   publish --all           全ての記事、スライドを投稿、更新

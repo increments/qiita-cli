@@ -46,7 +46,7 @@ describe("preview", () => {
     mockGetSlideFileSystemRepo.mockResolvedValue(slideFileSystemRepo);
     mockGetQiitaApiInstance.mockResolvedValue(qiitaApi);
     mockSyncArticlesFromQiita.mockResolvedValue();
-    mockSyncSlidesFromQiita.mockResolvedValue();
+    mockSyncSlidesFromQiita.mockResolvedValue(true);
     mockStartServer.mockResolvedValue(server);
     mockStartLocalChangeWatcher.mockImplementation();
   });
@@ -61,6 +61,28 @@ describe("preview", () => {
     expect(mockStartLocalChangeWatcher).toHaveBeenCalledWith({
       server,
       watchPaths: ["/data/public"],
+    });
+  });
+
+  it("starts the server with the slide feature enabled", async () => {
+    await preview();
+
+    expect(mockStartServer).toHaveBeenCalledWith({
+      slideFeatureAvailable: true,
+    });
+  });
+
+  describe("when the user is not a Qiita beta user", () => {
+    beforeEach(() => {
+      mockSyncSlidesFromQiita.mockResolvedValue(false);
+    });
+
+    it("starts the server with the slide feature disabled", async () => {
+      await preview();
+
+      expect(mockStartServer).toHaveBeenCalledWith({
+        slideFeatureAvailable: false,
+      });
     });
   });
 });

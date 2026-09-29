@@ -1,5 +1,6 @@
 import {
   QiitaBadRequestError,
+  QiitaBetaFeatureRequiredError,
   QiitaForbiddenOrBadRequestError,
   QiitaNotFoundError,
 } from "../qiita-api";
@@ -55,6 +56,16 @@ describe("handleError", () => {
     expect(printedMessages()).toContain("記事、スライドが見つかりませんでした");
     expect(printedMessages()).toContain(
       "  Qiita上で記事、スライドが削除されていないかご確認ください",
+    );
+  });
+
+  it("explains that the slide feature is limited to beta users", async () => {
+    await handleError(
+      new QiitaBetaFeatureRequiredError("Beta feature required"),
+    );
+
+    expect(printedMessages()).toContain(
+      "スライド機能はQiitaのベータ版を利用しているユーザーのみ利用できます",
     );
   });
 });

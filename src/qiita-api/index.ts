@@ -1,6 +1,7 @@
 import { URL, URLSearchParams } from "node:url";
 import {
   QiitaBadRequestError,
+  QiitaBetaFeatureRequiredError,
   QiitaFetchError,
   QiitaForbiddenError,
   QiitaInternalServerError,
@@ -136,6 +137,9 @@ export class QiitaApi {
       case 401:
         throw new QiitaUnauthorizedError(errorMessage);
       case 403:
+        if (QiitaApi.isBetaFeatureRequired(responseBody)) {
+          throw new QiitaBetaFeatureRequiredError(errorMessage);
+        }
         throw new QiitaForbiddenError(errorMessage);
       case 404:
         throw new QiitaNotFoundError(errorMessage);
@@ -147,6 +151,14 @@ export class QiitaApi {
         throw new QiitaInternalServerError(errorMessage);
       default:
         throw new QiitaUnknownError(errorMessage);
+    }
+  }
+
+  private static isBetaFeatureRequired(responseBody: string) {
+    try {
+      return JSON.parse(responseBody).type === "beta_feature_required";
+    } catch {
+      return false;
     }
   }
 
