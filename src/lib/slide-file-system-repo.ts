@@ -5,6 +5,7 @@ import { QiitaApi, Slide } from "../qiita-api";
 import { slidesShowPath } from "./qiita-cli-url";
 import { buildSlideMarkdown, QiitaSlide } from "./entities/qiita-slide";
 import { isSlideMarkdown } from "./is-slide-markdown";
+import { isLocalMarkdownFilename } from "./is-local-markdown-filename";
 
 // Fields qiita-cli itself manages in the frontmatter. Everything else is an
 // arbitrary Marp directive (theme, paginate, header, class, ...) that we don't
@@ -235,7 +236,7 @@ export class SlideFileSystemRepo {
         SlideFileSystemRepo.fileSystemOptions(),
       )
     ).filter(
-      (filename) => /\.md$/.test(filename) && !filename.startsWith(".remote/"),
+      (filename) => /\.md$/.test(filename) && isLocalMarkdownFilename(filename),
     );
   }
 

@@ -5,6 +5,7 @@ import { Item, QiitaApi } from "../qiita-api";
 import { itemsShowPath } from "../lib/qiita-cli-url";
 import { isSlideMarkdown } from "./is-slide-markdown";
 import { QiitaItem } from "./entities/qiita-item";
+import { isLocalMarkdownFilename } from "./is-local-markdown-filename";
 
 class FileContent {
   public readonly title: string;
@@ -251,7 +252,7 @@ export class FileSystemRepo {
       )
     ).filter(
       (itemFilename) =>
-        /\.md$/.test(itemFilename) && !itemFilename.startsWith(".remote/"),
+        /\.md$/.test(itemFilename) && isLocalMarkdownFilename(itemFilename),
     );
   }
 
