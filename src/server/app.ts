@@ -13,7 +13,11 @@ import { SlidesRouter } from "./api/slides";
 import { config } from "../lib/config";
 import { getUrlAddress } from "../lib/getUrlAddress";
 
-export async function startServer() {
+export async function startServer({
+  slideFeatureAvailable,
+}: {
+  slideFeatureAvailable: boolean;
+}) {
   const app = express();
   const userConfig = await config.getUserConfig();
 
@@ -27,7 +31,13 @@ export async function startServer() {
   app.use(express.static(path.join(__dirname, "../public")));
 
   app.use("/api/items", ItemsRouter);
-  app.use("/api/slides", SlidesRouter);
+  if (slideFeatureAvailable) {
+    app.use("/api/slides", SlidesRouter);
+  } else {
+    app.use("/api/slides", (req, res) => {
+      res.status(404).json({ message: "Not found" });
+    });
+  }
   app.use("/api/readme", ReadmeRouter);
   app.use("/assets", AssetsRouter);
   app.use("/emoji", EmojiRouter);

@@ -30,7 +30,7 @@ describe("pull", () => {
     mockGetFileSystemRepo.mockReturnValue(fileSystemRepo);
     mockGetSlideFileSystemRepo.mockResolvedValue(slideFileSystemRepo);
     mockSyncArticlesFromQiita.mockImplementation();
-    mockSyncSlidesFromQiita.mockImplementation();
+    mockSyncSlidesFromQiita.mockResolvedValue(true);
     jest.spyOn(console, "log").mockImplementation();
   });
 
@@ -54,6 +54,29 @@ describe("pull", () => {
       forceUpdate: undefined,
     });
     expect(mockSyncSlidesFromQiita).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports that slides are synced", async () => {
+    await pull([]);
+
+    expect(console.log).toHaveBeenCalledWith("Sync local slides from Qiita");
+  });
+
+  describe("when the user cannot use the slide feature", () => {
+    beforeEach(() => {
+      mockSyncSlidesFromQiita.mockResolvedValue(false);
+    });
+
+    it("reports nothing about slides", async () => {
+      await pull([]);
+
+      expect(console.log).toHaveBeenCalledTimes(2);
+      expect(console.log).toHaveBeenNthCalledWith(
+        1,
+        "Sync local articles from Qiita",
+      );
+      expect(console.log).toHaveBeenNthCalledWith(2, "Successful!");
+    });
   });
 
   it("pulls slides with forceUpdate", async () => {

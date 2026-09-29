@@ -26,19 +26,32 @@ interface PublishTargets {
   slides: QiitaSlide[];
 }
 
-const loadAllPublishTargets = async ({
-  fileSystemRepo,
-  slideFileSystemRepo,
-}: PublishRepos): Promise<PublishTargets> => ({
-  items: await fileSystemRepo.loadPublishTargets(),
-  slides: await slideFileSystemRepo.loadPublishTargets(),
-});
+const slideFeatureUnavailableReason =
+  "the slide feature is only available to Qiita beta users";
+
+const loadAllPublishTargets = async (
+  { fileSystemRepo, slideFileSystemRepo }: PublishRepos,
+  slideFeatureAvailable: boolean,
+): Promise<PublishTargets> => {
+  const items = await fileSystemRepo.loadPublishTargets();
+  const slides = await slideFileSystemRepo.loadPublishTargets();
+
+  if (slideFeatureAvailable) {
+    return { items, slides };
+  }
+
+  if (slides.length > 0) {
+    console.log(`Skip publishing slides: ${slideFeatureUnavailableReason}`);
+  }
+  return { items, slides: [] };
+};
 
 // Articles and slides share one basename namespace on the command line, so
 // resolving a basename is the only step that has to know about both stores.
 const resolveTargetsByBasenames = async (
   basenames: string[],
   { fileSystemRepo, slideFileSystemRepo }: PublishRepos,
+  slideFeatureAvailable: boolean,
 ): Promise<PublishTargets> => {
   const items: QiitaItem[] = [];
   const slides: QiitaSlide[] = [];
@@ -50,6 +63,12 @@ const resolveTargetsByBasenames = async (
     if (item !== null) {
       items.push(item);
     } else if (slide !== null) {
+      if (!slideFeatureAvailable) {
+        console.error(
+          `Error: '${basename}' is a slide, but ${slideFeatureUnavailableReason}`,
+        );
+        process.exit(1);
+      }
       slides.push(slide);
     } else {
       console.error(`Error: '${basename}' is not found`);
@@ -88,14 +107,15 @@ export const publish = async (argv: string[]) => {
   const slideFileSystemRepo = await getSlideFileSystemRepo();
 
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi });
-  await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi });
+  const slideFeatureAvailable = await syncSlidesFromQiita({
+    slideFileSystemRepo,
+    qiitaApi,
+  });
 
+  const repos = { fileSystemRepo, slideFileSystemRepo };
   const { items: targetItems, slides: targetSlides } = args["--all"]
-    ? await loadAllPublishTargets({ fileSystemRepo, slideFileSystemRepo })
-    : await resolveTargetsByBasenames(args._, {
-        fileSystemRepo,
-        slideFileSystemRepo,
-      });
+    ? await loadAllPublishTargets(repos, slideFeatureAvailable)
+    : await resolveTargetsByBasenames(args._, repos, slideFeatureAvailable);
 
   // Validate
   const force = args["--force"] ?? false;
