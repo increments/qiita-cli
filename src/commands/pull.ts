@@ -22,8 +22,11 @@ export const pull = async (argv: string[]) => {
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi, forceUpdate });
   console.log("Sync local articles from Qiita");
 
-  await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi, forceUpdate });
-  console.log("Sync local slides from Qiita");
+  if (
+    await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi, forceUpdate })
+  ) {
+    console.log("Sync local slides from Qiita");
+  }
 
   console.log("Successful!");
 };

@@ -12,9 +12,12 @@ export const preview = async () => {
   const slideFileSystemRepo = await getSlideFileSystemRepo();
 
   await syncArticlesFromQiita({ fileSystemRepo, qiitaApi });
-  await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi });
+  const slideFeatureAvailable = await syncSlidesFromQiita({
+    slideFileSystemRepo,
+    qiitaApi,
+  });
 
-  const server = await startServer();
+  const server = await startServer({ slideFeatureAvailable });
 
   const address = server.address();
   const url = getUrlAddress(address);
