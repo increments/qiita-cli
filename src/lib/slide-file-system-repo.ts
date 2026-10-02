@@ -235,9 +235,7 @@ export class SlideFileSystemRepo {
         this.getRootOrRemotePath(remote),
         SlideFileSystemRepo.fileSystemOptions(),
       )
-    ).filter(
-      (filename) => /\.md$/.test(filename) && isLocalMarkdownFilename(filename),
-    );
+    ).filter(isLocalMarkdownFilename);
   }
 
   private async getNewBasename() {

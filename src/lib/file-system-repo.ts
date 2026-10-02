@@ -250,10 +250,7 @@ export class FileSystemRepo {
         this.getRootOrRemotePath(remote),
         FileSystemRepo.fileSystemOptions(),
       )
-    ).filter(
-      (itemFilename) =>
-        /\.md$/.test(itemFilename) && isLocalMarkdownFilename(itemFilename),
-    );
+    ).filter(isLocalMarkdownFilename);
   }
 
   private defaultBasename(fileContent: FileContent) {
