@@ -1,7 +1,7 @@
 import type { FileSystemRepo } from "../lib/file-system-repo";
 import type { SlideFileSystemRepo } from "../lib/slide-file-system-repo";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
-import { getSlideFileSystemRepoIfEnabled } from "../lib/get-slide-file-system-repo";
+import { getSlideFileSystemRepo } from "../lib/get-slide-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { syncSlidesFromQiita } from "../lib/sync-slides-from-qiita";
@@ -33,9 +33,7 @@ jest.mock(
 );
 
 const mockGetFileSystemRepo = jest.mocked(getFileSystemRepo);
-const mockGetSlideFileSystemRepoIfEnabled = jest.mocked(
-  getSlideFileSystemRepoIfEnabled,
-);
+const mockGetSlideFileSystemRepo = jest.mocked(getSlideFileSystemRepo);
 const mockGetQiitaApiInstance = jest.mocked(getQiitaApiInstance);
 const mockSyncArticlesFromQiita = jest.mocked(syncArticlesFromQiita);
 const mockSyncSlidesFromQiita = jest.mocked(syncSlidesFromQiita);
@@ -144,10 +142,10 @@ theme: gaia
     jest.clearAllMocks();
 
     mockGetFileSystemRepo.mockResolvedValue(fileSystemRepo);
-    mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(slideFileSystemRepo);
+    mockGetSlideFileSystemRepo.mockResolvedValue(slideFileSystemRepo);
     mockGetQiitaApiInstance.mockResolvedValue(qiitaApi);
     mockSyncArticlesFromQiita.mockResolvedValue();
-    mockSyncSlidesFromQiita.mockResolvedValue();
+    mockSyncSlidesFromQiita.mockResolvedValue(true);
     fileSystemRepo.loadPublishTargets.mockResolvedValue([]);
     fileSystemRepo.loadItemByBasename.mockResolvedValue(null);
     slideFileSystemRepo.loadPublishTargets.mockResolvedValue([]);
@@ -429,6 +427,15 @@ theme: gaia
     });
   });
 
+  describe("when the basename matches neither an article nor a slide", () => {
+    it("exits with a not found error", async () => {
+      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+      expect(errorSpy).toHaveBeenCalledWith("Error: 'deck' is not found");
+      expect(exitSpy).toHaveBeenCalledWith(1);
+    });
+  });
+
   describe("when there is nothing to publish", () => {
     it("logs and exits 0", async () => {
       await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
@@ -438,21 +445,79 @@ theme: gaia
     });
   });
 
-  describe("when the slide repository is unavailable", () => {
+  describe("when the user is not a Qiita beta user", () => {
+    const skipMessage =
+      "Skip publishing slides: the slide feature is only available to Qiita beta users";
+
     beforeEach(() => {
-      mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(null);
+      mockSyncSlidesFromQiita.mockResolvedValue(false);
+      fileSystemRepo.publishItem.mockResolvedValue({
+        item: buildResponseItem(),
+        posted: true,
+      });
     });
 
-    it("does not sync slides", async () => {
+    describe("with --all and local slides to publish", () => {
+      it("publishes only the articles and reports that the slides were skipped", async () => {
+        fileSystemRepo.loadPublishTargets.mockResolvedValue([buildItem()]);
+        slideFileSystemRepo.loadPublishTargets.mockResolvedValue([
+          buildSlide(),
+        ]);
+
+        await publish(["--all"]);
+
+        expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+        expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+        expect(logSpy).toHaveBeenCalledWith(skipMessage);
+        expect(exitSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("with --all and no local slides to publish", () => {
+      it("does not report that the slides were skipped", async () => {
+        fileSystemRepo.loadPublishTargets.mockResolvedValue([buildItem()]);
+
+        await publish(["--all"]);
+
+        expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+        expect(logSpy).not.toHaveBeenCalledWith(skipMessage);
+      });
+    });
+
+    describe("when a slide is given by basename", () => {
+      it("exits with an error and does not call the API", async () => {
+        slideFileSystemRepo.loadSlideByBasename.mockResolvedValue(buildSlide());
+
+        await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
+
+        expect(errorSpy).toHaveBeenCalledWith(
+          "Error: 'deck' is a slide, but the slide feature is only available to Qiita beta users",
+        );
+        expect(exitSpy).toHaveBeenCalledWith(1);
+        expect(slideFileSystemRepo.publishSlide).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("when an article is given by basename", () => {
+      it("publishes it", async () => {
+        fileSystemRepo.loadItemByBasename.mockResolvedValue(buildItem());
+
+        await publish(["article"]);
+
+        expect(fileSystemRepo.publishItem).toHaveBeenCalledTimes(1);
+        expect(exitSpy).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe("before publishing", () => {
+    it("syncs the slides from Qiita", async () => {
       await expect(publish(["--all"])).rejects.toThrow(ProcessExitError);
 
-      expect(mockSyncSlidesFromQiita).not.toHaveBeenCalled();
-    });
-
-    it("reports a slide basename as not found", async () => {
-      await expect(publish(["deck"])).rejects.toThrow(ProcessExitError);
-
-      expect(errorSpy).toHaveBeenCalledWith("Error: 'deck' is not found");
+      expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
+        slideFileSystemRepo,
+        qiitaApi,
+      });
     });
   });
 });

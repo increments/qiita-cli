@@ -26,6 +26,13 @@ export class QiitaForbiddenError extends Error {
   }
 }
 
+export class QiitaBetaFeatureRequiredError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "QiitaBetaFeatureRequiredError";
+  }
+}
+
 export class QiitaNotFoundError extends Error {
   constructor(message: string) {
     super(message);

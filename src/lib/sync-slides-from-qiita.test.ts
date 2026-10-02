@@ -1,3 +1,7 @@
+import {
+  QiitaBetaFeatureRequiredError,
+  QiitaForbiddenError,
+} from "../qiita-api";
 import type { Slide, QiitaApi } from "../qiita-api";
 import type { SlideFileSystemRepo } from "./slide-file-system-repo";
 import { syncSlidesFromQiita } from "./sync-slides-from-qiita";
@@ -30,7 +34,9 @@ describe("syncSlidesFromQiita", () => {
   });
 
   it("saves every page until an empty one is returned", async () => {
-    await syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi });
+    await expect(
+      syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi }),
+    ).resolves.toBe(true);
 
     expect(mockAuthenticatedUserSlides).toHaveBeenNthCalledWith(1, 1, 100);
     expect(mockAuthenticatedUserSlides).toHaveBeenNthCalledWith(2, 2, 100);
@@ -48,6 +54,34 @@ describe("syncSlidesFromQiita", () => {
       });
 
       expect(mockSaveSlides).toHaveBeenCalledWith(slides, true);
+    });
+  });
+
+  describe("when the slide API requires the beta feature", () => {
+    beforeEach(() => {
+      mockAuthenticatedUserSlides.mockRejectedValue(
+        new QiitaBetaFeatureRequiredError("Beta feature required"),
+      );
+    });
+
+    it("skips syncing slides", async () => {
+      await expect(
+        syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi }),
+      ).resolves.toBe(false);
+
+      expect(mockSaveSlides).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when the slide API fails for another reason", () => {
+    it("throws the error", async () => {
+      mockAuthenticatedUserSlides.mockRejectedValue(
+        new QiitaForbiddenError("Forbidden"),
+      );
+
+      await expect(
+        syncSlidesFromQiita({ slideFileSystemRepo, qiitaApi }),
+      ).rejects.toThrow(QiitaForbiddenError);
     });
   });
 });

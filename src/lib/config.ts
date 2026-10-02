@@ -16,7 +16,6 @@ type UserConfig = {
   includePrivate: boolean;
   host: string;
   port: number;
-  experimentalSlideFeatureEnabled: boolean;
 };
 
 class Config {
@@ -111,7 +110,6 @@ class Config {
       includePrivate: false,
       host: "localhost",
       port: 8888,
-      experimentalSlideFeatureEnabled: false,
     } as UserConfig;
 
     if (fsSync.existsSync(this.getUserConfigFilePath())) {
