@@ -81,7 +81,7 @@
     "express": "^5.2.1",
     "gray-matter": "^4.0.3",
     "open": "^10.1.2",
-    "ws": "^8.21.1"
+    "ws": "^8.22.0"
   },
   "packageManager": "yarn@1.22.19",
   "engines": {
