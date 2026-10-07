@@ -53,7 +53,9 @@ module.exports = {
     },
     {
       rules: {
+        // TODO: remove the old rule name after increments/qiita-cli#426 is merged
         "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/no-empty-object-type": "off",
       },
       files: ["src/client/lib/entries.ts"],
     },
@@ -65,7 +67,9 @@ module.exports = {
     },
     {
       rules: {
+        // TODO: remove the old rule name after increments/qiita-cli#426 is merged
         "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-require-imports": "off",
       },
       files: ["src/lib/package-settings.ts"],
     },

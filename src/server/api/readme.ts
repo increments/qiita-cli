@@ -16,7 +16,7 @@ const readmeIndex = async (req: Express.Request, res: Express.Response) => {
     res.json({
       renderedBody,
     });
-  } catch (err: any) {
+  } catch {
     res.status(404).json({
       message: "Not found",
     });

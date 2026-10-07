@@ -14,6 +14,8 @@ describe("embed-init-scripts", () => {
   const loadModule = (): typeof import("./embed-init-scripts") => {
     let mod!: typeof import("./embed-init-scripts");
     jest.isolateModules(() => {
+      // isolateModules takes a sync callback, so dynamic import() cannot be used here
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       mod = require("./embed-init-scripts");
     });
     return mod;
