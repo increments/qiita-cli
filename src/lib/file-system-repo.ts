@@ -313,7 +313,7 @@ export class FileSystemRepo {
         return null;
       }
       return FileContent.read(fileContent);
-    } catch (err: any) {
+    } catch {
       return null;
     }
   }

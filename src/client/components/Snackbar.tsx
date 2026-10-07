@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { Colors, Typography, getSpace } from "../lib/variables";
 import { MaterialSymbol } from "./MaterialSymbol";
 
-const messageTypes = ["success", "error"] as const;
+type MessageType = "success" | "error";
 
 export interface Message {
-  type: (typeof messageTypes)[number];
+  type: MessageType;
   message: string;
 }
 
