@@ -24,6 +24,9 @@ const config = {
         test: /\.(ts|tsx)$/i,
         loader: "ts-loader",
         exclude: ["/node_modules/"],
+        options: {
+          configFile: path.resolve(__dirname, "src/client/tsconfig.json"),
+        },
       },
     ],
   },
