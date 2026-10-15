@@ -243,6 +243,8 @@ id: null # スライドを投稿した際に自動的にスライドのUUIDに�
 updated_at: null # スライドを投稿した際に自動的にスライドの更新日時に変わります
 description: "" # スライドの説明
 ignorePublish: false # true: `publish`コマンドにおいて無視されます（Qiitaに投稿されません） / false: `publish`コマンドで処理されます（Qiitaに投稿されます）
+visibility:
+  type: public # スライドの公開範囲（下記参照）
 marp: true
 theme: default # Marp のテーマ
 ---
@@ -254,8 +256,29 @@ theme: default # Marp のテーマ
 # Page 2
 ```
 
-`title`、`id`、`updated_at`、`description`、`ignorePublish`以外の項目（`theme`、`paginate`など）は、Marp のディレクティブとしてそのままスライドに反映されます。  
+`title`、`id`、`updated_at`、`description`、`ignorePublish`、`visibility`以外の項目（`theme`、`paginate`など）は、Marp のディレクティブとしてそのままスライドに反映されます。  
 本文は`---`でページを区切ります。
+
+`visibility.type`にはスライドの公開範囲を次のいずれかで指定します。
+
+| `type`         | 公開範囲     |
+| -------------- | ------------ |
+| `public`       | 全体公開     |
+| `only_me`      | 自分のみ     |
+| `url`          | リンク限定   |
+| `members_only` | メンバー限定 |
+
+`members_only`の場合は、スライドを共有するユーザーまたは Organization の URL 名を`url_names`に指定します。
+
+```yaml
+visibility:
+  type: members_only
+  url_names:
+    - alice
+    - increments
+```
+
+一度全体公開したスライドは、他の公開範囲に戻せません。
 
 ### スライドの投稿・更新
 
