@@ -30,6 +30,18 @@ export interface Item {
   posting_campaign_uuid: string | null;
 }
 
+export const slideVisibilityTypes = [
+  "public",
+  "only_me",
+  "url",
+  "members_only",
+] as const;
+
+export interface SlideVisibility {
+  type: (typeof slideVisibilityTypes)[number];
+  url_names?: string[];
+}
+
 export interface Slide {
   uuid: string;
   title: string;
@@ -38,6 +50,7 @@ export interface Slide {
   created_at: string;
   updated_at: string;
   url: string;
+  visibility: SlideVisibility;
 }
 
 export interface SlidePreview {
@@ -330,15 +343,18 @@ export class QiitaApi {
     title,
     markdown,
     description,
+    visibility,
   }: {
     title: string;
     markdown: string;
     description: string;
+    visibility: SlideVisibility;
   }) {
     const data = JSON.stringify({
       title,
       body: markdown,
       description,
+      visibility,
     });
 
     return await this.post<Slide>(`/api/v2/slides`, {
@@ -351,16 +367,19 @@ export class QiitaApi {
     title,
     markdown,
     description,
+    visibility,
   }: {
     uuid: string;
     title: string;
     markdown: string;
     description: string;
+    visibility: SlideVisibility;
   }) {
     const data = JSON.stringify({
       title,
       body: markdown,
       description,
+      visibility,
     });
 
     return await this.patch<Slide>(`/api/v2/slides/${uuid}`, {
