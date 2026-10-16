@@ -1,7 +1,7 @@
 import type { FileSystemRepo } from "../lib/file-system-repo";
 import type { SlideFileSystemRepo } from "../lib/slide-file-system-repo";
 import { getFileSystemRepo } from "../lib/get-file-system-repo";
-import { getSlideFileSystemRepoIfEnabled } from "../lib/get-slide-file-system-repo";
+import { getSlideFileSystemRepo } from "../lib/get-slide-file-system-repo";
 import { getQiitaApiInstance } from "../lib/get-qiita-api-instance";
 import { syncArticlesFromQiita } from "../lib/sync-articles-from-qiita";
 import { syncSlidesFromQiita } from "../lib/sync-slides-from-qiita";
@@ -16,9 +16,7 @@ jest.mock("../lib/sync-slides-from-qiita");
 jest.mock("../server/app");
 
 const mockGetFileSystemRepo = jest.mocked(getFileSystemRepo);
-const mockGetSlideFileSystemRepoIfEnabled = jest.mocked(
-  getSlideFileSystemRepoIfEnabled,
-);
+const mockGetSlideFileSystemRepo = jest.mocked(getSlideFileSystemRepo);
 const mockGetQiitaApiInstance = jest.mocked(getQiitaApiInstance);
 const mockSyncArticlesFromQiita = jest.mocked(syncArticlesFromQiita);
 const mockSyncSlidesFromQiita = jest.mocked(syncSlidesFromQiita);
@@ -45,43 +43,45 @@ describe("preview", () => {
     jest.clearAllMocks();
 
     mockGetFileSystemRepo.mockResolvedValue(fileSystemRepo);
-    mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(null);
+    mockGetSlideFileSystemRepo.mockResolvedValue(slideFileSystemRepo);
     mockGetQiitaApiInstance.mockResolvedValue(qiitaApi);
     mockSyncArticlesFromQiita.mockResolvedValue();
-    mockSyncSlidesFromQiita.mockResolvedValue();
+    mockSyncSlidesFromQiita.mockResolvedValue(true);
     mockStartServer.mockResolvedValue(server);
     mockStartLocalChangeWatcher.mockImplementation();
   });
 
-  describe("when the slide repository is unavailable", () => {
-    it("watches only the article root and does not sync slides", async () => {
-      await preview();
+  it("syncs slides and watches the shared root once", async () => {
+    await preview();
 
-      expect(mockSyncSlidesFromQiita).not.toHaveBeenCalled();
-      expect(mockStartLocalChangeWatcher).toHaveBeenCalledWith({
-        server,
-        watchPaths: ["/data/public"],
-      });
+    expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
+      slideFileSystemRepo,
+      qiitaApi,
+    });
+    expect(mockStartLocalChangeWatcher).toHaveBeenCalledWith({
+      server,
+      watchPaths: ["/data/public"],
     });
   });
 
-  describe("when the slide repository is available", () => {
+  it("starts the server with the slide feature enabled", async () => {
+    await preview();
+
+    expect(mockStartServer).toHaveBeenCalledWith({
+      slideFeatureAvailable: true,
+    });
+  });
+
+  describe("when the user is not a Qiita beta user", () => {
     beforeEach(() => {
-      mockGetSlideFileSystemRepoIfEnabled.mockResolvedValue(
-        slideFileSystemRepo,
-      );
+      mockSyncSlidesFromQiita.mockResolvedValue(false);
     });
 
-    it("syncs slides and watches the shared root once", async () => {
+    it("starts the server with the slide feature disabled", async () => {
       await preview();
 
-      expect(mockSyncSlidesFromQiita).toHaveBeenCalledWith({
-        slideFileSystemRepo,
-        qiitaApi,
-      });
-      expect(mockStartLocalChangeWatcher).toHaveBeenCalledWith({
-        server,
-        watchPaths: ["/data/public"],
+      expect(mockStartServer).toHaveBeenCalledWith({
+        slideFeatureAvailable: false,
       });
     });
   });
