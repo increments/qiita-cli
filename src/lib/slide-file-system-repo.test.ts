@@ -22,6 +22,8 @@ title: Title
 id: slide-uuid
 updated_at: '2026-09-01T00:00:00+09:00'
 description: null
+visibility:
+  type: public
 marp: true
 ---
 # Title`;
@@ -31,6 +33,8 @@ title: Title
 id: slide-uuid
 updated_at: '2026-09-01T00:00:00+09:00'
 description: ''
+visibility:
+  type: public
 marp: true
 ---
 # Title
@@ -44,6 +48,7 @@ const buildRemoteSlide = (overrides: Partial<Slide> = {}): Slide => ({
   created_at: "2026-09-01T00:00:00+09:00",
   updated_at: "2026-09-01T00:00:00+09:00",
   url: "https://qiita.com/Qiita/slides/slide-uuid",
+  visibility: { type: "public" },
   ...overrides,
 });
 
@@ -90,6 +95,7 @@ const buildQiitaSlide = (
     slidePath: `${rootPath}/deck.md`,
     marpFrontmatter: { marp: true },
     ignorePublish: false,
+    visibility: { type: "public" },
     ...overrides,
   });
 
@@ -194,13 +200,15 @@ paginate: true
         });
       });
 
-      it("keeps ignorePublish out of the slide markdown", async () => {
+      it("keeps ignorePublish and visibility out of the slide markdown", async () => {
         mockFileSystem({
           [`${rootPath}/deck.md`]: `---
 title: Title
 id: null
 description: null
 ignorePublish: true
+visibility:
+  type: only_me
 marp: true
 ---
 # Title`,
@@ -210,6 +218,7 @@ marp: true
         const slide = await instance.loadSlideByBasename("deck");
 
         expect(slide?.ignorePublish).toBe(true);
+        expect(slide?.visibility).toStrictEqual({ type: "only_me" });
         expect(matter(slide!.toMarkdown()).data).toStrictEqual({ marp: true });
       });
 
@@ -359,6 +368,7 @@ marp: true
         expect(data.title).toBe("newSlide001");
         expect(data.id).toBeNull();
         expect(data.ignorePublish).toBe(false);
+        expect(data.visibility).toStrictEqual({ type: "public" });
       });
     });
 
@@ -392,6 +402,8 @@ marp: true
 title: Title
 id: null
 description: null
+visibility:
+  type: public
 marp: true
 theme: gaia
 ---
@@ -462,6 +474,8 @@ title: Title
 id: null
 updated_at: null
 description: null
+visibility:
+  type: public
 marp: true
 ---
 # Title
@@ -478,6 +492,7 @@ marp: true
           title: "Title",
           markdown: "---\nmarp: true\n---\n# Title\n",
           description: "",
+          visibility: { type: "public" },
         });
         expect(qiitaApi.patchSlide).not.toHaveBeenCalled();
         expect(result).toStrictEqual({ slide: responseSlide, posted: true });
@@ -528,6 +543,7 @@ marp: true
             id: "slide-uuid",
             published: true,
             description: "An example description",
+            visibility: { type: "members_only", url_names: ["alice"] },
           }),
           qiitaApi,
         );
@@ -537,6 +553,7 @@ marp: true
           title: "Title",
           markdown: "---\nmarp: true\n---\n# Title\n",
           description: "An example description",
+          visibility: { type: "members_only", url_names: ["alice"] },
         });
         expect(qiitaApi.postSlide).not.toHaveBeenCalled();
         expect(result).toStrictEqual({ slide: responseSlide, posted: false });
@@ -663,6 +680,25 @@ ignorePublish: false
         });
       });
 
+      it("reports a diff when the visibility differs from the mirror", () => {
+        mockFileSystem({
+          [`${rootPath}/deck.md`]: localFile.replace(
+            "type: public",
+            "type: members_only\n  url_names:\n    - alice",
+          ),
+          [`${remotePath}/slide-uuid.md`]: mirrorFile,
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        return instance.loadSlideByBasename("deck").then((slide) => {
+          expect(slide?.visibility).toStrictEqual({
+            type: "members_only",
+            url_names: ["alice"],
+          });
+          expect(slide?.modified).toBe(true);
+        });
+      });
+
       it("reports being older than the remote when the mirror is newer", () => {
         mockFileSystem({
           [`${rootPath}/deck.md`]: localFile,
@@ -746,6 +782,24 @@ ignorePublish: false
           title: "Renamed",
           ignorePublish: true,
         });
+      });
+
+      it("writes the visibility to a local file synced before visibility existed", async () => {
+        const withoutVisibility = (file: string) =>
+          file.replace("visibility:\n  type: public\n", "");
+        const files = mockFileSystem({
+          [`${rootPath}/deck.md`]: withoutVisibility(localFile),
+          [`${remotePath}/slide-uuid.md`]: withoutVisibility(mirrorFile),
+        });
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        await instance.saveSlides([
+          buildRemoteSlide({ visibility: { type: "only_me" } }),
+        ]);
+
+        expect(
+          matter(files[`${rootPath}/deck.md`]).data.visibility,
+        ).toStrictEqual({ type: "only_me" });
       });
 
       it("names a slide that has no local file after its uuid under slides/", () => {

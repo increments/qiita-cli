@@ -1,9 +1,12 @@
+import { SlideVisibility, slideVisibilityTypes } from "../qiita-api";
+
 interface SlideFrontMatter {
   title: string | null;
   id: string | null;
   updatedAt: string | null;
   description: string | null;
   ignorePublish: boolean;
+  visibility: SlideVisibility;
 }
 
 interface CheckType {
@@ -20,6 +23,7 @@ export const checkSlideFrontmatterType = (
     checkUpdatedAt,
     checkDescription,
     checkIgnorePublish,
+    checkVisibility,
   ];
   return getErrorMessages(frontMatter, checkFrontMatterTypes);
 };
@@ -56,6 +60,14 @@ const checkIgnorePublish: CheckType = {
   getMessage: () => "ignorePublishは真偽値で入力してください",
   isValid: ({ ignorePublish }) => {
     return typeof ignorePublish === "boolean";
+  },
+};
+
+const checkVisibility: CheckType = {
+  getMessage: () =>
+    `visibility.typeは${slideVisibilityTypes.join(", ")}のいずれかで入力してください`,
+  isValid: ({ visibility }) => {
+    return slideVisibilityTypes.includes(visibility?.type);
   },
 };
 

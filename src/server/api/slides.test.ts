@@ -45,6 +45,7 @@ describe("SlidesRouter", () => {
       slidePath: "/data_root_dir/slides/slide.md",
       marpFrontmatter: {},
       ignorePublish: false,
+      visibility: { type: "public" },
       ...overrides,
     });
 
@@ -56,6 +57,7 @@ describe("SlidesRouter", () => {
     created_at: "2026-09-01T00:00:00+09:00",
     updated_at: "2026-09-01T00:00:00+09:00",
     url: "https://qiita.com/slides/new-slide-uuid",
+    visibility: { type: "public" },
     ...overrides,
   });
 

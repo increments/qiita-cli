@@ -1,3 +1,4 @@
+import type { SlideVisibility } from "../../qiita-api";
 import { checkSlideFrontmatterType } from "../check-slide-frontmatter-type";
 
 interface Slide {
@@ -10,6 +11,7 @@ interface PublishSlide extends Slide {
   updatedAt: string | null;
   description: string | null;
   ignorePublish: boolean;
+  visibility: SlideVisibility;
   isOlderThanRemote: boolean;
 }
 

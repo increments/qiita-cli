@@ -1,3 +1,4 @@
+import type { SlideVisibility } from "../qiita-api";
 import { checkSlideFrontmatterType } from "./check-slide-frontmatter-type";
 
 describe("checkSlideFrontmatterType", () => {
@@ -7,6 +8,7 @@ describe("checkSlideFrontmatterType", () => {
     updatedAt: null,
     description: null,
     ignorePublish: false,
+    visibility: { type: "public" as const },
   };
 
   it("returns no errors", () => {
@@ -118,6 +120,47 @@ describe("checkSlideFrontmatterType", () => {
         const errorMessages = checkSlideFrontmatterType({
           ...frontMatter,
           ignorePublish: "true" as unknown as boolean,
+        });
+        expect(errorMessages.length).toEqual(1);
+      });
+    });
+  });
+  describe("checkVisibility", () => {
+    describe("when visibility is members_only with url_names", () => {
+      it("returns no errors", () => {
+        const errorMessages = checkSlideFrontmatterType({
+          ...frontMatter,
+          visibility: { type: "members_only", url_names: ["alice"] },
+        });
+        expect(errorMessages).toEqual([]);
+      });
+    });
+
+    describe("when visibility is missing", () => {
+      it("returns errors", () => {
+        const errorMessages = checkSlideFrontmatterType({
+          ...frontMatter,
+          visibility: undefined as unknown as SlideVisibility,
+        });
+        expect(errorMessages.length).toEqual(1);
+      });
+    });
+
+    describe("when visibility is a string", () => {
+      it("returns errors", () => {
+        const errorMessages = checkSlideFrontmatterType({
+          ...frontMatter,
+          visibility: "public" as unknown as SlideVisibility,
+        });
+        expect(errorMessages.length).toEqual(1);
+      });
+    });
+
+    describe("when visibility type is unknown", () => {
+      it("returns errors", () => {
+        const errorMessages = checkSlideFrontmatterType({
+          ...frontMatter,
+          visibility: { type: "private" } as unknown as SlideVisibility,
         });
         expect(errorMessages.length).toEqual(1);
       });

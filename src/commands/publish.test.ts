@@ -121,6 +121,7 @@ describe("publish", () => {
       slidePath: "/data_root_dir/public/deck.md",
       marpFrontmatter: { marp: true, theme: "gaia" },
       ignorePublish: false,
+      visibility: { type: "public" },
       ...overrides,
     });
 
@@ -137,6 +138,7 @@ theme: gaia
     created_at: "2026-09-01T00:00:00+09:00",
     updated_at: "2026-09-01T00:00:00+09:00",
     url: "https://qiita.com/Qiita/slides/new-uuid",
+    visibility: { type: "public" },
     ...overrides,
   });
 
