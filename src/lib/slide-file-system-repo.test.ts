@@ -52,10 +52,16 @@ const buildRemoteSlide = (overrides: Partial<Slide> = {}): Slide => ({
   ...overrides,
 });
 
+const enoent = (filePath: unknown) =>
+  Object.assign(new Error(`ENOENT: ${filePath}`), { code: "ENOENT" });
+
 const mockFileSystem = (files: Record<string, string>) => {
   const mockFs = fs as jest.Mocked<typeof fs>;
   mockFs.readdir.mockImplementation(async (dirPath) => {
     const prefix = `${dirPath}/`;
+    if (!Object.keys(files).some((filePath) => filePath.startsWith(prefix))) {
+      throw enoent(dirPath);
+    }
     return Object.keys(files)
       .filter((filePath) => filePath.startsWith(prefix))
       .map((filePath) => filePath.slice(prefix.length)) as any[];
@@ -63,7 +69,7 @@ const mockFileSystem = (files: Record<string, string>) => {
   mockFs.readFile.mockImplementation(async (filePath) => {
     const content = files[filePath as string];
     if (content === undefined) {
-      throw new Error(`ENOENT: ${filePath}`);
+      throw enoent(filePath);
     }
     return content;
   });
@@ -113,6 +119,14 @@ describe("SlideFileSystemRepo", () => {
         return new SlideFileSystemRepo({ dataRootDir });
       };
       expect(subject()).toBeInstanceOf(SlideFileSystemRepo);
+    });
+  });
+
+  describe("build()", () => {
+    it("does not create the slides directory", async () => {
+      await SlideFileSystemRepo.build({ dataRootDir });
+
+      expect(fs.mkdir).not.toHaveBeenCalled();
     });
   });
 
@@ -317,6 +331,23 @@ marp: true
       });
     });
 
+    it("returns empty when the slides directory does not exist", async () => {
+      mockFileSystem({});
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadSlides()).toStrictEqual([]);
+    });
+
+    it("rethrows errors other than ENOENT", async () => {
+      const mockFs = fs as jest.Mocked<typeof fs>;
+      mockFs.readdir.mockRejectedValue(
+        Object.assign(new Error("EACCES"), { code: "EACCES" }),
+      );
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      await expect(instance.loadSlides()).rejects.toThrow("EACCES");
+    });
+
     it("returns all slides", () => {
       const dataRootDir = "data_root_dir";
       const subDir = "public";
@@ -370,6 +401,19 @@ marp: true
         expect(data.ignorePublish).toBe(false);
         expect(data.visibility).toStrictEqual({ type: "public" });
       });
+    });
+
+    it("creates the slides directory before writing the file", async () => {
+      mockFileSystem({});
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      await instance.createSlide("deck");
+
+      const mockFs = fs as jest.Mocked<typeof fs>;
+      expect(mockFs.mkdir).toHaveBeenCalledWith(rootPath, { recursive: true });
+      expect(mockFs.mkdir.mock.invocationCallOrder[0]).toBeLessThan(
+        mockFs.writeFile.mock.invocationCallOrder[0],
+      );
     });
 
     it("saves slide with the given basename", () => {
@@ -430,6 +474,13 @@ body`);
   });
 
   describe("loadPublishTargets()", () => {
+    it("returns empty when the slides directory does not exist", async () => {
+      mockFileSystem({});
+      const instance = new SlideFileSystemRepo({ dataRootDir });
+
+      expect(await instance.loadPublishTargets()).toStrictEqual([]);
+    });
+
     it("returns the unpublished slides and the ones that differ from the mirror", async () => {
       mockFileSystem({
         [`${rootPath}/draft.md`]: localFile.replace(
@@ -800,6 +851,30 @@ ignorePublish: false
         expect(
           matter(files[`${rootPath}/deck.md`]).data.visibility,
         ).toStrictEqual({ type: "only_me" });
+      });
+
+      it("creates the slides and mirror directories", async () => {
+        mockFileSystem({});
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        await instance.saveSlides([buildRemoteSlide()]);
+
+        const mockFs = fs as jest.Mocked<typeof fs>;
+        expect(mockFs.mkdir).toHaveBeenCalledWith(`${rootPath}/slides`, {
+          recursive: true,
+        });
+        expect(mockFs.mkdir).toHaveBeenCalledWith(remotePath, {
+          recursive: true,
+        });
+      });
+
+      it("creates no directory when there are no slides", async () => {
+        mockFileSystem({});
+        const instance = new SlideFileSystemRepo({ dataRootDir });
+
+        await instance.saveSlides([]);
+
+        expect(fs.mkdir).not.toHaveBeenCalled();
       });
 
       it("names a slide that has no local file after its uuid under slides/", () => {
