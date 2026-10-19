@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { QiitaApi, Slide } from "../qiita-api";
+import { QiitaApi, Slide, SlideVisibility } from "../qiita-api";
 import { slidesShowPath } from "./qiita-cli-url";
 import { buildSlideMarkdown, QiitaSlide } from "./entities/qiita-slide";
 import { isSlideMarkdown } from "./is-slide-markdown";
@@ -16,6 +16,7 @@ const RESERVED_FRONTMATTER_KEYS = [
   "updated_at",
   "description",
   "ignorePublish",
+  "visibility",
 ];
 
 const extractMarpFrontmatter = (data: { [key: string]: unknown }) =>
@@ -31,6 +32,7 @@ class SlideFileContent {
   public readonly updatedAt: string | null;
   public readonly description: string | null;
   public readonly ignorePublish: boolean;
+  public readonly visibility: SlideVisibility;
   public readonly rawBody: string;
   public readonly marpFrontmatter: Record<string, unknown>;
 
@@ -40,6 +42,7 @@ class SlideFileContent {
     updatedAt,
     description,
     ignorePublish,
+    visibility,
     rawBody,
     marpFrontmatter,
   }: {
@@ -48,6 +51,7 @@ class SlideFileContent {
     updatedAt: string | null;
     description: string | null;
     ignorePublish: boolean;
+    visibility: SlideVisibility;
     rawBody: string;
     marpFrontmatter: Record<string, unknown>;
   }) {
@@ -56,6 +60,7 @@ class SlideFileContent {
     this.updatedAt = updatedAt;
     this.description = description;
     this.ignorePublish = ignorePublish;
+    this.visibility = visibility;
     this.rawBody = rawBody;
     this.marpFrontmatter = marpFrontmatter;
   }
@@ -70,6 +75,7 @@ class SlideFileContent {
       updatedAt: data.updated_at,
       description: data.description,
       ignorePublish: data.ignorePublish ?? false,
+      visibility: data.visibility,
       marpFrontmatter: extractMarpFrontmatter(data),
     });
   }
@@ -82,6 +88,7 @@ class SlideFileContent {
       updatedAt: null,
       description: "",
       ignorePublish: false,
+      visibility: { type: "public" },
       marpFrontmatter: { marp: true, theme: "default" },
     });
   }
@@ -100,6 +107,7 @@ class SlideFileContent {
       updatedAt: slide.updated_at,
       description: slide.description_markdown,
       ignorePublish,
+      visibility: slide.visibility,
       // Slides are told apart from articles by `marp: true`, so a slide
       // written on Qiita without it would be read back as an article.
       marpFrontmatter: { ...extractMarpFrontmatter(data), marp: true },
@@ -114,6 +122,7 @@ class SlideFileContent {
       updatedAt: slide.updatedAt,
       description: slide.description,
       ignorePublish: slide.ignorePublish,
+      visibility: slide.visibility,
       marpFrontmatter: slide.marpFrontmatter,
     });
   }
@@ -131,6 +140,7 @@ class SlideFileContent {
       updatedAt,
       description: this.description,
       ignorePublish: this.ignorePublish,
+      visibility: this.visibility,
       rawBody: this.rawBody,
       marpFrontmatter: this.marpFrontmatter,
     });
@@ -143,6 +153,7 @@ class SlideFileContent {
       updated_at: this.updatedAt,
       description: this.description,
       ignorePublish: this.ignorePublish,
+      visibility: this.visibility,
       ...this.marpFrontmatter,
     });
   }
@@ -165,6 +176,9 @@ class SlideFileContent {
       this.title === aFileContent.title &&
       (this.description ?? "") === (aFileContent.description ?? "") &&
       this.ignorePublish === aFileContent.ignorePublish &&
+      this.visibility?.type === aFileContent.visibility?.type &&
+      JSON.stringify(this.visibility?.url_names) ===
+        JSON.stringify(aFileContent.visibility?.url_names) &&
       this.toMarkdown() === aFileContent.toMarkdown()
     );
   }
@@ -357,6 +371,7 @@ export class SlideFileSystemRepo {
       title: slide.title,
       markdown: slide.toMarkdown(),
       description: slide.description ?? "",
+      visibility: slide.visibility,
     };
 
     if (slide.id) {
@@ -475,6 +490,7 @@ export class SlideFileSystemRepo {
       slidePath: this.getFilePath(basename),
       marpFrontmatter: fileContent.marpFrontmatter,
       ignorePublish: fileContent.ignorePublish,
+      visibility: fileContent.visibility,
     });
   }
 

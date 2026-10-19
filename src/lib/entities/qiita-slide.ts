@@ -1,4 +1,5 @@
 import matter from "gray-matter";
+import type { SlideVisibility } from "../../qiita-api";
 
 // The markdown Qiita stores for a slide, used for the preview API, for
 // publishing and for comparing a local slide with its mirror. Only the Marp
@@ -24,6 +25,7 @@ export class QiitaSlide {
   public readonly slidePath: string;
   public readonly marpFrontmatter: Record<string, unknown>;
   public readonly ignorePublish: boolean;
+  public readonly visibility: SlideVisibility;
 
   constructor({
     id,
@@ -39,6 +41,7 @@ export class QiitaSlide {
     slidePath,
     marpFrontmatter,
     ignorePublish,
+    visibility,
   }: {
     id: string | null;
     title: string;
@@ -53,6 +56,7 @@ export class QiitaSlide {
     slidePath: string;
     marpFrontmatter: Record<string, unknown>;
     ignorePublish: boolean;
+    visibility: SlideVisibility;
   }) {
     this.id = id;
     this.title = title;
@@ -67,6 +71,7 @@ export class QiitaSlide {
     this.slidePath = slidePath;
     this.marpFrontmatter = marpFrontmatter;
     this.ignorePublish = ignorePublish;
+    this.visibility = visibility;
   }
 
   toMarkdown(): string {
