@@ -36,6 +36,7 @@ jobs:
         run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          SKIP_YARN_COREPACK_CHECK: "1"
       - name: Create version tag
         run: |
           git config --global user.name 'github-actions[bot]'
