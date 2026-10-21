@@ -45,6 +45,7 @@ jobs:
           - "22.22.1" # minimum version in engines.node
           - "22"
           - "24"
+          - "26"
     needs:
       - check_test_execution_conditions
     steps:
