@@ -42,9 +42,9 @@ jobs:
     strategy:
       matrix:
         node:
-          - "22.22.1"
-          - "22.23.2"
-          - "24.18.1"
+          - "22.22.1" # minimum version in engines.node
+          - "22"
+          - "24"
     needs:
       - check_test_execution_conditions
     steps:
