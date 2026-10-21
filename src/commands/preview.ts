@@ -27,7 +27,7 @@ export const preview = async () => {
     await open(url);
   }
 
-  startLocalChangeWatcher({
+  await startLocalChangeWatcher({
     server,
     watchPaths: [fileSystemRepo.getRootPath()],
   });
