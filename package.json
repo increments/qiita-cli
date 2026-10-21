@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/increments/qiita-discussions/discussions"
   },
-  "repository": "git@github.com:increments/qiita-cli.git",
+  "repository": "git+https://github.com/increments/qiita-cli.git",
   "author": {
     "name": "Qiita Inc."
   },
