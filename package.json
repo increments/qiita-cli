@@ -83,16 +83,16 @@
     "open": "^10.1.2",
     "ws": "^8.22.0"
   },
-  "packageManager": "yarn@1.22.19",
+  "packageManager": "pnpm@10.34.7",
   "engines": {
     "node": ">=22.22.1"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "yarn run lint:eslint:fix"
+      "pnpm run lint:eslint:fix"
     ],
     "*": [
-      "yarn run lint:prettier:fix"
+      "pnpm run lint:prettier:fix"
     ]
   }
 }

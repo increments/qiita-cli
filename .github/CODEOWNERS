@@ -6,4 +6,4 @@
 
 # package-ecosystem: npm, directories: /
 /package.json @increments/qiita-dev-group
-/yarn.lock @increments/qiita-dev-group
+/pnpm-lock.yaml @increments/qiita-dev-group
