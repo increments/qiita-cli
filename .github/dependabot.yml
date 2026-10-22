@@ -30,6 +30,10 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
+    ignore:
+      # bump major version manually to match node version in package.json
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       debug:
         patterns:
