@@ -80,7 +80,7 @@
     "dotenv": "^17.2.1",
     "express": "^5.3.0",
     "gray-matter": "^4.0.3",
-    "open": "^10.1.2",
+    "open": "^11.0.4",
     "ws": "^8.22.0"
   },
   "packageManager": "pnpm@10.34.7",
