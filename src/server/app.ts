@@ -1,4 +1,3 @@
-import chokidar from "chokidar";
 import express from "express";
 import type { Server } from "node:http";
 import { createServer } from "node:http";
@@ -68,13 +67,14 @@ export async function startServer({
   });
 }
 
-export function startLocalChangeWatcher({
+export async function startLocalChangeWatcher({
   server,
   watchPaths,
 }: {
   server: Server;
   watchPaths: string | string[];
 }) {
+  const chokidar = (await import("chokidar")).default; // `chokidar` v5 supports only ESM.
   const wsServer = new WebSocketServer({ server });
   const watcher = chokidar.watch(watchPaths, {
     ignored: [/node_modules|\.git/, "**/.remote/**"],

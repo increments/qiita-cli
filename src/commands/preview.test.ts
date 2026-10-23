@@ -48,7 +48,7 @@ describe("preview", () => {
     mockSyncArticlesFromQiita.mockResolvedValue();
     mockSyncSlidesFromQiita.mockResolvedValue(true);
     mockStartServer.mockResolvedValue(server);
-    mockStartLocalChangeWatcher.mockImplementation();
+    mockStartLocalChangeWatcher.mockResolvedValue();
   });
 
   it("syncs slides and watches the shared root once", async () => {
