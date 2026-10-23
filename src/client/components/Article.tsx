@@ -28,7 +28,6 @@ export const Article = ({ renderedBody, tags, title, slide }: Props) => {
           {tags.map((tag, index) => (
             <li css={tagListItemStyle} key={tag}>
               <span>{tag}</span>
-              {index !== tags.length - 1 && <span>,</span>}
             </li>
           ))}
         </ul>
