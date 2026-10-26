@@ -76,8 +76,12 @@ export async function startLocalChangeWatcher({
 }) {
   const chokidar = (await import("chokidar")).default; // `chokidar` v5 supports only ESM.
   const wsServer = new WebSocketServer({ server });
+  // `chokidar` v4+ no longer supports globs in `ignored` and compares strings
+  // with the whole path, so list the ".remote" directory of each watched path.
+  // An ignored directory is not descended into.
+  const remoteDirs = [watchPaths].flat().map((p) => path.join(p, ".remote"));
   const watcher = chokidar.watch(watchPaths, {
-    ignored: [/node_modules|\.git/, "**/.remote/**"],
+    ignored: [/node_modules|\.git/, ...remoteDirs],
   });
   const notifyClients = () => {
     wsServer.clients.forEach((client) => {
