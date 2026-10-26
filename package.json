@@ -48,7 +48,7 @@
     "react-router": "^8.4.0",
     "ts-jest": "^29.4.14",
     "ts-loader": "^9.6.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "webpack": "^5.111.1",
     "webpack-cli": "^6.0.1"
   },
