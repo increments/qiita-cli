@@ -81,7 +81,7 @@
     "express": "^5.3.0",
     "gray-matter": "^4.0.3",
     "open": "^11.0.4",
-    "ws": "^8.22.0"
+    "ws": "^8.22.1"
   },
   "packageManager": "pnpm@10.34.7",
   "engines": {
