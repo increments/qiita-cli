@@ -107,14 +107,17 @@ export const Header = ({
           <CopyButton text={itemPath} />
         </div>
       )}
-      <button
-        css={headerButtonStyle}
-        disabled={!isItemPublishable}
-        onClick={handlePublish}
-      >
-        {mobileSize ? "投稿する" : "記事を投稿する"}
-        <MaterialSymbol>publish</MaterialSymbol>
-      </button>
+      <div css={headerActionsStyle}>
+        <ImageUploadButton mobileSize={mobileSize} />
+        <button
+          css={headerButtonStyle}
+          disabled={!isItemPublishable}
+          onClick={handlePublish}
+        >
+          {mobileSize ? "投稿する" : "記事を投稿する"}
+          <MaterialSymbol>publish</MaterialSymbol>
+        </button>
+      </div>
       <Snackbar message={snackbarMessage} setMessage={setSnackbarMessage} />
     </header>
   );
@@ -142,7 +145,6 @@ export const HeaderSlide = ({
     useState<null | SnackbarMessage>(null);
   const { currentWidth } = useWindowSize();
   const mobileSize = currentWidth <= breakpoint.S;
-  const [isImageUploadPanelOpen, setIsImageUploadPanelOpen] = useState(false);
 
   const handlePublish = () => {
     if (isOlderThanRemote) {
@@ -205,18 +207,7 @@ export const HeaderSlide = ({
         </div>
       )}
       <div css={headerActionsStyle}>
-        <button
-          aria-label={mobileSize ? "画像をアップロード" : undefined}
-          css={[
-            headerButtonStyle,
-            headerGrayButtonStyle,
-            mobileSize && headerIconButtonStyle,
-          ]}
-          onClick={() => setIsImageUploadPanelOpen(true)}
-        >
-          {!mobileSize && "画像をアップロード"}
-          <MaterialSymbol>add_photo_alternate</MaterialSymbol>
-        </button>
+        <ImageUploadButton mobileSize={mobileSize} />
         <Link
           aria-label={mobileSize ? "スライドショーを開始" : undefined}
           css={[
@@ -242,11 +233,32 @@ export const HeaderSlide = ({
         </button>
       </div>
       <Snackbar message={snackbarMessage} setMessage={setSnackbarMessage} />
+    </header>
+  );
+};
+
+const ImageUploadButton = ({ mobileSize }: { mobileSize: boolean }) => {
+  const [isImageUploadPanelOpen, setIsImageUploadPanelOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        aria-label={mobileSize ? "画像をアップロード" : undefined}
+        css={[
+          headerButtonStyle,
+          headerGrayButtonStyle,
+          mobileSize && headerIconButtonStyle,
+        ]}
+        onClick={() => setIsImageUploadPanelOpen(true)}
+      >
+        {!mobileSize && "画像をアップロード"}
+        <MaterialSymbol>add_photo_alternate</MaterialSymbol>
+      </button>
       <ImageUploadPanel
         isOpen={isImageUploadPanelOpen}
         onRequestClose={() => setIsImageUploadPanelOpen(false)}
       />
-    </header>
+    </>
   );
 };
 
