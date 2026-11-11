@@ -33,14 +33,12 @@ export async function startServer({
   app.use("/api/items", ItemsRouter);
   if (slideFeatureAvailable) {
     app.use("/api/slides", SlidesRouter);
-    app.use("/api/images", ImagesRouter);
   } else {
-    const notFound: express.RequestHandler = (req, res) => {
+    app.use("/api/slides", (req, res) => {
       res.status(404).json({ message: "Not found" });
-    };
-    app.use("/api/slides", notFound);
-    app.use("/api/images", notFound);
+    });
   }
+  app.use("/api/images", ImagesRouter);
   app.use("/api/readme", ReadmeRouter);
   app.use("/assets", AssetsRouter);
   app.use("/emoji", EmojiRouter);
