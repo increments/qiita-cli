@@ -294,6 +294,17 @@ npx qiita publish スライドのファイルのベース名
 
 `pull`、`preview`コマンドを実行すると、記事とあわせて Qiita 上のスライドも`public`ディレクトリに同期されます。
 
+## 画像をアップロードする
+
+記事やスライドに貼る画像は、Qiita Preview 上の「画像をアップロード」ボタン、または以下のコマンドでアップロードできます。
+
+```console
+npx qiita upload 画像ファイルのパス
+```
+
+アップロードした画像の URL が表示されるので、`![](画像のURL)`の形で記事やスライドに貼り付けてください。  
+アップロードできるのは avif、gif、jpeg、png、tiff 形式の画像です。1 ファイルの大きさと、1 か月にアップロードできる合計の大きさには、Qiita 上でアップロードする場合と同じ上限があります。
+
 ## GitHub で記事を管理する
 
 ### GitHub の設定について
@@ -341,6 +352,14 @@ npx qiita pull -f
 
 ```console
 npx qiita posting-campaigns
+```
+
+### upload
+
+画像をアップロードし、画像の URL を 1 ファイル 1 行で表示します。複数のファイルを指定できます。
+
+```console
+npx qiita upload 画像ファイルのパス ...
 ```
 
 ### version

@@ -6,6 +6,7 @@ import WebSocket, { WebSocketServer } from "ws";
 import { serverDebugger } from "../lib/debugger";
 import { AssetsRouter } from "./api/assets";
 import { EmojiRouter } from "./api/emoji";
+import { ImagesRouter } from "./api/images";
 import { ItemsRouter } from "./api/items";
 import { ReadmeRouter } from "./api/readme";
 import { SlidesRouter } from "./api/slides";
@@ -37,6 +38,7 @@ export async function startServer({
       res.status(404).json({ message: "Not found" });
     });
   }
+  app.use("/api/images", ImagesRouter);
   app.use("/api/readme", ReadmeRouter);
   app.use("/assets", AssetsRouter);
   app.use("/emoji", EmojiRouter);

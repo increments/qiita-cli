@@ -8,6 +8,7 @@ import { postingCampaigns } from "./postingCampaigns";
 import { preview } from "./preview";
 import { publish } from "./publish";
 import { pull } from "./pull";
+import { upload } from "./upload";
 import { version } from "./version";
 
 export const exec = async (commandName: string, commandArgs: string[]) => {
@@ -19,6 +20,7 @@ export const exec = async (commandName: string, commandArgs: string[]) => {
     preview,
     publish,
     pull,
+    upload,
     help,
     version,
     "--help": help,
