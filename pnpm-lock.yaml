@@ -24,8 +24,8 @@ importers:
         specifier: ^4.4.0
         version: 4.4.3
       dotenv:
-        specifier: ^17.2.1
-        version: 17.2.1
+        specifier: ^18.0.10
+        version: 18.0.10
       express:
         specifier: ^5.3.0
         version: 5.3.0
@@ -1431,9 +1431,10 @@ packages:
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
 
-  dotenv@17.2.1:
-    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+  dotenv@18.0.10:
+    resolution: {integrity: sha512-89FAA1xchzK2mxVWdr5F/0rldwiueXs6zJM86rO66EzekR1iBdiXRthyG+m5GvkJaFH3C2LESzamTkgndmLT2A==}
     engines: {node: '>=12'}
+    hasBin: true
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -4895,7 +4896,7 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.9.1
 
-  dotenv@17.2.1: {}
+  dotenv@18.0.10: {}
 
   dunder-proto@1.0.1:
     dependencies:
