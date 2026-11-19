@@ -16,6 +16,12 @@ describe("helpText", () => {
     );
   });
 
+  it("mentions the preview-slide command", () => {
+    expect(helpText).toContain(
+      "preview-slide <basename> --output <file>\n                          スライドのプレビューをHTMLファイルに出力（Qiitaのベータ版を利用しているユーザーのみ）\n",
+    );
+  });
+
   it("does not describe the slide feature as experimental", () => {
     expect(helpText).not.toContain("実験的機能");
     expect(helpText).not.toContain("experimentalSlideFeatureEnabled");
