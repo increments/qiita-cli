@@ -59,6 +59,12 @@ export interface SlidePreview {
   css: string;
 }
 
+export interface UploadPolicy {
+  bucket: string;
+  download_url: string;
+  form_data: { [key: string]: string };
+}
+
 export interface PostingCampaign {
   uuid: string;
   title: string;
@@ -427,6 +433,28 @@ export class QiitaApi {
     const path = `/api/v2/posting-campaigns/${uuid}`;
 
     return await this.get<PostingCampaign>(path);
+  }
+
+  async uploadPolicy({
+    contentType,
+    name,
+    size,
+  }: {
+    contentType: string;
+    name: string;
+    size: number;
+  }) {
+    const data = JSON.stringify({
+      content_type: contentType,
+      name,
+      size,
+    });
+
+    const path = `/api/v2/upload_policies`;
+
+    return await this.post<UploadPolicy>(path, {
+      body: data,
+    });
   }
 
   async getAssetUrls() {
