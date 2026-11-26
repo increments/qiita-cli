@@ -1,7 +1,12 @@
-import { createServer } from "node:http";
+import { createServer, type Server } from "node:http";
+import type { AddressInfo } from "node:net";
 import path from "node:path";
-import { startLocalChangeWatcher } from "./app";
+import { config } from "../lib/config";
+import { startLocalChangeWatcher, startServer } from "./app";
 
+jest.mock("../lib/config");
+
+const mockGetUserConfig = jest.mocked(config.getUserConfig);
 const mockWatch = jest.fn();
 
 // chokidar is ESM-only; stub it so the dynamic import() works under ts-jest's
@@ -48,5 +53,38 @@ describe("startLocalChangeWatcher", () => {
     expect(
       ignored.filter((m) => typeof m === "string" && m.includes("*")),
     ).toEqual([]);
+  });
+});
+
+describe("startServer", () => {
+  let server: Server;
+
+  beforeEach(() => {
+    mockGetUserConfig.mockResolvedValue({
+      includePrivate: false,
+      host: "127.0.0.1",
+      port: 0,
+    });
+    jest.spyOn(console, "log").mockImplementation();
+  });
+
+  afterEach(async () => {
+    await new Promise((resolve) => server.close(resolve));
+  });
+
+  const baseUrlOf = (server: Server) =>
+    `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+
+  it("accepts image uploads while the slide feature is unavailable", async () => {
+    server = await startServer({ slideFeatureAvailable: false });
+
+    const response = await fetch(`${baseUrlOf(server)}/api/images`, {
+      method: "POST",
+    });
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      message: "画像のファイル名が指定されていません",
+    });
   });
 });

@@ -11,6 +11,11 @@ import {
   QiitaUnknownError,
   QiitaUnprocessableEntityError,
 } from "../qiita-api";
+import {
+  ImageStorageError,
+  ImageUploadRejectedError,
+  UnsupportedImageTypeError,
+} from "./upload-image";
 
 export const handleError = async (error: Error) => {
   const chalk = (await import("chalk")).default;
@@ -98,6 +103,18 @@ export const handleError = async (error: Error) => {
       console.error(
         chalk.red("  https://github.com/increments/qiita-discussions"),
       );
+      break;
+
+    // Image upload
+    case UnsupportedImageTypeError.name:
+    case ImageUploadRejectedError.name:
+      console.error(chalk.red.bold("画像をアップロードできませんでした"));
+      console.error(chalk.red(`  ${error.message}`));
+      break;
+    case ImageStorageError.name:
+      console.error(chalk.red.bold("画像のアップロードに失敗しました"));
+      console.error(chalk.red(`  ${error.message}`));
+      console.error(chalk.red("  再度お試しください"));
       break;
 
     default:

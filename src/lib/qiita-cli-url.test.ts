@@ -1,4 +1,5 @@
 import {
+  apiImagesCreatePath,
   apiItemsShowPath,
   apiItemsUpdatePath,
   apiReadmeShowPath,
@@ -112,6 +113,22 @@ describe("apiSlidesShowPath", () => {
     it("returns api slides show path", () => {
       const url = apiSlidesShowPath(slideId, { basename: basename });
       expect(url).toEqual(`/api/slides/${slideId}?basename=${basename}`);
+    });
+  });
+});
+
+describe("apiImagesCreatePath", () => {
+  it("returns api images create path", () => {
+    const url = apiImagesCreatePath("screenshot.png");
+    expect(url).toEqual(`/api/images?name=screenshot.png`);
+  });
+
+  describe("when the name needs escaping", () => {
+    it("escapes the name", () => {
+      const url = apiImagesCreatePath("スクリーンショット 1.png");
+      expect(url).toEqual(
+        `/api/images?name=%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88+1.png`,
+      );
     });
   });
 });
