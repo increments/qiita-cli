@@ -8,9 +8,12 @@ COMMAND:
   new --slide [<basename>] ...
                           新しいスライドを追加（Qiitaのベータ版を利用しているユーザーのみ）
   preview                 コンテンツをブラウザでプレビュー
+  preview-slide <basename> --output <file>
+                          スライドのプレビューをHTMLファイルに出力（Qiitaのベータ版を利用しているユーザーのみ）
   publish <basename> ...  記事、スライドを投稿、更新
   publish --all           全ての記事、スライドを投稿、更新
   pull                    記事、スライドファイルをQiitaと同期
+  upload <file> ...       画像をアップロードしてURLを表示
   posting-campaigns       開催中の記事投稿キャンペーン一覧を表示（最大100件）
   version                 Qiita CLIのバージョンを表示
   help                    ヘルプを表示

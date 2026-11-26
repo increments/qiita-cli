@@ -6,8 +6,10 @@ import { login } from "./login";
 import { newArticles } from "./newArticles";
 import { postingCampaigns } from "./postingCampaigns";
 import { preview } from "./preview";
+import { previewSlide } from "./previewSlide";
 import { publish } from "./publish";
 import { pull } from "./pull";
+import { upload } from "./upload";
 import { version } from "./version";
 
 export const exec = async (commandName: string, commandArgs: string[]) => {
@@ -17,8 +19,10 @@ export const exec = async (commandName: string, commandArgs: string[]) => {
     new: newArticles,
     "posting-campaigns": postingCampaigns,
     preview,
+    "preview-slide": previewSlide,
     publish,
     pull,
+    upload,
     help,
     version,
     "--help": help,
